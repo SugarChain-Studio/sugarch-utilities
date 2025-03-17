@@ -30,6 +30,6 @@ jobs:
       - name: Build project
         run: pnpm run build
 
-      - run: pnpm publish --access public
+      - run: pnpm -r publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
