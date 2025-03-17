@@ -18,12 +18,7 @@ A package for managing assets in BC. It includes functions for loading, modifyin
 A package for handling BC chat events using the EventEmitter interface. It provides a robust event system to manage custom events, making it easier to create responsive and interactive mods.
 
 ## Contributing
-Contributions are welcome! If you'd like to contribute:
-
-1. Fork the repository
-2. Create a new branch for your feature
-3. Add your changes
-4. Submit a pull request
+We welcome contributions! If you have any issues or suggestions, please feel free to open an issue or submit a pull request.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
