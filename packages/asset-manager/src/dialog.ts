@@ -1,0 +1,45 @@
+import { ModManager } from "@sugarch/bc-mod-manager";
+import { Translation } from "./types";
+import { translateDialog } from "./entryUtils";
+
+/** Custom dialog translations */
+const customDialog: Translation.Dialog = {};
+
+/**
+ * Add custom dialog translations. If it contains ItemTorso or ItemTorso2, automatically add the mirrored version
+ * @param dialog The dialog translations to add
+ */
+export function addCustomDialog(dialog: Translation.Dialog): void {
+    for(const [key, value] of Object.entries(dialog) as [ServerChatRoomLanguage, Record<string,string>][]) {
+        if (!customDialog[key]) {
+            customDialog[key] = {};
+        }
+        for(const [k, v] of Object.entries(value)) {
+            customDialog[key][k] = v;
+            if (k.includes("ItemTorso2")) {
+                customDialog[key][k.replace("ItemTorso2", "ItemTorso")] = v;
+            } else if (k.includes("ItemTorso")) {
+                customDialog[key][k.replace("ItemTorso", "ItemTorso2")] = v;
+            }
+        }
+    }
+}
+
+/**
+ * Set up custom dialog hooks
+ */
+export function setupCustomDialog(): void {
+    const translate = (msg: string) => translateDialog(customDialog, msg);
+    
+    ModManager.progressiveHook("AssetTextGet").override(
+        (args, next) =>  translate(args[0]) || next(args)
+    );
+
+    ModManager.progressiveHook("ChatRoomPublishCustomAction")
+        .inject((args, next) => {
+            const [msg, _, Dictionary] = args;
+            const tDialog = translate(msg);
+            if (tDialog) Dictionary.push({ Tag: `MISSING TEXT IN "Interface.csv": ${msg}`, Text: tDialog });
+        })
+        .next();
+}

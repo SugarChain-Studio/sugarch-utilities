@@ -4,9 +4,9 @@
         "packages/*"
     ],
     "scripts": {
-        "build": "pnpm run build --recursive",
-        "type-check": "pnpm run type-check --recursive",
-        "publish": "pnpm run publish --recursive"
+        "build": "pnpm -r run build",
+        "type-check": "pnpm -r run type-check",
+        "publish": "pnpm -r run publish"
     },
     "devDependencies": {},
     "packageManager": "pnpm@10.6.2"

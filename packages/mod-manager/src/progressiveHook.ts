@@ -1,20 +1,17 @@
+import { ModManagerInterface, ProgressiveHookInterface } from "./types";
+
 /**
  * Register a hook
- * @template {string} TFunctionName
+ * @template TFunctionName
  */
 export class ProgressiveHook<TFunctionName extends string> {
     workList: ProgressiveHookInterface.WorkType<TFunctionName>[] = [];
 
     /**
-     * @param {ModManagerInterface.HookableMod} hookMng
+     * @param hookMng
      */
     constructor (private hookMng: ModManagerInterface.HookableMod) {}
 
-    /**
-     * @param {ModManagerInterface.FunctionArguments<TFunctionName>} args
-     * @param {ModManagerInterface.FunctionType<TFunctionName>} next
-     * @returns {ModManagerInterface.FunctionReturnType<TFunctionName>}
-     */
     run (
         args: ModManagerInterface.FunctionArguments<TFunctionName>,
         next: ModManagerInterface.FunctionType<TFunctionName>
@@ -54,8 +51,8 @@ export class ProgressiveHook<TFunctionName extends string> {
     /**
      * Add an injection step, where you can modify parameters or produce other side effects. 
      * Note that this step will not set the Result, and next() will be automatically called at the end of the step.
-     * @param {ModManagerInterface.InjectFunction<TFunctionName>} func
-     * @returns {this}
+     * @param func
+     * @returns
      */
     inject (func: ModManagerInterface.InjectFunction<TFunctionName>) {
         this.workList.push({ value: 'inject', work: func });
@@ -64,14 +61,13 @@ export class ProgressiveHook<TFunctionName extends string> {
 
     /**
      * Require the next steps to be inside the specified function
-     * @template {string} funcName
-     * @param {funcName} func
-     * @param {Object} config
-     * @param {boolean} [config.once]
-     * @param {number} [config.priority]
-     * @returns {this}
+     * @param func inside function name
+     * @param config 
+     * @param config.once only run once (reset count for each inside function call) 
+     * @param config.priority hook priority
+     * @returns
      */
-    inside (func: TFunctionName, { once = false, priority = 1 } = {}) {
+    inside<UFunctionName extends string>(func: UFunctionName, { once = false, priority = 1 } = {}) {
         const flag: ProgressiveHookInterface.FlagWork<TFunctionName> = { value: 'flag', flag: false, once };
 
         this.hookMng.hookFunction(func, priority, (args, next) => {
@@ -87,8 +83,8 @@ export class ProgressiveHook<TFunctionName extends string> {
 
     /**
      * Add a check step, if it returns false, stop executing subsequent steps.
-     * @param {ModManagerInterface.CheckFunction<TFunctionName>} func
-     * @returns {this}
+     * @param func
+     * @returns
      */
     when (func: ModManagerInterface.CheckFunction<TFunctionName>) {
         this.workList.push({ value: 'check', work: func });
@@ -98,7 +94,7 @@ export class ProgressiveHook<TFunctionName extends string> {
     /**
      * Override the original function and use the return value as the Result. 
      * If the Result is set, next() will not be automatically called at the end.
-     * @param {ModManagerInterface.HookFunction<TFunctionName>} func
+     * @param func
      */
     override (func: ModManagerInterface.HookFunction<TFunctionName>) {
         this.workList.push({ value: 'override', work: func });

@@ -1,10 +1,11 @@
 {
-  "name": "@sugarch/bc-mod-manager",
-  "version": "0.2.0",
-  "description": "A mod hooks manager base on bcmodsdk",
+  "name": "@sugarch/bc-shared-utility",
+  "version": "0.1.0",
+  "description": "A shared utility library for BC mods.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "private": true,
   "files": [
     "dist"
   ],
@@ -31,11 +32,11 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
     "bc-stubs": "113.0.0",
-    "bondage-club-mod-sdk": "^1.2.0",
-    "rollup": "^2.0.0",
+    "rollup": "^2.79.2",
     "tslib": "^2.8.1"
   },
   "peerDependencies": {
+    "@sugarch/bc-mod-manager": "workspace:*",
     "bondage-club-mod-sdk": "^1.2.0"
   }
 }
