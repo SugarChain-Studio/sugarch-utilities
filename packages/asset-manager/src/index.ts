@@ -178,8 +178,10 @@ export class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
-     * Initialize and add custom component functionality
-     * @param componentSetup
+     * Initialize and add custom component.  
+     * 
+     * *Note: This function should be called **only once**.*
+     * @param componentSetup Component setup function, all custom components should be initialized inside this function
      */
     init (componentSetup: FuncWork) {
         // Initialize all functions, order doesn't matter much
@@ -195,20 +197,28 @@ export class _AssetManager<Custom extends string = AssetGroupBodyName> {
 
     /**
      * Enable non-mod removal validation
+     * @param fromModUserTest Function to determine if the user is from a mod
      */
     enableValidation (fromModUserTest: FromModUserTestFunc) {
         enableValidation(fromModUserTest);
     }
 
+    /**
+     * Set the logger for the asset manager
+     * @param logger
+     */
     setLogger (logger: ILogger) {
         setLogger(logger);
     }
+
+    /**
+     * Retype AssetManager, if you need to customize the body group name and ensure 
+     * type safety, use this method to get a re-typed version
+     * @returns retyped AssetManager
+     */
+    typeBodyGroupNames<T extends string>() {
+        return this as _AssetManager<T>;
+    }
 }
 
-const AssetManagerInstance = new _AssetManager();
-
-function AssetManager<Custom extends string = AssetGroupBodyName> (): _AssetManager<Custom> {
-    return AssetManagerInstance as _AssetManager<Custom>;
-}
-
-export { AssetManager };
+export const AssetManager = new _AssetManager();

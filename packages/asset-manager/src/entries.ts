@@ -171,7 +171,11 @@ function loadAssetEntries (): void {
     }
 }
 
+let entriesLoaded = false;
 export function setupEntries (): void {
+    if (entriesLoaded) return;
+    entriesLoaded = true;
+
     // BC has three loading phases:
     // Phase 1: Load assets
     // Phase 2: Load CSV descriptions

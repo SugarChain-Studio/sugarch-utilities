@@ -25,7 +25,6 @@ class _ChatRoomEvents {
 
     /**
      * Register an event listener
-     * @param args
      */
     on<T extends ServerChatRoomMessageType>(
         event: T,
@@ -38,7 +37,6 @@ class _ChatRoomEvents {
 
     /**
      * Register a one-time event listener
-     * @param args
      */
     once<T extends ServerChatRoomMessageType>(
         event: T,

@@ -25,10 +25,15 @@ export function addCustomDialog(dialog: Translation.Dialog): void {
     }
 }
 
+let customDialogLoaded = false;
+
 /**
  * Set up custom dialog hooks
  */
 export function setupCustomDialog(): void {
+    if (customDialogLoaded) return;
+    customDialogLoaded = true;
+
     const translate = (msg: string) => translateDialog(customDialog, msg);
     
     ModManager.progressiveHook("AssetTextGet").override(

@@ -39,7 +39,6 @@ class _OrgasmEvents {
 
     /**
      * Register an event listener
-     * @param args
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     on<T extends OrgasmType> (event: T, listener: (eventData: { Player: Character }) => void, context?: any): void {
@@ -48,7 +47,6 @@ class _OrgasmEvents {
 
     /**
      * Register a one-time event listener
-     * @param args
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     once<T extends OrgasmType> (event: T, listener: (eventData: { Player: Character }) => void, context?: any): void {
