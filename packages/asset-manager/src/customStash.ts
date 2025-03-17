@@ -1,11 +1,12 @@
 import { ModManager } from '@sugarch/bc-mod-manager';
 import { CustomGroupName } from './types';
+import { ModManagerInterface } from '../../mod-manager/dist/types';
 
 const customGroups: Record<string, AssetGroup> = {};
 
 const customAssets: Record<string, Record<string, Asset>> = {};
 
-export const accessCustomAsset = <Custom extends string = AssetGroupBodyName>(
+export const AccessCustomAsset = <Custom extends string = AssetGroupBodyName>(
     group: CustomGroupName<Custom>,
     name: string
 ): Asset | undefined => customAssets[group]?.[name];
@@ -13,9 +14,9 @@ export const accessCustomAsset = <Custom extends string = AssetGroupBodyName>(
 /**
  * Add a custom asset group
  */
-export function CustomGroupAdd (...[IFamily, GroupDef]: Parameters<typeof AssetGroupAdd>): Promise<Mutable<AssetGroup>> {
+export function customGroupAdd (...[family, groupDef]: Parameters<typeof AssetGroupAdd>): Promise<Mutable<AssetGroup>> {
     // Prevent the addition process from being disrupted
-    const Group = ModManager.invokeOriginal('AssetGroupAdd', IFamily, GroupDef);
+    const Group = ModManager.invokeOriginal('AssetGroupAdd', family, groupDef);
     customGroups[Group.Name] = Group;
     return Promise.resolve(Group as Mutable<AssetGroup>);
 }
@@ -23,11 +24,11 @@ export function CustomGroupAdd (...[IFamily, GroupDef]: Parameters<typeof AssetG
 /**
  * Add a custom asset
  */
-export function CustomAssetAdd (...[Group, AssetDef, Config]: Parameters<typeof AssetAdd>): Promise<Mutable<Asset>> {
+export function customAssetAdd (...[group, assetDef, config]: Parameters<typeof AssetAdd>): Promise<Mutable<Asset>> {
     // Prevent the addition process from being disrupted
-    ModManager.invokeOriginal('AssetAdd', Group, AssetDef, Config);
-    const groupName = Group.Name;
-    const assetName = AssetDef.Name;
+    ModManager.invokeOriginal('AssetAdd', group, assetDef, config);
+    const groupName = group.Name;
+    const assetName = assetDef.Name;
     if (!customAssets[groupName]) customAssets[groupName] = {};
     const as = AssetGet('Female3DCG', groupName, assetName);
     if (as) {
@@ -67,7 +68,7 @@ export function getCustomAssets<Custom extends string = AssetGroupBodyName> (): 
  */
 export function isInListCustomAsset (group: CustomGroupName, name: string): boolean {
     /** @type {Asset | undefined} */
-    const asset = accessCustomAsset(group, name);
+    const asset = AccessCustomAsset(group, name);
     return !!asset && !asset.NotVisibleOnScreen?.includes('LuziScreen');
 }
 
@@ -76,14 +77,14 @@ export function isInListCustomAsset (group: CustomGroupName, name: string): bool
  */
 export function enableCustomAssets (): void {
     let doInventoryAdd = false;
-    ModManager.progressiveHook('DialogInventoryBuild').inject((args, next) => {
+    ModManager.progressiveHook('DialogInventoryBuild').inject(args => {
         if (args[2]) return;
         doInventoryAdd = true;
     });
 
     ModManager.progressiveHook('DialogInventoryAdd')
         .next()
-        .inject((args, next) => {
+        .inject(args => {
             if (!doInventoryAdd) return;
             doInventoryAdd = false;
             const groupName = args[1].Asset.Group.Name;
@@ -99,9 +100,9 @@ export function enableCustomAssets (): void {
             }
         });
 
-    const overrideAvailable = (args: any[], next: Function) => {
-        const [C, Name, Group] = args;
-        if (!!accessCustomAsset(Group, Name)) return true;
+    const overrideAvailable = (...[args, next]: Parameters<ModManagerInterface.HookFunction<'InventoryAvailable'>>) => {
+        const [_, Name, Group] = args;
+        if (AccessCustomAsset(Group, Name)) return true;
         return next(args);
     };
 
@@ -109,7 +110,7 @@ export function enableCustomAssets (): void {
     ModManager.progressiveHook('InventoryAvailable').inside('CraftingItemListBuild').override(overrideAvailable);
     ModManager.progressiveHook('InventoryAvailable').inside('WardrobeFastLoad').override(overrideAvailable);
 
-    ModManager.progressiveHook('CraftingValidate').inject((args, next) => {
+    ModManager.progressiveHook('CraftingValidate').inject((args) => {
         const item = args[0]?.Item;
         if (!item) return;
         const asset = CraftingAssets[item]?.[0];
@@ -136,5 +137,5 @@ export function enableCustomAssets (): void {
  * @param {Item | null} item
  */
 export function checkItemCustomed (item: { Asset?: Asset } | null): boolean {
-    return !!(item && item.Asset && accessCustomAsset(item.Asset.Group.Name, item.Asset.Name));
+    return !!(item && item.Asset && AccessCustomAsset(item.Asset.Group.Name, item.Asset.Name));
 }

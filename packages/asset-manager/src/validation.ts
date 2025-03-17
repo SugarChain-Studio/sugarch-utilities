@@ -1,5 +1,5 @@
 import { ModManager } from '@sugarch/bc-mod-manager';
-import { accessCustomAsset } from './customStash';
+import { AccessCustomAsset } from './customStash';
 
 // Extend appearance update parameters with an optional fromModUser property
 interface AUParametersExt extends AppearanceUpdateParameters {
@@ -11,9 +11,9 @@ interface AUParametersExt extends AppearanceUpdateParameters {
  * @param param Appearance update parameters
  * @returns Whether the parameters are from a mod user
  */
-export type fromModUserTestFunc = (param: AppearanceUpdateParameters) => boolean;
+export type FromModUserTestFunc = (param: AppearanceUpdateParameters) => boolean;
 
-let fromModUserTest: fromModUserTestFunc | undefined = undefined;
+let tester: FromModUserTestFunc | undefined = undefined;
 
 let hookEnabled = false;
 function runHook () {
@@ -25,7 +25,7 @@ function runHook () {
         const [previousItem, params] = args;
         if (
             !(params as AUParametersExt).fromModUser &&
-            accessCustomAsset(previousItem.Asset.Group.Name, previousItem.Asset.Name)
+            AccessCustomAsset(previousItem.Asset.Group.Name, previousItem.Asset.Name)
         ) {
             return { item: previousItem, valid: false };
         }
@@ -37,7 +37,7 @@ function runHook () {
         const [previousItem, _, params] = args;
         if (
             !(params as AUParametersExt).fromModUser &&
-            accessCustomAsset(previousItem.Asset.Group.Name, previousItem.Asset.Name)
+            AccessCustomAsset(previousItem.Asset.Group.Name, previousItem.Asset.Name)
         ) {
             return { item: previousItem, valid: false };
         }
@@ -46,7 +46,7 @@ function runHook () {
 
     // Set fromModUser property based on the test function
     ModManager.hookFunction('ValidationResolveAppearanceDiff', 1, (args, next) => {
-        if (fromModUserTest) (args[3] as AUParametersExt).fromModUser = fromModUserTest(args[3]);
+        if (tester) (args[3] as AUParametersExt).fromModUser = tester(args[3]);
         return next(args);
     });
 }
@@ -55,7 +55,7 @@ function runHook () {
  * Enable validation to prevent custom assets from being removed or swapped by non-mod users
  * @param fromModUserTest Function to test if the parameters are from a mod user
  */
-export function enableValidation (fromModUserTest: fromModUserTestFunc): void {
-    fromModUserTest = fromModUserTest;
+export function enableValidation (fromModUserTest: FromModUserTestFunc): void {
+    tester = fromModUserTest;
     runHook();
 }

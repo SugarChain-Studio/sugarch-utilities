@@ -13,10 +13,10 @@ export async function resolveAssetOverrides (
 ): Promise<ImageMappingRecord> {
     const basicImgMapping: ImageMappingRecord = {};
 
-    let processList: { container: AssetOverrideContainer; path: string }[] = [{ container: overrides, path: '' }];
+    const processList: { container: AssetOverrideContainer; path: string }[] = [{ container: overrides, path: '' }];
 
     while (processList.length > 0) {
-        let current = processList.pop()!;
+        const current = processList.pop()!;
         Object.entries(current.container).forEach(([key, value]) => {
             const assetPath = `${current.path}${key}`;
             if (typeof value !== 'object') {
@@ -43,25 +43,23 @@ function setupImgMapping (): void {
     });
 
     (async () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await sleepUntil(() => (globalThis as any)['ElementButton'] !== undefined);
 
         ModManager.hookFunction('ElementButton.CreateForAsset', 0, (args, next) => {
-            const _args = args as any[];
-            storage.mapImg(Paths.AssetPreviewIconPath(_args[1] as Asset | Item), (image: string) => {
-                _args[4] = { ..._args[4], image };
+            storage.mapImg(Paths.assetPreviewIconPath(args[1] as Asset | Item), (image: string) => {
+                args[4] = { ...args[4], image };
             });
             return next(args);
         });
 
         ModManager.hookFunction('ElementButton.CreateForActivity', 0, (args, next) => {
-            const _args = args as any[];
-            const activity = _args[1] as ItemActivity;
-
+            const activity = args[1] as ItemActivity;
             const srcImage = activity.Item
-                ? Paths.AssetPreviewIconPath(activity.Item.Asset)
+                ? Paths.assetPreviewIconPath(activity.Item.Asset)
                 : `Assets/Female3DCG/Activity/${activity.Activity.Name}.png`;
             storage.mapImg(srcImage, (image: string) => {
-                _args[4] = { ..._args[4], image };
+                args[4] = { ...args[4], image };
             });
 
             return next(args);

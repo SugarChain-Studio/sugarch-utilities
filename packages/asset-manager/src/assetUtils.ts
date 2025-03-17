@@ -1,5 +1,5 @@
 import { AssetConfig, ParsedAsset, resolveStringAsset } from './assetConfigs';
-import { CustomAssetAdd, getCustomAssets } from './customStash';
+import { customAssetAdd, getCustomAssets } from './customStash';
 import { Entries, resolveEntry, solidfyEntry } from './entries';
 import { addLayerNames } from './layerNames';
 import { pushAfterLoad, pushAssetLoadEvent, pushDefsLoad, requireGroup } from './loadSchedule';
@@ -7,34 +7,37 @@ import { CustomAssetDefinition, CustomGroupName, FuncWork, Translation } from '.
 
 /**
  * Mirror a global function between asset groups
- * @param Group
+ * @param group
  * @param preimageGroup
  * @param asset
  * @param category
  */
+ 
 function globalFunctionMirror<Custom extends string = AssetGroupBodyName> (
-    Group: CustomGroupName<Custom>,
+    group: CustomGroupName<Custom>,
     preimageGroup: CustomGroupName<Custom>,
     asset: { Name: string },
     category: string
 ) {
     const preimageFunction = `Assets${preimageGroup}${asset.Name}${category}`;
-    const newFunction = `Assets${Group}${asset.Name}${category}`;
+    const newFunction = `Assets${group}${asset.Name}${category}`;
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     if ((globalThis as any)[preimageFunction]) {
         (globalThis as any)[newFunction] = (globalThis as any)[preimageFunction];
     }
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 }
 
 /**
  * Add an item
- * @param groupName
- * @param asset
- * @param config
- * @param config.extendedConfig
- * @param config.description
- * @param config.dynamicName
- * @param config.preimage
- * @param config.noMirror
+ * @param groupName Body group name
+ * @param asset Item definition
+ * @param config Additional configuration
+ * @param config.extendedConfig Extended configuration
+ * @param config.description Display name
+ * @param config.dynamicName Dynamic group name
+ * @param config.preimage Preimage group (for mirroring)
+ * @param config.noMirror Whether to not add a mirror
  */
 export function loadAsset<Custom extends string = AssetGroupBodyName> (
     groupName: CustomGroupName<Custom>,
@@ -77,7 +80,7 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
         }
 
         // First set the display name here
-        CustomAssetAdd(groupObj, assetDefRes, AssetConfig.value).then(asset => {
+        customAssetAdd(groupObj, assetDefRes, AssetConfig.value).then(asset => {
             if (asset.DynamicGroupName === asset.Group.Name) {
                 if (dynamicName) asset.DynamicGroupName = dynamicName as AssetGroupName;
                 else asset.DynamicGroupName = srcGroupName as AssetGroupName;
@@ -157,7 +160,7 @@ export function modifyAssetLayers (
 ) {
     pushAfterLoad(() => {
         // Assuming Asset is a global array of assets
-        (globalThis as any).Asset.filter(filter).forEach((asset: Asset) => {
+        Asset.filter(filter).forEach((asset: Asset) => {
             asset.Layer.forEach(layer => work(asset as Mutable<Asset>, layer as Mutable<AssetLayer>));
         });
     });

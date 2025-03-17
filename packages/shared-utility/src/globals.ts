@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 interface INamespace<T = any> {
     get(name: string, defaultValue: () => T): T;
     set(name: string, value: T): void;

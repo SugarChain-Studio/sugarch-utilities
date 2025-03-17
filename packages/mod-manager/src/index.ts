@@ -1,7 +1,7 @@
 import bcModSdk from 'bondage-club-mod-sdk';
 import { ProgressiveHook } from './progressiveHook';
 import { FuncWork, ModManagerInterface } from './types';
-import { DefaultLogger, Logger, setLogger } from './logger';
+import { ILogger, Logger, setLogger } from './logger';
 
 class WorkList {
     done: boolean;
@@ -28,12 +28,12 @@ const hookList = new WorkList();
 const waitPlayerHookList = new WorkList();
 const patchList = new WorkList();
 
-function PlayerLoaded (): boolean {
+function playerLoaded (): boolean {
     return globalThis['Player'] != undefined && typeof globalThis['Player']['MemberNumber'] === 'number';
 }
 
-function PlayerHook (work: FuncWork) {
-    if (PlayerLoaded()) {
+function playerHook (work: FuncWork) {
+    if (playerLoaded()) {
         waitPlayerHookList.push(work);
     } else {
         work();
@@ -62,12 +62,12 @@ export class ModManager {
 
         const wk = () => waitPlayerHookList.run();
 
-        if (PlayerLoaded()) {
+        if (playerLoaded()) {
             wk();
         } else {
             ModManager.mod!.hookFunction('LoginResponse', 0, (args, next) => {
                 next(args);
-                if (PlayerLoaded()) wk();
+                if (playerLoaded()) wk();
             });
         }
 
@@ -85,12 +85,12 @@ export class ModManager {
 
         const wk = () => waitPlayerHookList.run();
 
-        if (PlayerLoaded()) {
+        if (playerLoaded()) {
             wk();
         } else {
             ModManager.mod!.hookFunction('LoginResponse', 0, (args, next) => {
                 next(args);
-                if (PlayerLoaded()) wk();
+                if (playerLoaded()) wk();
             });
         }
     }
@@ -123,7 +123,7 @@ export class ModManager {
     }
 
     /**
-     * Invoke original function
+     * Invoke original function, if mod is not registered, call the original function directly
      * @template TFunctionName
      * @param functionName function name
      * @param args function arguments
@@ -132,6 +132,7 @@ export class ModManager {
         functionName: TFunctionName,
         ...args: ModManagerInterface.FunctionArguments<TFunctionName>
     ): ModManagerInterface.FunctionReturnType<TFunctionName> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (!ModManager.mod) return (globalThis as any)[functionName]?.(...args);
         else return ModManager.mod.callOriginal(functionName, args);
     }
@@ -179,23 +180,26 @@ export class ModManager {
         priority: number,
         hook: ModManagerInterface.HookFunction<TFunctionName>
     ) {
-        PlayerHook(() => ModManager.mod!.hookFunction(funcName, priority, hook));
+        playerHook(() => ModManager.mod!.hookFunction(funcName, priority, hook));
     }
 
     /**
      * Register a global function (accessible via globalThis)
      * @param funcName function name
      * @param func the function to register
-     */
+     */ 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     static globalFunction (funcName: string, func: Function) {
         if (typeof func != 'function') {
             Logger.warn('globalFunction: param is not a function');
         }
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         if ((globalThis as any)[funcName] == undefined) {
             (globalThis as any)[funcName] = func;
         } else if ((globalThis as any)[funcName] != func) {
             Logger.warn(`globalFunction: ${funcName} is already defined`);
         }
+        /* eslint-enable @typescript-eslint/no-explicit-any */
     }
 
     /**
@@ -206,6 +210,7 @@ export class ModManager {
      * @param func the function to register
      * @returns randomly generated function name
      */
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     static randomGlobalFunction<T extends any[], R> (funcPrefix: string, func: (...args: T) => R): string {
         const genName = (prefix: string) => prefix + Math.random().toString(16).substring(2);
         let funcName = genName(funcPrefix);
@@ -215,12 +220,13 @@ export class ModManager {
         (globalThis as any)[funcName] = func;
         return funcName;
     }
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     /**
      * Override the default logger
      * @param logger
      */
-    static setLogger(logger: typeof DefaultLogger) {
+    static setLogger(logger: ILogger) {
         setLogger(logger);
     }
 }

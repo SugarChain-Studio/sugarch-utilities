@@ -34,7 +34,7 @@ export function pickEntry<Custom extends string = AssetGroupBodyName> (
     asset: string,
     groupedEntry: Translation.GroupedEntries
 ): Translation.Entry {
-    let ret: Translation.Entry = {};
+    const ret: Translation.Entry = {};
     for (const [lang, entries] of Object.entries(groupedEntry)) {
         if (entries[group]?.[asset]) ret[lang as ServerChatRoomLanguage] = entries[group][asset];
     }
@@ -192,15 +192,14 @@ export function setupEntries (): void {
 
     const ActionFunc = ModManager.randomGlobalFunction(
         'CustomDialogInject',
-        (dictionary: any, _1: any, _2: any, PrevItem: any, NextItem: any) => {
-            [
+        (dictionary: DictionaryBuilder, _1: Character, _2: string, PrevItem: Item, NextItem: Item) => {
+            for (const [key, item] of [
                 ['PrevAsset', PrevItem],
                 ['NextAsset', NextItem],
-            ]
-                .map(([key, value]) => [key, value, checkItemCustomed(value)])
-                .forEach(([key, item, customed]) => {
-                    if (customed) dictionary.text(key, item.Asset.Description);
-                });
+            ] as const) {
+                const customed = checkItemCustomed(item);
+                if (customed) dictionary.text(key, item.Asset.Description);
+            }
         }
     );
 

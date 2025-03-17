@@ -18,7 +18,7 @@ namespace details {
             AssetGroupName,
             CustomGroupName<T>
         >;
-        export type Script<T extends string = AssetGroupBodyName> = AssetGroupDefinition.Script;
+        export type Script<_ extends string = AssetGroupBodyName> = AssetGroupDefinition.Script;
     }
 
     export namespace CAssetDef {
@@ -32,7 +32,7 @@ namespace details {
             AssetGroupName,
             CustomGroupName<T>
         >;
-        export type Script<T extends string = AssetGroupBodyName> = AssetDefinition.Script;
+        export type Script<_ extends string = AssetGroupBodyName> = AssetDefinition.Script;
     }
 
     export type GroupedAssetType<T extends string = AssetGroupBodyName> = {
@@ -93,4 +93,5 @@ export namespace Translation {
     export type GroupedEntries<Custom extends string = AssetGroupBodyName> = CustomRecord<CustomGroupName<Custom>, Record<string, string>>;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type FuncWork<T extends any[] = []> = (...args: T) => void;

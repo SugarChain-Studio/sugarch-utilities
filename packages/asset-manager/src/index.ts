@@ -5,7 +5,7 @@ import { addCustomDialog, setupCustomDialog } from './dialog';
 import { pickEntry, setupEntries } from './entries';
 import { enableCustomAssets, getCustomAssets } from './customStash';
 import { addLayerNames, addLayerNamesByEntry, setupLayerNameLoad } from './layerNames';
-import { enableValidation, fromModUserTestFunc } from './validation';
+import { enableValidation, FromModUserTestFunc } from './validation';
 import {
     CustomAssetDefinition,
     CustomGroupDefinition,
@@ -15,6 +15,7 @@ import {
     Translation,
 } from './types';
 import { ImageMapping, ImageMappingRecord } from '@sugarch/bc-shared-utility';
+import { ILogger, setLogger } from './logger';
 
 export class _AssetManager<Custom extends string = AssetGroupBodyName> {
     /**
@@ -47,8 +48,8 @@ export class _AssetManager<Custom extends string = AssetGroupBodyName> {
         descriptions?: Translation.GroupedEntries,
         extended?: ExtendedItemMainConfig
     ) {
-        for(const [group, assets] of Object.entries(groupedAssets)) {
-            for(const asset of assets) {
+        for (const [group, assets] of Object.entries(groupedAssets)) {
+            for (const asset of assets) {
                 const groupName = group as CustomGroupName;
                 const description = descriptions && pickEntry(groupName, asset.Name, descriptions);
                 const extendedConfig = extended &&
@@ -195,8 +196,12 @@ export class _AssetManager<Custom extends string = AssetGroupBodyName> {
     /**
      * Enable non-mod removal validation
      */
-    enableValidation(fromModUserTest: fromModUserTestFunc) {
+    enableValidation (fromModUserTest: FromModUserTestFunc) {
         enableValidation(fromModUserTest);
+    }
+
+    setLogger (logger: ILogger) {
+        setLogger(logger);
     }
 }
 

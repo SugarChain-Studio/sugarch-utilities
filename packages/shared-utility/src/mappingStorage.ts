@@ -1,5 +1,3 @@
-import { Globals } from './globals';
-
 export class ImageMappingStorage {
     basic: Record<string, string>; // basicImgMapping
     custom: Record<string, string>; // customImgMapping
@@ -46,11 +44,11 @@ export class ImageMappingStorage {
         if (src.startsWith('data:image')) return src;
         if (src.startsWith('http')) return src;
 
-        let test = src.startsWith('./') ? src.slice(2) : src;
-        let test_return = test;
-        if (this.custom[test_return]) test_return = this.custom[test_return];
-        if (this.basic[test_return]) test_return = this.basic[test_return];
-        if (test_return !== test) return test_return as T;
+        const test = src.startsWith('./') ? src.slice(2) : src;
+        let testReturn = test;
+        if (this.custom[testReturn]) testReturn = this.custom[testReturn];
+        if (this.basic[testReturn]) testReturn = this.basic[testReturn];
+        if (testReturn !== test) return testReturn as T;
         return src;
     }
 

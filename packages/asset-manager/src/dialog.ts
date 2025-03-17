@@ -36,7 +36,7 @@ export function setupCustomDialog(): void {
     );
 
     ModManager.progressiveHook("ChatRoomPublishCustomAction")
-        .inject((args, next) => {
+        .inject((args) => {
             const [msg, _, Dictionary] = args;
             const tDialog = translate(msg);
             if (tDialog) Dictionary.push({ Tag: `MISSING TEXT IN "Interface.csv": ${msg}`, Text: tDialog });

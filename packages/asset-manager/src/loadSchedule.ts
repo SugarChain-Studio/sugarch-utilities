@@ -104,7 +104,7 @@ export function requireGroup<Custom extends string = AssetGroupBodyName> (
     noMirror: boolean,
     resolve: (group: AssetGroup) => void
 ): void {
-    const wk = (resolve_: typeof resolve) => {
+    const wk = (_resolve: typeof resolve) => {
         const mirrors = noMirror ? [resolveSingle(group)] : resolveMirror(group);
         const unresolved = mirrors.find(({ group }) => !group);
         if (unresolved) {
@@ -113,16 +113,16 @@ export function requireGroup<Custom extends string = AssetGroupBodyName> (
                 return;
             }
             missingGroups.add(unresolved.name);
-            pushAssetLoadEvent(unresolved.name, groupObj => wk(resolve_));
+            pushAssetLoadEvent(unresolved.name, () => wk(_resolve));
             return;
         }
-        mirrors.forEach(({ name, group }) => resolve_(group));
+        mirrors.forEach(({ group }) => _resolve(group));
     };
 
     if (isGroupLoaded) {
         wk(resolve);
     } else {
-        pushAssetLoadEvent(group, groupObj => wk(resolve));
+        pushAssetLoadEvent(group, () => wk(resolve));
     }
 }
 

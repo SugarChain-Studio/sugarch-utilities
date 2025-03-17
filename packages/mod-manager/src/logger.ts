@@ -1,29 +1,23 @@
-export class DefaultLogger {
-    static info(message: string) {
-        console.log("[@sugarch/bc-mod-manager]", message);
-    }
-    static warn(message: string) {
-        console.warn("[@sugarch/bc-mod-manager]", message);
-    }
-    static error(message: string) {
-        console.error("[@sugarch/bc-mod-manager]", message);
-    }
+export interface ILogger {
+    info(message: string): void;
+    warn(message: string): void;
+    error(message: string): void;
 }
 
-let _Logger = DefaultLogger;
+let staticLogger: ILogger | undefined = undefined;
 
-export function setLogger(logger: typeof DefaultLogger) {
-    _Logger = logger;
+export function setLogger(logger: ILogger) {
+    staticLogger = logger;
 }
 
 export class Logger {
     static info(message: string) {
-        Logger.info(message);
+        staticLogger?.info(message);
     }
     static warn(message: string) {
-        Logger.warn(message);
+        staticLogger?.warn(message);
     }
     static error(message: string) {
-        Logger.error(message);
+        staticLogger?.error(message);
     }
 }

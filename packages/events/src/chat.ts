@@ -30,6 +30,7 @@ class _ChatRoomEvents {
     on<T extends ServerChatRoomMessageType>(
         event: T,
         listener: (message: ServerChatRoomMessage) => void,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         context?: any
     ): void {
         handler!.on(event, listener, context);
@@ -42,6 +43,7 @@ class _ChatRoomEvents {
     once<T extends ServerChatRoomMessageType>(
         event: T,
         listener: (message: ServerChatRoomMessage) => void,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         context?: any
     ): void {
         handler!.once(event, listener, context);

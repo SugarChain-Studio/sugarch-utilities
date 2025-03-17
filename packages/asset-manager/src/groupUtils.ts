@@ -1,7 +1,7 @@
 import { Entries, resolveEntry, solidfyEntry } from './entries';
 import { pushGroupLoad } from './loadSchedule';
 import { registerMirror } from './mirrorGroup';
-import { CustomGroupAdd } from './customStash';
+import { customGroupAdd } from './customStash';
 import { loadAsset } from './assetUtils';
 import { resolveStringAsset } from './assetConfigs';
 import { CustomAssetDefinition, CustomGroupDefinition, CustomGroupName, Translation } from './types';
@@ -28,7 +28,7 @@ export function loadGroup<Custom extends string = AssetGroupBodyName> (
 ) {
     pushGroupLoad(() => {
         const solidDesc = solidfyEntry(description, groupDef.Group.replace(/_.*?Luzi$/, ''));
-        CustomGroupAdd('Female3DCG', groupDef as AssetGroupDefinition).then(grp => {
+        customGroupAdd('Female3DCG', groupDef as AssetGroupDefinition).then(grp => {
             grp.Description = resolveEntry(solidDesc);
             if (dynamicName) grp.DynamicGroupName = dynamicName as AssetGroupName;
 

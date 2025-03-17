@@ -4,7 +4,7 @@ XJ/P2gAAAABJRU5ErkJggg==`;
 
 class Paths {
     // image/empty.png
-    static get EmptyImage() {
+    static get emptyImage() {
         return emptyPNG;
     }
 
@@ -13,9 +13,9 @@ class Paths {
      * @param asset The item
      * @returns The icon path
      */
-    static AssetPreviewIconPath(asset: Asset | Item): string {
-        const _asset = "Asset" in asset ? asset.Asset : asset;
-        return `${AssetGetPreviewPath(_asset)}/${_asset.Name}.png`;
+    static assetPreviewIconPath(asset: Asset | Item): string {
+        const stripAsset = "Asset" in asset ? asset.Asset : asset;
+        return `${AssetGetPreviewPath(stripAsset)}/${stripAsset.Name}.png`;
     }
 
     /**
@@ -23,9 +23,9 @@ class Paths {
      * @param activity The activity
      * @returns The icon path
      */
-    static ActivityPreviewIconPath(activity: Activity | ItemActivity): string {
-        const _activity = "Activity" in activity ? activity.Activity : activity;
-        return `Assets/Female3DCG/Activity/${_activity.Name}.png`;
+    static activityPreviewIconPath(activity: Activity | ItemActivity): string {
+        const stripActivity = "Activity" in activity ? activity.Activity : activity;
+        return `Assets/Female3DCG/Activity/${stripActivity.Name}.png`;
     }
 }
 
