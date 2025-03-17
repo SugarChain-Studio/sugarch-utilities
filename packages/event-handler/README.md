@@ -18,12 +18,12 @@ Here's a basic example of how to use the `@sugarch/bc-event-handler` package:
 import { ChatRoomEvents } from '@sugarch/bc-event-handler';
 
 // Register an event listener
-ChatRoomEvents.on('ChatRoomMessage', (message) => {
+ChatRoomEvents.on('Chat', (message) => {
     console.log('New chat message:', message);
 });
 
 // Register a one-time event listener
-ChatRoomEvents.once('ChatRoomMessage', (message) => {
+ChatRoomEvents.once('Action', (message) => {
     console.log('New chat message:', message);
 });
 ```
