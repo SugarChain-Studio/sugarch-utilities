@@ -1,0 +1,13 @@
+{
+    "name": "sugarch-utilities",
+    "workspaces": [
+        "packages/*"
+    ],
+    "scripts": {
+        "build": "pnpm run build --recursive",
+        "type-check": "pnpm run type-check --recursive",
+        "publish": "pnpm run publish --recursive"
+    },
+    "devDependencies": {},
+    "packageManager": "pnpm@10.6.2"
+}
