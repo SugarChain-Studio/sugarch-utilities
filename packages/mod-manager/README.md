@@ -1,6 +1,16 @@
-# BC Mod Manager
+# @sugarchain/bc-mod-manager
 
-## Key Features
+A package that wraps the bcModSdk to provide a more flexible hook mechanism. It simplifies the creation and management of mods by offering a loose coupling of hooks and utilities.
+
+## Installation
+
+To install the package, use pnpm:
+
+```bash
+pnpm add @sugarchain/bc-mod-manager --save-dev
+```
+
+## Usage
 
 ### `hookFunction`
 The `hookFunction` method allows you to register hooks that can be executed before the mod initialization. This is useful for setting up necessary hooks early in the mod lifecycle.
@@ -21,7 +31,10 @@ ModManager.initWithMod(bcmod);
 ```
 
 ### `afterInit`
-The `afterInit` method lets you add callbacks that will be executed after the mod has been initialized. If the mod is already initialized, the callback will be executed immediately.
+
+The `afterInit` method lets you add callbacks that will be executed after the mod has been initialized. Which means all the hooks registered before `initWithMod` will be executed before the callback.
+
+If the mod is already initialized, the callback will be executed immediately.
 
 ```typescript
 import { ModManager } from '@sugarchain/bc-mod-manager';
@@ -33,6 +46,7 @@ ModManager.afterInit(() => {
 ```
 
 ### `afterPlayerLogin`
+
 The `afterPlayerLogin` method allows you to add callbacks that will be executed after the player logs in. If the player is already logged in, the callback will be executed immediately.
 
 ```typescript
@@ -45,7 +59,8 @@ ModManager.afterPlayerLogin(() => {
 ```
 
 ### `progressiveHook`
-The `progressiveHook` method enables you to assemble hooks in a chain-like manner. This allows for more complex and flexible hook management by combining multiple hook functions into a single progressive hook.
+
+The `progressiveHook` method allows you to assemble hooks in a chain-like manner. This allows for more complex and flexible hook management by combining multiple hook functions into a single progressive hook.
 
 ```typescript
 import { ModManager } from '@sugarchain/bc-mod-manager';
@@ -63,9 +78,3 @@ hook
     return next(args);
   });
 ```
-
-## Contributing
-Contributions are welcome! Please feel free to submit a pull request or open an issue for any enhancements or bug fixes.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
