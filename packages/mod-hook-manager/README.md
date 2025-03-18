@@ -4,10 +4,10 @@ A package that wraps the bcModSdk to provide a more flexible hook mechanism. It 
 
 ## Installation
 
-To install the package, use pnpm:
+To install the package, use:
 
 ```bash
-pnpm add @sugarch/bc-mod-hook-manager --save-dev
+npm add @sugarch/bc-mod-hook-manager --save-dev
 ```
 
 ## Usage

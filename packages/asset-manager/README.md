@@ -6,10 +6,10 @@ A package for managing assets in BC. It includes functions for loading, modifyin
 
 This package requires the `@sugarch/bc-mod-hook-manager` package to be installed. Make sure to install it before installing this package.
 
-To install the package, use pnpm:
+To install the package, use:
 
 ```bash
-pnpm add @sugarch/bc-asset-manager --save-dev
+npm add @sugarch/bc-asset-manager --save-dev
 ```
 
 ## Usage
