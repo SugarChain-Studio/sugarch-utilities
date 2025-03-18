@@ -1,6 +1,6 @@
 import { sleepUntil } from './sleep';
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
-import { Paths } from './paths';
+import { PathTools } from './paths';
 import { ImageMappingStorage } from './mappingStorage';
 import type { AssetOverrideContainer, ImageMappingRecord } from "@sugarch/bc-mod-types";
 import { Globals } from './globals';
@@ -68,7 +68,7 @@ function setupImgMapping (): void {
         await sleepUntil(() => (globalThis as any)['ElementButton'] !== undefined);
 
         HookManager.hookFunction('ElementButton.CreateForAsset', 0, (args, next) => {
-            storage.mapImg(Paths.assetPreviewIconPath(args[1] as Asset | Item), (image: string) => {
+            storage.mapImg(PathTools.assetPreviewIconPath(args[1] as Asset | Item), (image: string) => {
                 args[4] = { ...args[4], image };
             });
             return next(args);
@@ -77,7 +77,7 @@ function setupImgMapping (): void {
         HookManager.hookFunction('ElementButton.CreateForActivity', 0, (args, next) => {
             const activity = args[1] as ItemActivity;
             const srcImage = activity.Item
-                ? Paths.assetPreviewIconPath(activity.Item.Asset)
+                ? PathTools.assetPreviewIconPath(activity.Item.Asset)
                 : `Assets/Female3DCG/Activity/${activity.Activity.Name}.png`;
             storage.mapImg(srcImage, (image: string) => {
                 args[4] = { ...args[4], image };

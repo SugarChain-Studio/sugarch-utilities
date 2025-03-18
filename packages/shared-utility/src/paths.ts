@@ -2,7 +2,7 @@ const emptyPNG = `data:img/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFc
 G3RFWHRTb2Z0d2FyZQBDZWxzeXMgU3R1ZGlvIFRvb2zBp+F8AAAADUlEQVQI12P4//8/AwAI/AL+
 XJ/P2gAAAABJRU5ErkJggg==`;
 
-class Paths {
+class PathTools {
     // image/empty.png
     static get emptyImage() {
         return emptyPNG;
@@ -29,4 +29,4 @@ class Paths {
     }
 }
 
-export { Paths };
+export { PathTools };
