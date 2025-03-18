@@ -6,3 +6,5 @@ export type AssetOverrideLeaf = string | AssetOverrideContainer;
 export interface AssetOverrideContainer {
     [key: string]: AssetOverrideLeaf;
 }
+
+export * from './translationTypes';

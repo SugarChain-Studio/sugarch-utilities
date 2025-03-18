@@ -17,9 +17,11 @@ import {
 import { ImageMapping, ImageMappingRecord } from '@sugarch/bc-shared-utility';
 import { ILogger, setLogger } from './logger';
 
+export * from './types';
+
 export { resolveAssetOverrides } from '@sugarch/bc-shared-utility';
 
-export class _AssetManager<Custom extends string = AssetGroupBodyName> {
+class _AssetManager<Custom extends string = AssetGroupBodyName> {
     /**
      * Add an asset. If the asset is ItemTorso or ItemTorso2, a mirror will be automatically added.
      * @param group The asset group
@@ -229,5 +231,7 @@ export class _AssetManager<Custom extends string = AssetGroupBodyName> {
         return this as _AssetManager<T>;
     }
 }
+
+export type AssetManagerType = _AssetManager;
 
 export const AssetManager = new _AssetManager();
