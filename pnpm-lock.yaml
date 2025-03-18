@@ -179,10 +179,6 @@ importers:
         version: 5.8.2
 
   packages/mod-utility:
-    dependencies:
-      '@sugarch/bc-mod-utility':
-        specifier: workspace:*
-        version: 'link:'
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^28.0.3
