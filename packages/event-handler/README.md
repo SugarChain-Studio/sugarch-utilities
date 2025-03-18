@@ -21,7 +21,7 @@ import { ChatRoomEvents } from '@sugarch/bc-event-handler';
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 
 
-// Initialize the hook manager, AssetManager will use it to hook essential functions
+// Initialize the hook manager, event handler will use it to register events
 HookManager.initWithMod(bcModSdk.registerMod(...));
 
 // Register an event listener
