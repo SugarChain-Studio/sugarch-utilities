@@ -1,9 +1,8 @@
-import { sleepUntil } from './sleep';
+import { Globals } from '@sugarch/bc-mod-utility';
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
-import { PathTools } from './paths';
+import { sleepUntil, PathTools } from '@sugarch/bc-mod-utility';
 import { ImageMappingStorage } from './mappingStorage';
 import type { AssetOverrideContainer, ImageMappingRecord } from "@sugarch/bc-mod-types";
-import { Globals } from './globals';
 
 const storage = new ImageMappingStorage();
 

@@ -1,5 +1,5 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
-import { Globals } from '@sugarch/bc-shared-utility';
+import { Globals } from '@sugarch/bc-mod-utility';
 import EventEmitter from 'eventemitter3';
 
 // Define types for orgasm events

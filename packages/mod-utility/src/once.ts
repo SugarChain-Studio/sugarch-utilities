@@ -1,4 +1,4 @@
-import { Globals } from "@sugarch/bc-shared-utility"
+import { Globals } from "./globals";
 
 const globalName = 'OnceFlag';
 

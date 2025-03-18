@@ -1,5 +1,5 @@
 import { HookManager } from "@sugarch/bc-mod-hook-manager";
-import { Globals } from "@sugarch/bc-shared-utility";
+import { Globals } from "@sugarch/bc-mod-utility";
 import EventEmitter from "eventemitter3";
 
 // Define custom event emitter interface with our specific events

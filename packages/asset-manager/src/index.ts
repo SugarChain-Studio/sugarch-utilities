@@ -15,12 +15,12 @@ import type {
     Translation,
     ImageMappingRecord,
 } from '@sugarch/bc-mod-types';
-import { ImageMapping } from '@sugarch/bc-shared-utility';
+import { ImageMapping } from '@sugarch/bc-image-mapping';
 import { ILogger, setLogger } from './logger';
 
 export type * from '@sugarch/bc-mod-types';
 
-export { resolveAssetOverrides } from '@sugarch/bc-shared-utility';
+export { resolveAssetOverrides } from '@sugarch/bc-image-mapping';
 
 class _AssetManager<Custom extends string = AssetGroupBodyName> {
     /**

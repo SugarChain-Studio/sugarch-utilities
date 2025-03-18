@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-event-handler",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Handle BC events with EventEmitter.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
@@ -28,14 +28,13 @@
   },
   "packageManager": "pnpm@10.6.2",
   "dependencies": {
-    "@sugarch/bc-mod-types": "workspace:*"
+    "@sugarch/bc-mod-utility": "workspace:*"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@sugarch/bc-shared-utility": "workspace:*",
     "bc-stubs": "114.0.0",
     "eventemitter3": "^5.0.1",
     "rollup": "^4.36.0",
