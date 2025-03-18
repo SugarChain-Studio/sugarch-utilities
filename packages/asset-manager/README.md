@@ -50,7 +50,8 @@ const assetDef: AssetDefinition = {
 };
 
 // Assembling an asset registration function
-// I like to pack asset in separate files, and each file will have a function like this. For me, t's easier to manage the massing assets.
+// Tips: I like to pack asset in separate files, and each file will have a function like this. 
+//   With custom assets piling up, it's easier to manage them this way.
 function registerSimpleExample() {
     // Add the asset to the game
     AssetManager.addAsset("ItemHandHeld", assetDef);
