@@ -59,9 +59,9 @@ function registerSimpleExample() {
     // Mapping the images
     AssetManager.addImageMapping({
         // the image for the Base layer
-        "Assets/ItemMisc/SimpleExample_Base.png": `${yourBaseURL}/SimpleExample_Base.png`,
+        "Assets/Femal3DCG/ItemHandHeld/SimpleExample_Base.png": `${yourBaseURL}/SimpleExample_Base.png`,
         // the image for the dialog preview icon
-        "Assets/ItemMisc/Preview/SimpleExample.png": `${yourBaseURL}/SimpleExample_Preview.png`,
+        "Assets/Femal3DCG/ItemHandHeld/Preview/SimpleExample.png": `${yourBaseURL}/SimpleExample_Preview.png`,
     })
 }
 
