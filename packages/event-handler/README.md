@@ -18,6 +18,11 @@ Here's a basic example of how to use the `@sugarch/bc-event-handler` package:
 
 ```typescript
 import { ChatRoomEvents } from '@sugarch/bc-event-handler';
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
+
+
+// Initialize the hook manager, AssetManager will use it to hook essential functions
+HookManager.initWithMod(bcModSdk.registerMod(...));
 
 // Register an event listener
 ChatRoomEvents.on('Chat', (message) => {

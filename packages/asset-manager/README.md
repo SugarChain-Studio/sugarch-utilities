@@ -18,6 +18,7 @@ Here's a basic example of how to use the `@sugarch/bc-asset-manager` package:
 
 ```typescript
 import { AssetManager } from '@sugarch/bc-asset-manager';
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
 
 // write a AssetDefinition for your asset, just like vanilla BC definition
 const assetDef: AssetDefinition = {
@@ -64,6 +65,8 @@ function registerSimpleExample() {
     })
 }
 
+// Initialize the hook manager, AssetManager will use it to hook essential functions
+HookManager.initWithMod(bcModSdk.registerMod(...));
 
 // Register the whole thing
 AssetManager.init(() => {
