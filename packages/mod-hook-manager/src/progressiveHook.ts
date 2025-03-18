@@ -2,7 +2,6 @@ import { HookManagerInterface, ProgressiveHookInterface } from "./types";
 
 /**
  * Register a hook
- * @template TFunctionName
  */
 export class ProgressiveHook<TFunctionName extends string> {
     workList: ProgressiveHookInterface.WorkType<TFunctionName>[] = [];

@@ -125,7 +125,6 @@ class _HookManager {
 
     /**
      * Invoke original function, if mod is not registered, call the original function directly
-     * @template TFunctionName
      * @param functionName function name
      * @param args function arguments
      */
@@ -140,7 +139,6 @@ class _HookManager {
 
     /**
      * Register a hook function
-     * @template TFunctionName
      * @param funcName function name
      * @param priority hook priority
      * @param hook hook function
@@ -171,7 +169,6 @@ class _HookManager {
     /**
      * Register a hook function that depends on the player, executed after player data is loaded.
      * If player data is already loaded, execute immediately.
-     * @template TFunctionName
      * @param funcName function name
      * @param priority hook priority
      * @param hook hook function
@@ -205,8 +202,6 @@ class _HookManager {
 
     /**
      * Register a global function with a randomly generated name
-     * @template T
-     * @template R
      * @param funcPrefix the prefix of the function name
      * @param func the function to register
      * @returns randomly generated function name

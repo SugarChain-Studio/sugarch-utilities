@@ -2,7 +2,6 @@ import { CustomGroupName, Translation } from './types';
 
 /**
  * Internal function: Resolves translations with language fallback logic
- * @template  [F=undefined]
  * @param resolver - Function to resolve translations from a specific structure
  * @param fallback - Fallback value
  * @returns Translated text or fallback value
