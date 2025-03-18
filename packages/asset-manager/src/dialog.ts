@@ -1,4 +1,4 @@
-import { ModManager } from "@sugarch/bc-mod-manager";
+import { HookManager } from "@sugarch/bc-mod-hook-manager";
 import { Translation } from "./types";
 import { translateDialog } from "./entryUtils";
 
@@ -36,11 +36,11 @@ export function setupCustomDialog(): void {
 
     const translate = (msg: string) => translateDialog(customDialog, msg);
     
-    ModManager.progressiveHook("AssetTextGet").override(
+    HookManager.progressiveHook("AssetTextGet").override(
         (args, next) =>  translate(args[0]) || next(args)
     );
 
-    ModManager.progressiveHook("ChatRoomPublishCustomAction")
+    HookManager.progressiveHook("ChatRoomPublishCustomAction")
         .inject((args) => {
             const [msg, _, Dictionary] = args;
             const tDialog = translate(msg);

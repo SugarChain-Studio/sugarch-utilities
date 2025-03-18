@@ -1,4 +1,4 @@
-import { ModManager } from '@sugarch/bc-mod-manager';
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { checkItemCustomed, getCustomAssets, getCustomGroups } from './customStash';
 import { getCustomMirrorGroups, resolvePreimage } from './mirrorGroup';
 import { CustomGroupName, Translation } from './types';
@@ -189,12 +189,12 @@ export function setupEntries (): void {
         loadAssetEntries();
     } else {
         // Load CSV descriptions
-        ModManager.progressiveHook('AssetBuildDescription').next().inject(loadAssetEntries);
+        HookManager.progressiveHook('AssetBuildDescription').next().inject(loadAssetEntries);
         // Translation loading phase
-        ModManager.progressiveHook('TranslationAssetProcess').next().inject(loadAssetEntries);
+        HookManager.progressiveHook('TranslationAssetProcess').next().inject(loadAssetEntries);
     }
 
-    const ActionFunc = ModManager.randomGlobalFunction(
+    const ActionFunc = HookManager.randomGlobalFunction(
         'CustomDialogInject',
         (dictionary: DictionaryBuilder, _1: Character, _2: string, PrevItem: Item, NextItem: Item) => {
             for (const [key, item] of [
@@ -207,7 +207,7 @@ export function setupEntries (): void {
         }
     );
 
-    ModManager.patchFunction('ChatRoomPublishAction', {
+    HookManager.patchFunction('ChatRoomPublishAction', {
         'ChatRoomCharacterItemUpdate(C);': `${ActionFunc}(dictionary, C, Action, PrevItem, NextItem);\nChatRoomCharacterItemUpdate(C);`,
     });
 }

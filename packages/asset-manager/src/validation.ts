@@ -1,4 +1,4 @@
-import { ModManager } from '@sugarch/bc-mod-manager';
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { AccessCustomAsset } from './customStash';
 
 // Extend appearance update parameters with an optional fromModUser property
@@ -21,7 +21,7 @@ function runHook () {
     hookEnabled = true;
 
     // Prevent custom assets from being removed by non-mod users
-    ModManager.hookFunction('ValidationResolveRemoveDiff', 1, (args, next) => {
+    HookManager.hookFunction('ValidationResolveRemoveDiff', 1, (args, next) => {
         const [previousItem, params] = args;
         if (
             !(params as AUParametersExt).fromModUser &&
@@ -33,7 +33,7 @@ function runHook () {
     });
 
     // Prevent custom assets from being swapped by non-mod users
-    ModManager.hookFunction('ValidationResolveSwapDiff', 1, (args, next) => {
+    HookManager.hookFunction('ValidationResolveSwapDiff', 1, (args, next) => {
         const [previousItem, _, params] = args;
         if (
             !(params as AUParametersExt).fromModUser &&
@@ -45,7 +45,7 @@ function runHook () {
     });
 
     // Set fromModUser property based on the test function
-    ModManager.hookFunction('ValidationResolveAppearanceDiff', 1, (args, next) => {
+    HookManager.hookFunction('ValidationResolveAppearanceDiff', 1, (args, next) => {
         if (tester) (args[3] as AUParametersExt).fromModUser = tester(args[3]);
         return next(args);
     });

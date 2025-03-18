@@ -1,4 +1,4 @@
-import { ModManagerInterface, ProgressiveHookInterface } from "./types";
+import { HookManagerInterface, ProgressiveHookInterface } from "./types";
 
 /**
  * Register a hook
@@ -10,14 +10,14 @@ export class ProgressiveHook<TFunctionName extends string> {
     /**
      * @param hookMng
      */
-    constructor (private hookMng: ModManagerInterface.HookableMod) {}
+    constructor (private hookMng: HookManagerInterface.HookableMod) {}
 
     run (
-        args: ModManagerInterface.FunctionArguments<TFunctionName>,
-        next: ModManagerInterface.FunctionType<TFunctionName>
-    ): ModManagerInterface.FunctionReturnType<TFunctionName> {
+        args: HookManagerInterface.FunctionArguments<TFunctionName>,
+        next: HookManagerInterface.FunctionType<TFunctionName>
+    ): HookManagerInterface.FunctionReturnType<TFunctionName> {
         let hasResult = false;
-        let result: ModManagerInterface.FunctionReturnType<TFunctionName> | undefined = undefined;
+        let result: HookManagerInterface.FunctionReturnType<TFunctionName> | undefined = undefined;
         for (const work of this.workList) {
             if (work.value === 'inject') {
                 work.work(args, next);
@@ -35,7 +35,7 @@ export class ProgressiveHook<TFunctionName extends string> {
             }
         }
 
-        if (hasResult) return result as ModManagerInterface.FunctionReturnType<TFunctionName>;
+        if (hasResult) return result as HookManagerInterface.FunctionReturnType<TFunctionName>;
         else return next(args);
     }
 
@@ -54,7 +54,7 @@ export class ProgressiveHook<TFunctionName extends string> {
      * @param func
      * @returns
      */
-    inject (func: ModManagerInterface.InjectFunction<TFunctionName>) {
+    inject (func: HookManagerInterface.InjectFunction<TFunctionName>) {
         this.workList.push({ value: 'inject', work: func });
         return this;
     }
@@ -86,7 +86,7 @@ export class ProgressiveHook<TFunctionName extends string> {
      * @param func
      * @returns
      */
-    when (func: ModManagerInterface.CheckFunction<TFunctionName>) {
+    when (func: HookManagerInterface.CheckFunction<TFunctionName>) {
         this.workList.push({ value: 'check', work: func });
         return this;
     }
@@ -96,7 +96,7 @@ export class ProgressiveHook<TFunctionName extends string> {
      * If the Result is set, next() will not be automatically called at the end.
      * @param func
      */
-    override (func: ModManagerInterface.HookFunction<TFunctionName>) {
+    override (func: HookManagerInterface.HookFunction<TFunctionName>) {
         this.workList.push({ value: 'override', work: func });
         return this;
     }

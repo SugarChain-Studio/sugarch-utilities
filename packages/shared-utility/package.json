@@ -36,7 +36,7 @@
     "tslib": "^2.8.1"
   },
   "peerDependencies": {
-    "@sugarch/bc-mod-manager": "workspace:*",
+    "@sugarch/bc-mod-hook-manager": "workspace:*",
     "bondage-club-mod-sdk": "^1.2.0"
   }
 }

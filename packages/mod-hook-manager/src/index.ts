@@ -1,7 +1,8 @@
 import bcModSdk from 'bondage-club-mod-sdk';
 import { ProgressiveHook } from './progressiveHook';
-import { FuncWork, ModManagerInterface } from './types';
+import { FuncWork, HookManagerInterface } from './types';
 import { ILogger, Logger, setLogger } from './logger';
+export {HookManagerInterface};
 
 class WorkList {
     done: boolean;
@@ -40,14 +41,14 @@ function playerHook (work: FuncWork) {
     }
 }
 
-let mMod: ModManagerInterface.ModSDKModAPI | undefined = undefined;
+let mMod: HookManagerInterface.ModSDKModAPI | undefined = undefined;
 
-export class ModManager {
-    static get mod () {
+class _HookManager {
+    get mod () {
         return mMod;
     }
 
-    static push (list: WorkList, work: FuncWork) {
+    push (list: WorkList, work: FuncWork) {
         list.push(work);
     }
 
@@ -55,7 +56,7 @@ export class ModManager {
      * Register mod
      * @param modinfo the mod info to register
      */
-    static init (modinfo: ModManagerInterface.ModSDKModInfo) {
+    init (modinfo: HookManagerInterface.ModSDKModInfo) {
         mMod = bcModSdk.registerMod(modinfo);
         patchList.run();
         hookList.run();
@@ -65,7 +66,7 @@ export class ModManager {
         if (playerLoaded()) {
             wk();
         } else {
-            ModManager.mod!.hookFunction('LoginResponse', 0, (args, next) => {
+            this.mod!.hookFunction('LoginResponse', 0, (args, next) => {
                 next(args);
                 if (playerLoaded()) wk();
             });
@@ -78,7 +79,7 @@ export class ModManager {
      * Register mod using an already initialized mod
      * @param mod a registered mod
      */
-    static initWithMod (mod: ModManagerInterface.ModSDKModAPI) {
+    initWithMod (mod: HookManagerInterface.ModSDKModAPI) {
         mMod = mod;
         patchList.run();
         hookList.run();
@@ -88,7 +89,7 @@ export class ModManager {
         if (playerLoaded()) {
             wk();
         } else {
-            ModManager.mod!.hookFunction('LoginResponse', 0, (args, next) => {
+            this.mod!.hookFunction('LoginResponse', 0, (args, next) => {
                 next(args);
                 if (playerLoaded()) wk();
             });
@@ -100,8 +101,8 @@ export class ModManager {
      * If the mod is already initialized, execute immediately.
      * @param work
      */
-    static afterInit (work: FuncWork) {
-        ModManager.push(afterInitList, work);
+    afterInit (work: FuncWork) {
+        this.push(afterInitList, work);
     }
 
     /**
@@ -109,8 +110,8 @@ export class ModManager {
      * If the player is already logged in, execute immediately.
      * @param work
      */
-    static afterPlayerLogin (work: FuncWork) {
-        ModManager.push(waitPlayerHookList, work);
+    afterPlayerLogin (work: FuncWork) {
+        this.push(waitPlayerHookList, work);
     }
 
     /**
@@ -118,8 +119,8 @@ export class ModManager {
      * @param functionName
      * @param patch
      */
-    static patchFunction (functionName: string, patch: Record<string, string | null>) {
-        ModManager.push(patchList, () => ModManager.mod!.patchFunction(functionName, patch));
+    patchFunction (functionName: string, patch: Record<string, string | null>) {
+        this.push(patchList, () => this.mod!.patchFunction(functionName, patch));
     }
 
     /**
@@ -128,13 +129,13 @@ export class ModManager {
      * @param functionName function name
      * @param args function arguments
      */
-    static invokeOriginal<TFunctionName extends string> (
+    invokeOriginal<TFunctionName extends string> (
         functionName: TFunctionName,
-        ...args: ModManagerInterface.FunctionArguments<TFunctionName>
-    ): ModManagerInterface.FunctionReturnType<TFunctionName> {
+        ...args: HookManagerInterface.FunctionArguments<TFunctionName>
+    ): HookManagerInterface.FunctionReturnType<TFunctionName> {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (!ModManager.mod) return (globalThis as any)[functionName]?.(...args);
-        else return ModManager.mod.callOriginal(functionName, args);
+        if (!this.mod) return (globalThis as any)[functionName]?.(...args);
+        else return this.mod.callOriginal(functionName, args);
     }
 
     /**
@@ -144,12 +145,12 @@ export class ModManager {
      * @param priority hook priority
      * @param hook hook function
      */
-    static hookFunction<TFunctionName extends string> (
+    hookFunction<TFunctionName extends string> (
         funcName: TFunctionName,
         priority: number,
-        hook: ModManagerInterface.HookFunction<TFunctionName>
+        hook: HookManagerInterface.HookFunction<TFunctionName>
     ) {
-        ModManager.push(hookList, () => ModManager.mod!.hookFunction(funcName, priority, hook));
+        this.push(hookList, () => this.mod!.hookFunction(funcName, priority, hook));
     }
 
     /**
@@ -158,12 +159,12 @@ export class ModManager {
      * @param priority hook priority
      * @returns ProgressiveHook instance
      */
-    static progressiveHook<TFunctionName extends string> (
+    progressiveHook<TFunctionName extends string> (
         funcName: TFunctionName,
         priority = 1
     ): ProgressiveHook<TFunctionName> {
-        const hook = new ProgressiveHook<TFunctionName>(ModManager);
-        ModManager.hookFunction(funcName, priority, (args, next) => hook.run(args, next));
+        const hook = new ProgressiveHook<TFunctionName>(this);
+        this.hookFunction(funcName, priority, (args, next) => hook.run(args, next));
         return hook;
     }
 
@@ -175,21 +176,21 @@ export class ModManager {
      * @param priority hook priority
      * @param hook hook function
      */
-    static hookPlayerFunction<TFunctionName extends string> (
+    hookPlayerFunction<TFunctionName extends string> (
         funcName: TFunctionName,
         priority: number,
-        hook: ModManagerInterface.HookFunction<TFunctionName>
+        hook: HookManagerInterface.HookFunction<TFunctionName>
     ) {
-        playerHook(() => ModManager.mod!.hookFunction(funcName, priority, hook));
+        playerHook(() => this.mod!.hookFunction(funcName, priority, hook));
     }
 
     /**
      * Register a global function (accessible via globalThis)
      * @param funcName function name
      * @param func the function to register
-     */ 
+     */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-    static globalFunction (funcName: string, func: Function) {
+    globalFunction (funcName: string, func: Function) {
         if (typeof func != 'function') {
             Logger.warn('globalFunction: param is not a function');
         }
@@ -211,7 +212,7 @@ export class ModManager {
      * @returns randomly generated function name
      */
     /* eslint-disable @typescript-eslint/no-explicit-any */
-    static randomGlobalFunction<T extends any[], R> (funcPrefix: string, func: (...args: T) => R): string {
+    randomGlobalFunction<T extends any[], R> (funcPrefix: string, func: (...args: T) => R): string {
         const genName = (prefix: string) => prefix + Math.random().toString(16).substring(2);
         let funcName = genName(funcPrefix);
         while ((globalThis as any)[funcName] != undefined) {
@@ -226,7 +227,9 @@ export class ModManager {
      * Override the default logger
      * @param logger
      */
-    static setLogger(logger: ILogger) {
+    setLogger (logger: ILogger) {
         setLogger(logger);
     }
 }
+
+export const HookManager = new _HookManager();

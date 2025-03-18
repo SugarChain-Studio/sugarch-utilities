@@ -4,7 +4,7 @@ A package for managing assets in BC. It includes functions for loading, modifyin
 
 ## Installation
 
-This package requires the `@sugarch/bc-mod-manager` package to be installed. Make sure to install it before installing this package.
+This package requires the `@sugarch/bc-mod-hook-manager` package to be installed. Make sure to install it before installing this package.
 
 To install the package, use pnpm:
 

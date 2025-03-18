@@ -16,10 +16,10 @@ pnpm add @sugarchain/bc-mod-manager --save-dev
 The `hookFunction` method allows you to register hooks that can be executed before the mod initialization. This is useful for setting up necessary hooks early in the mod lifecycle.
 
 ```typescript
-import { ModManager } from '@sugarchain/bc-mod-manager';
+import { HookManager } from '@sugarchain/bc-mod-manager';
 
 // Register a hook function
-ModManager.hookFunction('SomeFunction', 1, (args, next) => {
+HookManager.hookFunction('SomeFunction', 1, (args, next) => {
   console.log('Hook before SomeFunction');
   next(args);
 });
@@ -27,7 +27,7 @@ ModManager.hookFunction('SomeFunction', 1, (args, next) => {
 const bcmod = bcModSdk.registerMod(...);
 
 // initialize the mod after registering the hook, then the hook will be executed
-ModManager.initWithMod(bcmod);
+HookManager.initWithMod(bcmod);
 ```
 
 ### `afterInit`
@@ -37,10 +37,10 @@ The `afterInit` method lets you add callbacks that will be executed after the mo
 If the mod is already initialized, the callback will be executed immediately.
 
 ```typescript
-import { ModManager } from '@sugarchain/bc-mod-manager';
+import { HookManager } from '@sugarchain/bc-mod-manager';
 
 // Add a callback to be executed after initialization
-ModManager.afterInit(() => {
+HookManager.afterInit(() => {
   console.log('Mod has been initialized');
 });
 ```
@@ -50,10 +50,10 @@ ModManager.afterInit(() => {
 The `afterPlayerLogin` method allows you to add callbacks that will be executed after the player logs in. If the player is already logged in, the callback will be executed immediately.
 
 ```typescript
-import { ModManager } from '@sugarchain/bc-mod-manager';
+import { HookManager } from '@sugarchain/bc-mod-manager';
 
 // Add a callback to be executed after player login
-ModManager.afterPlayerLogin(() => {
+HookManager.afterPlayerLogin(() => {
   console.log('Player has logged in');
 });
 ```
@@ -63,10 +63,10 @@ ModManager.afterPlayerLogin(() => {
 The `progressiveHook` method allows you to assemble hooks in a chain-like manner. This allows for more complex and flexible hook management by combining multiple hook functions into a single progressive hook.
 
 ```typescript
-import { ModManager } from '@sugarchain/bc-mod-manager';
+import { HookManager } from '@sugarchain/bc-mod-manager';
 
 // Create a progressive hook
-const hook = ModManager.progressiveHook('SomeFunction');
+const hook = HookManager.progressiveHook('SomeFunction');
 
 // Add steps to the progressive hook
 hook

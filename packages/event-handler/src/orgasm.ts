@@ -1,4 +1,4 @@
-import { ModManager } from '@sugarch/bc-mod-manager';
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { Globals } from '@sugarch/bc-shared-utility';
 import EventEmitter from 'eventemitter3';
 
@@ -21,7 +21,7 @@ class _OrgasmEvents {
 
         handler = new EventEmitter();
 
-        ModManager.hookFunction('ActivityOrgasmStop', 9, (args, next) => {
+        HookManager.hookFunction('ActivityOrgasmStop', 9, (args, next) => {
             const [C, Progress] = args;
             if (C.IsPlayer()) {
                 if (ActivityOrgasmRuined) handler!.emit('ruined', { Player: C });
@@ -30,7 +30,7 @@ class _OrgasmEvents {
             next(args);
         });
 
-        ModManager.hookFunction('ActivityOrgasmStart', 9, (args, next) => {
+        HookManager.hookFunction('ActivityOrgasmStart', 9, (args, next) => {
             const [C] = args;
             if (C.IsPlayer() && !ActivityOrgasmRuined) handler!.emit('orgasmed', { Player: C });
             next(args);

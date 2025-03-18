@@ -1,4 +1,4 @@
-import { ModManager } from '@sugarch/bc-mod-manager';
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { resolveMirror, resolveSingle } from './mirrorGroup';
 import { Logger } from './logger';
 import { CustomGroupName, FuncWork } from './types';
@@ -162,7 +162,7 @@ export function runSetupLoad (
     if (AssetGroup.length > 50) {
         mLoadGroup();
     } else {
-        ModManager.progressiveHook('AssetLoadAll', 1)
+        HookManager.progressiveHook('AssetLoadAll', 1)
             .next()
             .inject(() => mLoadGroup());
     }

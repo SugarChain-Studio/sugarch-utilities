@@ -1,4 +1,4 @@
-import { ModManager } from '@sugarch/bc-mod-manager';
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { CustomGroupName, Translation } from './types';
 
 interface LayerNameDetails {
@@ -104,13 +104,13 @@ export function addLayerNames<Custom extends string = AssetGroupBodyName> (
 
 // Create an async task that waits for ItemColorLayerNames to load and then writes cached layer names to ItemColorLayerNames
 export function setupLayerNameLoad () {
-    const FuncK = ModManager.randomGlobalFunction('LayerNameInject', (cacheGetter: () => TextCache) => {
+    const FuncK = HookManager.randomGlobalFunction('LayerNameInject', (cacheGetter: () => TextCache) => {
         cache = cacheGetter;
     });
-    ModManager.patchFunction('ItemColorLoad', {
+    HookManager.patchFunction('ItemColorLoad', {
         'ItemColorLayerNames = new TextCache': `${FuncK}(()=>ItemColorLayerNames);\nItemColorLayerNames = new TextCache`,
     });
-    ModManager.progressiveHook('ItemColorLoad', 1)
+    HookManager.progressiveHook('ItemColorLoad', 1)
         .next()
         .inject(() => {
             const cacheV = cache?.()?.cache;

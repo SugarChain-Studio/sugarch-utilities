@@ -1,4 +1,4 @@
-import { ModManager } from "@sugarch/bc-mod-manager";
+import { HookManager } from "@sugarch/bc-mod-hook-manager";
 import { Globals } from "@sugarch/bc-shared-utility";
 import EventEmitter from "eventemitter3";
 
@@ -16,7 +16,7 @@ class _ChatRoomEvents {
 
         handler = new EventEmitter();
 
-        ModManager.hookFunction("ChatRoomMessage", 10, (args, next) => {
+        HookManager.hookFunction("ChatRoomMessage", 10, (args, next) => {
             const { Type } = args[0];
             handler!.emit(Type, args[0]);
             return next(args);

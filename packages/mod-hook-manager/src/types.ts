@@ -1,4 +1,4 @@
-export namespace ModManagerInterface {
+export namespace HookManagerInterface {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     type PatchHook<T extends (...args: any[]) => any> = import('bondage-club-mod-sdk').PatchHook<T>;
     type GetDotedPathType<K extends string> = import('bondage-club-mod-sdk').GetDotedPathType<typeof globalThis, K>;
@@ -20,11 +20,11 @@ export namespace ModManagerInterface {
 }
 
 export namespace ProgressiveHookInterface {
-    export type InjectWork<T extends string> = { value: 'inject'; work: ModManagerInterface.InjectFunction<T> };
+    export type InjectWork<T extends string> = { value: 'inject'; work: HookManagerInterface.InjectFunction<T> };
     export type NextWork<_ extends string> = { value: 'next' };
-    export type OverrideWork<T extends string> = { value: 'override'; work: ModManagerInterface.HookFunction<T> };
+    export type OverrideWork<T extends string> = { value: 'override'; work: HookManagerInterface.HookFunction<T> };
     export type FlagWork<_ extends string> = { value: 'flag'; flag: boolean; once: boolean };
-    export type CheckWork<T extends string> = { value: 'check'; work: ModManagerInterface.CheckFunction<T> };
+    export type CheckWork<T extends string> = { value: 'check'; work: HookManagerInterface.CheckFunction<T> };
 
     export type WorkType<T extends string> = InjectWork<T> | NextWork<T> | OverrideWork<T> | FlagWork<T> | CheckWork<T>;
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@sugarch/bc-mod-manager",
+  "name": "@sugarch/bc-mod-hook-manager",
   "version": "0.2.0",
   "description": "A mod hooks manager base on bcmodsdk",
   "main": "dist/index.mjs",

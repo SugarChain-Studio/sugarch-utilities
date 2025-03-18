@@ -1,6 +1,5 @@
-import { ModManager } from '@sugarch/bc-mod-manager';
+import { HookManager, HookManagerInterface } from '@sugarch/bc-mod-hook-manager';
 import { CustomGroupName } from './types';
-import { ModManagerInterface } from '../../mod-manager/dist/types';
 
 const customGroups: Record<string, AssetGroup> = {};
 
@@ -16,7 +15,7 @@ export const AccessCustomAsset = <Custom extends string = AssetGroupBodyName>(
  */
 export function customGroupAdd (...[family, groupDef]: Parameters<typeof AssetGroupAdd>): Promise<Mutable<AssetGroup>> {
     // Prevent the addition process from being disrupted
-    const Group = ModManager.invokeOriginal('AssetGroupAdd', family, groupDef);
+    const Group = HookManager.invokeOriginal('AssetGroupAdd', family, groupDef);
     customGroups[Group.Name] = Group;
     return Promise.resolve(Group as Mutable<AssetGroup>);
 }
@@ -26,7 +25,7 @@ export function customGroupAdd (...[family, groupDef]: Parameters<typeof AssetGr
  */
 export function customAssetAdd (...[group, assetDef, config]: Parameters<typeof AssetAdd>): Promise<Mutable<Asset>> {
     // Prevent the addition process from being disrupted
-    ModManager.invokeOriginal('AssetAdd', group, assetDef, config);
+    HookManager.invokeOriginal('AssetAdd', group, assetDef, config);
     const groupName = group.Name;
     const assetName = assetDef.Name;
     if (!customAssets[groupName]) customAssets[groupName] = {};
@@ -77,12 +76,12 @@ export function isInListCustomAsset (group: CustomGroupName, name: string): bool
  */
 export function enableCustomAssets (): void {
     let doInventoryAdd = false;
-    ModManager.progressiveHook('DialogInventoryBuild').inject(args => {
+    HookManager.progressiveHook('DialogInventoryBuild').inject(args => {
         if (args[2]) return;
         doInventoryAdd = true;
     });
 
-    ModManager.progressiveHook('DialogInventoryAdd')
+    HookManager.progressiveHook('DialogInventoryAdd')
         .next()
         .inject(args => {
             if (!doInventoryAdd) return;
@@ -100,24 +99,24 @@ export function enableCustomAssets (): void {
             }
         });
 
-    const overrideAvailable = (...[args, next]: Parameters<ModManagerInterface.HookFunction<'InventoryAvailable'>>) => {
+    const overrideAvailable = (...[args, next]: Parameters<HookManagerInterface.HookFunction<'InventoryAvailable'>>) => {
         const [_, Name, Group] = args;
         if (AccessCustomAsset(Group, Name)) return true;
         return next(args);
     };
 
-    ModManager.progressiveHook('InventoryAvailable').inside('CharacterAppearanceValidate').override(overrideAvailable);
-    ModManager.progressiveHook('InventoryAvailable').inside('CraftingItemListBuild').override(overrideAvailable);
-    ModManager.progressiveHook('InventoryAvailable').inside('WardrobeFastLoad').override(overrideAvailable);
+    HookManager.progressiveHook('InventoryAvailable').inside('CharacterAppearanceValidate').override(overrideAvailable);
+    HookManager.progressiveHook('InventoryAvailable').inside('CraftingItemListBuild').override(overrideAvailable);
+    HookManager.progressiveHook('InventoryAvailable').inside('WardrobeFastLoad').override(overrideAvailable);
 
-    ModManager.progressiveHook('CraftingValidate').inject((args) => {
+    HookManager.progressiveHook('CraftingValidate').inject((args) => {
         const item = args[0]?.Item;
         if (!item) return;
         const asset = CraftingAssets[item]?.[0];
         if (asset && isInListCustomAsset(asset.Group.Name, asset.Name)) args[3] = false;
     });
 
-    const pInventory = ModManager.randomGlobalFunction('CraftingInventory', () => {
+    const pInventory = HookManager.randomGlobalFunction('CraftingInventory', () => {
         return [
             ...Player.Inventory,
             ...Object.values(customAssets)
@@ -127,7 +126,7 @@ export function enableCustomAssets (): void {
         ];
     });
 
-    ModManager.patchFunction('CraftingRun', {
+    HookManager.patchFunction('CraftingRun', {
         'for (let Item of Player.Inventory) {': `for (let Item of ${pInventory}()) {`,
     });
 }

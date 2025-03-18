@@ -1,5 +1,5 @@
 import { sleepUntil } from './sleep';
-import { ModManager } from '@sugarch/bc-mod-manager';
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { Paths } from './paths';
 import { ImageMappingStorage } from './mappingStorage';
 import { AssetOverrideContainer, ImageMappingRecord } from './types';
@@ -31,12 +31,12 @@ export async function resolveAssetOverrides (
 
 function setupImgMapping (): void {
     // Cross-origin image loading
-    ModManager.patchFunction('GLDrawLoadImage', {
+    HookManager.patchFunction('GLDrawLoadImage', {
         'Img.src = url;': 'Img.crossOrigin = "Anonymous";\n\t\tImg.src = url;',
     });
 
     (['DrawImageEx', 'DrawImageResize', 'GLDrawImage', 'DrawGetImage'] as const).forEach(fn => {
-        ModManager.hookFunction(fn, 0, (args, next) => {
+        HookManager.hookFunction(fn, 0, (args, next) => {
             args[0] = storage.mapImgSrc(args[0]);
             return next(args);
         });
@@ -46,14 +46,14 @@ function setupImgMapping (): void {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await sleepUntil(() => (globalThis as any)['ElementButton'] !== undefined);
 
-        ModManager.hookFunction('ElementButton.CreateForAsset', 0, (args, next) => {
+        HookManager.hookFunction('ElementButton.CreateForAsset', 0, (args, next) => {
             storage.mapImg(Paths.assetPreviewIconPath(args[1] as Asset | Item), (image: string) => {
                 args[4] = { ...args[4], image };
             });
             return next(args);
         });
 
-        ModManager.hookFunction('ElementButton.CreateForActivity', 0, (args, next) => {
+        HookManager.hookFunction('ElementButton.CreateForActivity', 0, (args, next) => {
             const activity = args[1] as ItemActivity;
             const srcImage = activity.Item
                 ? Paths.assetPreviewIconPath(activity.Item.Asset)
@@ -65,12 +65,12 @@ function setupImgMapping (): void {
             return next(args);
         });
 
-        const func = ModManager.randomGlobalFunction<[string], string>(
+        const func = HookManager.randomGlobalFunction<[string], string>(
             'mapImage',
             src => storage.mapImgSrc(src) as string
         );
 
-        ModManager.patchFunction('ElementButton._ParseIcons', {
+        HookManager.patchFunction('ElementButton._ParseIcons', {
             'src = `./Assets/Female3DCG/ItemMisc/Preview/${icon}.png`': `src = ${func}(\`./Assets/Female3DCG/ItemMisc/Preview/\${icon}.png\`)`,
         });
     })();
