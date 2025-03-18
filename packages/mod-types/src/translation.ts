@@ -1,7 +1,4 @@
-/**
- * Extended group name for custom asset group.
- */
-export type CustomGroupName<Custom extends string = AssetGroupBodyName> = AssetGroupItemName | Custom | AssetGroupScriptName;
+import { CustomGroupName } from "./assets";
 
 export namespace Translation {
     export type Languages = typeof TranslationLanguage;

@@ -9,7 +9,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
-    "declarationDir": "./dist"
+    "declarationDir": "./dist",
+    "emitDeclarationOnly": true
   },
   "exclude": ["**/__tests__", "**/*.test.ts"],
   "include": ["./src/*.ts", "node_modules/bc-stubs/bc/**/*.d.ts"]

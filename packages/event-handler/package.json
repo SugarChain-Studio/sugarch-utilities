@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-event-handler",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Handle BC events with EventEmitter.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
@@ -27,6 +27,9 @@
     "url": "git+https://github.com/SugarChain-Studio/sugarch-utilities.git"
   },
   "packageManager": "pnpm@10.6.2",
+  "dependencies": {
+    "@sugarch/bc-mod-types": "workspace:*"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",

@@ -1,5 +1,5 @@
 import { HookManager, HookManagerInterface } from '@sugarch/bc-mod-hook-manager';
-import { CustomGroupName } from './types';
+import { CustomGroupName } from "@sugarch/bc-mod-types";
 
 const customGroups: Record<string, AssetGroup> = {};
 

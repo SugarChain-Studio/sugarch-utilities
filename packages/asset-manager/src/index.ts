@@ -13,11 +13,11 @@ import {
     CustomGroupName,
     FuncWork,
     Translation,
-} from './types';
+} from "@sugarch/bc-mod-types";
 import { ImageMapping, ImageMappingRecord } from '@sugarch/bc-shared-utility';
 import { ILogger, setLogger } from './logger';
 
-export * from './types';
+export * from "@sugarch/bc-mod-types";
 
 export { resolveAssetOverrides } from '@sugarch/bc-shared-utility';
 

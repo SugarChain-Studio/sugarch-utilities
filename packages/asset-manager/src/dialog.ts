@@ -1,5 +1,5 @@
 import { HookManager } from "@sugarch/bc-mod-hook-manager";
-import { Translation } from "./types";
+import { Translation } from "@sugarch/bc-mod-types";
 import { translateDialog } from "./entryUtils";
 
 /** Custom dialog translations */

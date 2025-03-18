@@ -1,4 +1,4 @@
-import { CustomGroupName } from "./types";
+import { CustomGroupName } from "@sugarch/bc-mod-types";
 
 const TorsoMirror: Set<string> = new Set<string>(['ItemTorso', 'ItemTorso2']);
 const mMirrorGroups: Record<string, Set<string>> = {

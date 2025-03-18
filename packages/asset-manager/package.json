@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-asset-manager",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "An asset manager for Bondage Club mods, easily add custom assets to the game.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
@@ -27,6 +27,9 @@
     "url": "git+https://github.com/SugarChain-Studio/sugarch-utilities.git"
   },
   "packageManager": "pnpm@10.6.2",
+  "dependencies": {
+    "@sugarch/bc-mod-types": "workspace:*"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",

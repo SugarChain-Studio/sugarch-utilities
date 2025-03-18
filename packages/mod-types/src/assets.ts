@@ -1,6 +1,7 @@
-import { type CustomGroupName, type Translation } from '@sugarch/bc-shared-utility';
-
-export { CustomGroupName, Translation };
+/**
+ * Extended group name for custom asset group.
+ */
+export type CustomGroupName<Custom extends string = AssetGroupBodyName> = AssetGroupItemName | Custom | AssetGroupScriptName;
 
 namespace details {
     export type ExtendType<T, From, To> = { [K in keyof T]: T[K] extends From ? To : ExtendType<T[K], From, To> };
@@ -67,6 +68,3 @@ export type CustomAssetDefinition<Custom extends string = AssetGroupBodyName> =
 /** Asset definitions grouped by body group */
 export type CustomGroupedAssetDefinitions<Custom extends string = AssetGroupBodyName> =
     details.GroupedAssetType<Custom>;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type FuncWork<T extends any[] = []> = (...args: T) => void;

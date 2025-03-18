@@ -1,5 +1,5 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
-import { CustomGroupName, Translation } from './types';
+import { CustomGroupName, Translation } from "@sugarch/bc-mod-types";
 
 interface LayerNameDetails {
     desc: Translation.Entry;

@@ -28,6 +28,3 @@ export namespace ProgressiveHookInterface {
 
     export type WorkType<T extends string> = InjectWork<T> | NextWork<T> | OverrideWork<T> | FlagWork<T> | CheckWork<T>;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type FuncWork<T extends any[] = []> = (...args: T) => void;
