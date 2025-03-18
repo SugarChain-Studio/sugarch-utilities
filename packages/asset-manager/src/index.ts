@@ -232,6 +232,6 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 }
 
-export type AssetManagerType = _AssetManager;
+export type AssetManagerType<Custom extends string> = _AssetManager<Custom>;
 
 export const AssetManager = new _AssetManager();
