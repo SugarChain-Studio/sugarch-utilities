@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-mod-utility",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Various utility for BC mods.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
