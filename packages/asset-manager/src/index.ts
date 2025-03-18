@@ -17,6 +17,8 @@ import {
 import { ImageMapping, ImageMappingRecord } from '@sugarch/bc-shared-utility';
 import { ILogger, setLogger } from './logger';
 
+export { resolveAssetOverrides } from '@sugarch/bc-shared-utility';
+
 export class _AssetManager<Custom extends string = AssetGroupBodyName> {
     /**
      * Add an asset. If the asset is ItemTorso or ItemTorso2, a mirror will be automatically added.
@@ -114,6 +116,13 @@ export class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
+     * Forwarding ImageMapping interface
+     */
+    get imageMapping () {
+        return ImageMapping;
+    }
+
+    /**
      * Add a new body group
      * @param groupDef
      * @param description
@@ -178,8 +187,8 @@ export class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
-     * Initialize and add custom component.  
-     * 
+     * Initialize and add custom component.
+     *
      * *Note: This function should be called **only once**.*
      * @param componentSetup Component setup function, all custom components should be initialized inside this function
      */
@@ -212,11 +221,11 @@ export class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
-     * Retype AssetManager, if you need to customize the body group name and ensure 
+     * Retype AssetManager, if you need to customize the body group name and ensure
      * type safety, use this method to get a re-typed version
      * @returns retyped AssetManager
      */
-    typeBodyGroupNames<T extends string>() {
+    typeBodyGroupNames<T extends string> () {
         return this as _AssetManager<T>;
     }
 }

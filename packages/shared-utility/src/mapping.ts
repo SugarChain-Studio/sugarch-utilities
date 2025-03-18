@@ -7,6 +7,27 @@ import { Globals } from './globals';
 
 const storage = new ImageMappingStorage();
 
+/**
+ * Resolve compressed asset overrides, returning a mapping of asset paths to URLs
+ * The `overrides` object should be a nested object where the keys are asset paths and the values are version strings, e.g.
+ * ```jsonc
+ * {
+ *   "Assets": {
+ *     "Female3DCG": {
+ *       "ItemMisc": {
+ *         // use semver as version string
+ *         "Key.png": "1.0.0",
+ *         // use git hash as version string
+ *         "Key2.png": "acbd18db"
+ *       }
+ *     }
+ *   }
+ * }
+ * ```
+ * @param baseURL The base URL to prepend to all asset paths
+ * @param overrides The compressed asset overrides
+ * @returns A mapping of asset paths to URLs
+ */
 export async function resolveAssetOverrides (
     baseURL: string,
     overrides: AssetOverrideContainer
