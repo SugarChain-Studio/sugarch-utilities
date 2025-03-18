@@ -8,7 +8,7 @@ This monorepo contains various packages designed to streamline the development o
 
 ## Components
 
-### [@sugarch/bc-mod-hook-manager](packages/bc-mod-manager)
+### [@sugarch/bc-mod-hook-manager](packages/bc-mod-hook-manager)
 A package that wraps the bcModSdk to provide a more flexible hook mechanism. It simplifies the creation and management of mods by offering a loose coupling of hooks and utilities.
 
 ### [@sugarch/bc-asset-manager](packages/bc-asset-manager)
