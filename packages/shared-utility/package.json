@@ -28,6 +28,9 @@
     "url": "git+https://github.com/SugarChain-Studio/sugarch-utilities.git"
   },
   "packageManager": "pnpm@10.6.2",
+  "dependencies": {
+    "@sugarch/bc-mod-types": "workspace:*"
+  },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",

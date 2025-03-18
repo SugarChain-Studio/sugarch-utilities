@@ -190,6 +190,9 @@ importers:
       '@sugarch/bc-mod-hook-manager':
         specifier: workspace:*
         version: link:../mod-hook-manager
+      '@sugarch/bc-mod-types':
+        specifier: workspace:*
+        version: link:../mod-types
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0

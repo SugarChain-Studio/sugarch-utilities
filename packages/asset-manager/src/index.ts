@@ -13,11 +13,12 @@ import {
     CustomGroupName,
     FuncWork,
     Translation,
-} from "@sugarch/bc-mod-types";
-import { ImageMapping, ImageMappingRecord } from '@sugarch/bc-shared-utility';
+} from '@sugarch/bc-mod-types';
+import { ImageMappingRecord } from '@sugarch/bc-mod-types';
+import { ImageMapping } from '@sugarch/bc-shared-utility';
 import { ILogger, setLogger } from './logger';
 
-export * from "@sugarch/bc-mod-types";
+export * from '@sugarch/bc-mod-types';
 
 export { resolveAssetOverrides } from '@sugarch/bc-shared-utility';
 
@@ -232,6 +233,6 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 }
 
-export type AssetManagerType<Custom extends string> = _AssetManager<Custom>;
+export type AssetManagerType = _AssetManager;
 
 export const AssetManager = new _AssetManager();
