@@ -4,7 +4,7 @@ import { registerMirror } from './mirrorGroup';
 import { customGroupAdd } from './customStash';
 import { loadAsset } from './assetUtils';
 import { resolveStringAsset } from './assetConfigs';
-import { CustomAssetDefinition, CustomGroupDefinition, CustomGroupName, Translation } from "@sugarch/bc-mod-types";
+import type { CustomAssetDefinition, CustomGroupDefinition, CustomGroupName, Translation } from "@sugarch/bc-mod-types";
 
 /**
  * Register a custom group

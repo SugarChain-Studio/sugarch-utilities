@@ -15,7 +15,7 @@ export default {
             sourcemap: true,
         },
     ],
-    external: ["bondage-club-mod-sdk", "@sugarch/bc-mod-types"],
+    external: ["bondage-club-mod-sdk"],
     plugins: [
         typescript({
             tsconfig: "./tsconfig.json",

@@ -1,7 +1,7 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { resolveMirror, resolveSingle } from './mirrorGroup';
 import { Logger } from './logger';
-import { CustomGroupName, FuncWork } from "@sugarch/bc-mod-types";
+import type { CustomGroupName, FuncWork } from "@sugarch/bc-mod-types";
 
 let isGroupLoaded = false;
 

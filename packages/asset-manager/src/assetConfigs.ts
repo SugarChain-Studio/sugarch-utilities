@@ -1,5 +1,5 @@
 import { resolveMirror } from './mirrorGroup';
-import { CustomAssetDefinition, CustomGroupName } from "@sugarch/bc-mod-types";
+import type {  CustomAssetDefinition, CustomGroupName } from "@sugarch/bc-mod-types";
 
 export class AssetConfig {
     /**

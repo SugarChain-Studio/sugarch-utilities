@@ -1,7 +1,7 @@
 import bcModSdk from 'bondage-club-mod-sdk';
 import { ProgressiveHook } from './progressiveHook';
 import { HookManagerInterface } from './types';
-import { FuncWork } from '@sugarch/bc-mod-types';
+import type { FuncWork } from '@sugarch/bc-mod-types';
 import { ILogger, Logger, setLogger } from './logger';
 export {HookManagerInterface};
 

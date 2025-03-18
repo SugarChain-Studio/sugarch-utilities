@@ -1,4 +1,4 @@
-import { CustomGroupName, Translation } from "@sugarch/bc-mod-types";
+import type { CustomGroupName, Translation } from "@sugarch/bc-mod-types";
 
 /**
  * Internal function: Resolves translations with language fallback logic

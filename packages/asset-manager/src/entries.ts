@@ -1,7 +1,7 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { checkItemCustomed, getCustomAssets, getCustomGroups } from './customStash';
 import { getCustomMirrorGroups, resolvePreimage } from './mirrorGroup';
-import { CustomGroupName, Translation } from "@sugarch/bc-mod-types";
+import type { CustomGroupName, Translation } from "@sugarch/bc-mod-types";
 import { translateDialog, translateEntry, translateGroupedEntries } from './entryUtils';
 
 /**

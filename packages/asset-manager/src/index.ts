@@ -6,19 +6,19 @@ import { pickEntry, setupEntries } from './entries';
 import { enableCustomAssets, getCustomAssets } from './customStash';
 import { addLayerNames, addLayerNamesByEntry, setupLayerNameLoad } from './layerNames';
 import { enableValidation, FromModUserTestFunc } from './validation';
-import {
+import type {
     CustomAssetDefinition,
     CustomGroupDefinition,
     CustomGroupedAssetDefinitions,
     CustomGroupName,
     FuncWork,
     Translation,
+    ImageMappingRecord,
 } from '@sugarch/bc-mod-types';
-import { ImageMappingRecord } from '@sugarch/bc-mod-types';
 import { ImageMapping } from '@sugarch/bc-shared-utility';
 import { ILogger, setLogger } from './logger';
 
-export * from '@sugarch/bc-mod-types';
+export type * from '@sugarch/bc-mod-types';
 
 export { resolveAssetOverrides } from '@sugarch/bc-shared-utility';
 

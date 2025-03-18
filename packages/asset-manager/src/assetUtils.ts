@@ -3,7 +3,7 @@ import { customAssetAdd, getCustomAssets } from './customStash';
 import { Entries, resolveEntry, solidfyEntry } from './entries';
 import { addLayerNames } from './layerNames';
 import { pushAfterLoad, pushAssetLoadEvent, pushDefsLoad, requireGroup } from './loadSchedule';
-import { CustomAssetDefinition, CustomGroupName, FuncWork, Translation } from "@sugarch/bc-mod-types";
+import type {  CustomAssetDefinition, CustomGroupName, FuncWork, Translation } from "@sugarch/bc-mod-types";
 
 /**
  * Mirror a global function between asset groups
