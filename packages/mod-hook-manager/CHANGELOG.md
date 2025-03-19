@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-hook-manager
 
+## 0.2.9
+
+### Patch Changes
+
+-   Rollup declarations in distribution.
+
 ## 0.2.8
 
 ### Patch Changes

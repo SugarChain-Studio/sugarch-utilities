@@ -4,10 +4,12 @@ export type CustomActivityPrerequisite<CustomPrereq extends string = ActivityPre
     | ActivityPrerequisite
     | CustomPrereq;
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type PrerequisiteCheckFunction<CustomPrereq extends string = ActivityPrerequisite> = (
     prerequisite: CustomPrereq,
     ...args: Parameters<typeof globalThis['ActivityCheckPrerequisite']> extends [any, ...infer Rest] ? Rest : never
 ) => ReturnType<typeof globalThis['ActivityCheckPrerequisite']>;
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export type ExCustomActivityPrerequisite<CustomPrereq extends string = ActivityPrerequisite> =
     | CustomActivityPrerequisite<CustomPrereq>

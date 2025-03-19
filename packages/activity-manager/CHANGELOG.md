@@ -1,5 +1,14 @@
 # @sugarch/bc-activity-manager
 
+## 0.1.4
+
+### Patch Changes
+
+-   Rollup declarations in distribution.
+-   Updated dependencies
+    -   @sugarch/bc-mod-hook-manager@0.2.9
+    -   @sugarch/bc-mod-utility@0.1.10
+
 ## 0.1.3
 
 ### Patch Changes

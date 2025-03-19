@@ -8,8 +8,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "declaration": true,
-    "declarationDir": "./dist"
   },
   "exclude": ["**/__tests__", "**/*.test.ts"],
   "include": ["./src/*.ts", "node_modules/bc-stubs/bc/**/*.d.ts"]

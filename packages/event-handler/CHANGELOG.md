@@ -1,5 +1,13 @@
 # @sugarch/bc-event-handler
 
+## 0.3.2
+
+### Patch Changes
+
+-   Rollup declarations in distribution.
+-   Updated dependencies
+    -   @sugarch/bc-mod-hook-manager@0.2.9
+
 ## 0.3.1
 
 ### Patch Changes

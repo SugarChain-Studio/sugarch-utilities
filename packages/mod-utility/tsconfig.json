@@ -7,9 +7,7 @@
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "declaration": true,
-    "declarationDir": "./dist"
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": ["**/__tests__", "**/*.test.ts"],
   "include": ["./src/*.ts", "node_modules/bc-stubs/bc/**/*.d.ts"]
