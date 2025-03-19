@@ -1,5 +1,6 @@
 export interface ActivityInfo {
-    SourceCharacter: Character;
+    SourceCharacter: number;
+    SourceCharacterC: Character;
     TargetCharacter: number;
     ActivityGroup: AssetItemGroup;
     ActivityName: string;

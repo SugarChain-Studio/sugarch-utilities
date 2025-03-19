@@ -1,5 +1,14 @@
 # @sugarch/bc-event-handler
 
+## 0.3.1
+
+### Patch Changes
+
+-   Add a SourceCharacterC property in ActivityInfo for easier event handling
+-   Updated dependencies
+    -   @sugarch/bc-mod-types@0.4.0
+    -   @sugarch/bc-mod-hook-manager@0.2.8
+
 ## 0.3.0
 
 ### Minor Changes

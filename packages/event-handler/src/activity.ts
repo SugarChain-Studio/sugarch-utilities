@@ -26,10 +26,11 @@ function makeChatRoomMsgHandler (runner: HandlerRunner): ChatRoomMessageHandler 
             if (data.Type !== 'Activity' || !data.Dictionary || !metadata) return false;
 
             const { ActivityName, ActivityAsset, CraftingNames, FocusGroup, TargetMemberNumber } = metadata;
-            if (!ActivityName || !FocusGroup || !TargetMemberNumber) return false;
+            if (!ActivityName || !FocusGroup || !TargetMemberNumber || !sender.MemberNumber) return false;
 
             const info: ActivityInfo = {
-                SourceCharacter: sender,
+                SourceCharacter: sender.MemberNumber,
+                SourceCharacterC: sender,
                 TargetCharacter: TargetMemberNumber,
                 ActivityGroup: FocusGroup,
                 ActivityName: ActivityName,
