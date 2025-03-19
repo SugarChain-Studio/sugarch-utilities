@@ -28,8 +28,7 @@
   },
   "packageManager": "pnpm@10.6.2",
   "dependencies": {
-    "@sugarch/bc-mod-types": "workspace:*",
-    "@sugarch/bc-mod-utility": "workspace:*"
+    "@sugarch/bc-mod-types": "workspace:*"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",
@@ -37,6 +36,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
     "@sugarch/bc-image-mapping": "workspace:*",
+    "@sugarch/bc-mod-utility": "workspace:*",
     "bc-stubs": "114.0.0",
     "bondage-club-mod-sdk": "^1.2.0",
     "rollup": "^4.36.0",

@@ -1,24 +1,23 @@
-import { HookManager } from "@sugarch/bc-mod-hook-manager";
-import { Globals } from "@sugarch/bc-mod-utility";
-import EventEmitter from "eventemitter3";
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
+import { Globals } from '@sugarch/bc-mod-utility';
+import EventEmitter from 'eventemitter3';
 
-// Define custom event emitter interface with our specific events
-type ChatRoomEventEmitter = EventEmitter<{
-    [key in ServerChatRoomMessageType]: [ServerChatRoomMessage];
-}>;
+type EventType = ServerChatRoomMessageType;
 
-// Module's event handler instance
-let handler: ChatRoomEventEmitter | undefined = undefined;
+type EventMap = {
+    [key in EventType]: [message: ServerChatRoomMessage];
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type OnFuncArgs<T extends EventType> = [event: T, listener: (message: ServerChatRoomMessage) => void, context?: any];
 
 class _ChatRoomEvents {
-    constructor() {
-        if(handler !== undefined) return;
+    private handler = new EventEmitter<EventMap>();
 
-        handler = new EventEmitter();
-
-        HookManager.hookFunction("ChatRoomMessage", 10, (args, next) => {
+    constructor () {
+        HookManager.hookFunction('ChatRoomMessage', 10, (args, next) => {
             const { Type } = args[0];
-            handler!.emit(Type, args[0]);
+            this.handler.emit(Type, args[0]);
             return next(args);
         });
     }
@@ -26,26 +25,19 @@ class _ChatRoomEvents {
     /**
      * Register an event listener
      */
-    on<T extends ServerChatRoomMessageType>(
-        event: T,
-        listener: (message: ServerChatRoomMessage) => void,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        context?: any
-    ): void {
-        handler!.on(event, listener, context);
+    on<T extends EventType> (...args: OnFuncArgs<T>): void {
+        this.handler.on(...args);
     }
 
     /**
      * Register a one-time event listener
      */
-    once<T extends ServerChatRoomMessageType>(
-        event: T,
-        listener: (message: ServerChatRoomMessage) => void,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        context?: any
-    ): void {
-        handler!.once(event, listener, context);
+    once<T extends EventType> (...args: OnFuncArgs<T>): void {
+        this.handler.once(...args);
     }
 }
 
-export const ChatRoomEvents = Globals.get("ChatRoomEvents", () => new _ChatRoomEvents());
+/**
+ * Chat events emitter, note that the events are emitted before the message is processed by the game.
+ */
+export const ChatRoomEvents = Globals.get('ChatRoomEvents', () => new _ChatRoomEvents());

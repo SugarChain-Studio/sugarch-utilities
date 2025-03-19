@@ -1,7 +1,7 @@
 {
-  "name": "@sugarch/bc-event-handler",
-  "version": "0.2.8",
-  "description": "Handle BC events with EventEmitter.",
+  "name": "@sugarch/bc-activity-manager",
+  "version": "0.1.0",
+  "description": "An activity manager for BC mods, easily add custom activities to the game.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -28,6 +28,7 @@
   },
   "packageManager": "pnpm@10.6.2",
   "dependencies": {
+    "@sugarch/bc-mod-utility": "workspace:*",
     "@sugarch/bc-mod-types": "workspace:*"
   },
   "devDependencies": {
@@ -35,7 +36,8 @@
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@sugarch/bc-mod-utility": "workspace:*",
+    "@sugarch/bc-event-handler": "workspace:*",
+    "@sugarch/bc-image-mapping": "workspace:*",
     "bc-stubs": "114.0.0",
     "eventemitter3": "^5.0.1",
     "rollup": "^4.36.0",

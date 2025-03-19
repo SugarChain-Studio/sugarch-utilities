@@ -27,8 +27,9 @@ export namespace Translation {
      */
     export type GroupedEntries<Custom extends string = AssetGroupBodyName> = CustomRecord<CustomGroupName<Custom>, Record<string, string>>;
 
+    export type ActivityGroupName = AssetGroupItemName | 'ItemPenis' | 'ItemGlans';
     /**
      * Activity description translation entries
      */
-    export type ActivityEntry = I18NRecord<Partial<Record<AssetGroupItemName, string>>>;
+    export type ActivityEntry = I18NRecord<Partial<Record<ActivityGroupName, string>>>;
 }
