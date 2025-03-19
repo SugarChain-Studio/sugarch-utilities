@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.1.2
+
+### Patch Changes
+
+-   Provide more flexible typing for Activity Prerequisite
+
 ## 0.1.1
 
 ### Patch Changes

@@ -4,7 +4,10 @@ export type CustomActivityPrerequisite<CustomPrereq extends string = ActivityPre
     | ActivityPrerequisite
     | CustomPrereq;
 
-export type PrerequisiteCheckFunction = typeof globalThis['ActivityCheckPrerequisite'];
+export type PrerequisiteCheckFunction<CustomPrereq extends string = ActivityPrerequisite> = (
+    prerequisite: CustomPrereq,
+    ...args: Parameters<typeof globalThis['ActivityCheckPrerequisite']> extends [any, ...infer Rest] ? Rest : never
+) => ReturnType<typeof globalThis['ActivityCheckPrerequisite']>;
 
 export type ExCustomActivityPrerequisite<CustomPrereq extends string = ActivityPrerequisite> =
     | CustomActivityPrerequisite<CustomPrereq>
@@ -66,8 +69,7 @@ export interface ActivityExtendedEvent extends Required<ActivityRunnable> {
 /**
  * Represents a custom activity.
  */
-export interface CustomActivity<CustomPrereq extends string = ActivityPrerequisite>
-    extends ActivityRunnable {
+export interface CustomActivity<CustomPrereq extends string = ActivityPrerequisite> extends ActivityRunnable {
     readonly activity: CustomActivityDefinition<CustomPrereq>;
 
     /** The image for activity in dialog, see {@link ActivityImageSetting} for details */
