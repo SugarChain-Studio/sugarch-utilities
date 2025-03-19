@@ -12,8 +12,38 @@ npm add @sugarch/bc-mod-hook-manager --save-dev
 
 ## Usage
 
+### Initialize
+
+To initialize the hook manager, you need to provide the mod information. You can either pass the mod information directly or use the registered mod from the bcModSdk.
+
+```typescript
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
+
+// Initialize the hook manager with a mod information
+HookManager.init({
+  name: 'MyMod',
+  fullName: 'My Mod',
+  version: '1.0.0',
+  repository: 'https://github.com/username/repo',
+});
+```
+
+```typescript
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
+
+const mod = bcModSdk.registerMod({
+  name: 'MyMod',
+  fullName: 'My Mod',
+  version: '1.0.0',
+  repository: 'https://github.com/username/repo',
+});
+
+// Initialize the hook manager with a registered mod
+HookManager.initWithMod(mod);
+```
+
 ### `hookFunction`
-The `hookFunction` method allows you to register hooks that can be executed before the mod initialization. This is useful for setting up necessary hooks early in the mod lifecycle.
+The `hookFunction` method allows you to register hooks, and can be executed before the mod initialization. This is useful for setting up necessary hooks early in the mod lifecycle.
 
 ```typescript
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
@@ -65,16 +95,19 @@ The `progressiveHook` method allows you to assemble hooks in a chain-like manner
 ```typescript
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 
-// Create a progressive hook
+// Create a progressive hook (priority is optional parameter)
 const hook = HookManager.progressiveHook('SomeFunction');
 
 // Add steps to the progressive hook
 hook
+  // inject step will not set the return value
   .inject((args, next) => {
     console.log('Inject step');
   })
+  // override step will set the return value
   .override((args, next) => {
     console.log('Override step');
     return next(args);
   });
+// if a chain does not set the return value, the original function will be called after the last step
 ```
