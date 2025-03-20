@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-types
 
+## 0.5.0
+
+### Minor Changes
+
+-   Add ILogger common type.
+
 ## 0.4.0
 
 ### Minor Changes

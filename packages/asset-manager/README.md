@@ -55,13 +55,13 @@ const assetDef: AssetDefinition = {
 //   With custom assets piling up, it's easier to manage them this way.
 function registerSimpleExample() {
     // Add the asset to the game
-    AssetManager.addAsset("ItemHandHeld", assetDef);
+    AssetManager.addAsset("ItemHandheld", assetDef);
     // Mapping the images
     AssetManager.addImageMapping({
         // the image for the Base layer
-        "Assets/Femal3DCG/ItemHandHeld/SimpleExample_Base.png": `${yourBaseURL}/SimpleExample_Base.png`,
+        "Assets/Femal3DCG/ItemHandheld/SimpleExample_Base.png": `${yourBaseURL}/SimpleExample_Base.png`,
         // the image for the dialog preview icon
-        "Assets/Femal3DCG/ItemHandHeld/Preview/SimpleExample.png": `${yourBaseURL}/SimpleExample_Preview.png`,
+        "Assets/Femal3DCG/ItemHandheld/Preview/SimpleExample.png": `${yourBaseURL}/SimpleExample_Preview.png`,
     })
 }
 

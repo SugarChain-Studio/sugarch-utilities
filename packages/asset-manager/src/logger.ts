@@ -1,8 +1,4 @@
-export interface ILogger {
-    info(message: string): void;
-    warn(message: string): void;
-    error(message: string): void;
-}
+import { ILogger } from "@sugarch/bc-mod-types";
 
 let staticLogger: ILogger | undefined = undefined;
 

@@ -6,6 +6,8 @@ import { addPrerequisite, enlistUnamedPrereq, setupPrereq } from './prereq';
 import { addCustomActivity, testCustomActivity } from './stash';
 import { addActivityImageMapping } from './image';
 import { Globals, sleepUntil } from '@sugarch/bc-mod-utility';
+import { setLogger } from './logger';
+import { ILogger } from '@sugarch/bc-mod-types';
 
 export { CustomActivity };
 
@@ -96,6 +98,14 @@ export class _ActivityManager<CustomPrereq extends string = ActivityPrerequisite
 
         setupEntry();
         setupPrereq();
+    }
+
+    /**
+     * Set the logger for the asset manager
+     * @param logger
+     */
+    setLogger (logger: ILogger) {
+        setLogger(logger);
     }
 }
 

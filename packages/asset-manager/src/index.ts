@@ -14,9 +14,10 @@ import type {
     FuncWork,
     Translation,
     ImageMappingRecord,
+    ILogger,
 } from '@sugarch/bc-mod-types';
 import { ImageMapping } from '@sugarch/bc-image-mapping';
-import { ILogger, setLogger } from './logger';
+import { setLogger } from './logger';
 
 export type * from '@sugarch/bc-mod-types';
 
