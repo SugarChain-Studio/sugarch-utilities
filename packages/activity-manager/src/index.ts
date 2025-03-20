@@ -9,6 +9,7 @@ import { Globals, sleepUntil } from '@sugarch/bc-mod-utility';
 import { setLogger } from './logger';
 import { ILogger } from '@sugarch/bc-mod-types';
 
+export * from './types';
 export { CustomActivity };
 
 export class _ActivityManager<CustomPrereq extends string = ActivityPrerequisite> {

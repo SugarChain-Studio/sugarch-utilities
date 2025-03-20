@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.1.6
+
+### Patch Changes
+
+-   Adjust type export for easier use.
+
 ## 0.1.5
 
 ### Patch Changes

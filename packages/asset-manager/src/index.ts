@@ -19,7 +19,21 @@ import type {
 import { ImageMapping } from '@sugarch/bc-image-mapping';
 import { setLogger } from './logger';
 
-export type * from '@sugarch/bc-mod-types';
+export type {
+    CustomAssetDefinition,
+    CustomGroupDefinition,
+    CustomGroupedAssetDefinitions,
+    CustomGroupName,
+    FuncWork,
+    Translation,
+    ImageMappingRecord,
+    ILogger,
+};
+
+export type {
+    CustomAssetDefinitionItem,
+    CustomAssetDefinitionAppearance,
+} from "@sugarch/bc-mod-types";
 
 export { resolveAssetOverrides } from '@sugarch/bc-image-mapping';
 

@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.2.15
+
+### Patch Changes
+
+-   Adjust type export for easier use.
+
 ## 0.2.14
 
 ### Patch Changes
