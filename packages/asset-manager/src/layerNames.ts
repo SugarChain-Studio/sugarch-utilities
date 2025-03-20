@@ -1,6 +1,7 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import type { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
 import { oncePatch } from './oncePatch';
+import { translateEntry } from './entryUtils';
 
 interface LayerNameDetails {
     desc: Translation.Entry;
@@ -21,9 +22,8 @@ let cache: (() => TextCache) | undefined = undefined;
  */
 export function pushLayerName (key: string, desc: Translation.Entry, fallback: string, noOverride = false) {
     if (cache?.()?.cache) {
-        const lang = TranslationLanguage as ServerChatRoomLanguage;
         if (cache().cache[key] && noOverride) return;
-        cache().cache[key] = desc[lang] || desc['CN'] || fallback;
+        cache().cache[key] = translateEntry(desc, fallback);
     } else {
         if (noOverride && layerNames.has(key)) return;
         layerNames.set(key, { desc, fallback, noOverride });
@@ -105,16 +105,25 @@ export function addLayerNames<Custom extends string = AssetGroupBodyName> (
 
 // Create an async task that waits for ItemColorLayerNames to load and then writes cached layer names to ItemColorLayerNames
 export function setupLayerNameLoad () {
-    type CacheAccessor = { cache: (() => TextCache) | undefined };
+    type CacheSetter = { setters: ((cache: () => TextCache) => void)[] };
 
-    oncePatch<CacheAccessor>().getMayOverride('ItemColorLoad', old => {
+    oncePatch<CacheSetter>().getMayOverride('ItemColorLoad', old => {
         if (old) {
-            cache = old.cache;
+            old.setters.push(cacheGetter => {
+                cache = cacheGetter;
+            });
             return old;
         } else {
-            const ret: CacheAccessor = { cache: undefined };
+            const ret: CacheSetter = {
+                setters: [
+                    (cacheGetter: () => TextCache) => {
+                        cache = cacheGetter;
+                    },
+                ],
+            };
+
             const FuncK = HookManager.randomGlobalFunction('LayerNameInject', (cacheGetter: () => TextCache) => {
-                ret.cache = cacheGetter;
+                ret.setters.forEach(setter => setter(cacheGetter));
             });
             HookManager.patchFunction('ItemColorLoad', {
                 'ItemColorLayerNames = new TextCache': `${FuncK}(()=>ItemColorLayerNames);\nItemColorLayerNames = new TextCache`,

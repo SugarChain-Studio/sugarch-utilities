@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.3.1
+
+### Patch Changes
+
+-   Fix layerName processing.
+
 ## 0.3.0
 
 ### Minor Changes
