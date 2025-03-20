@@ -112,4 +112,4 @@ export class _ActivityManager<CustomPrereq extends string = ActivityPrerequisite
 
 export type ActivityManagerType<CustomPrereq extends string = ActivityPrerequisite> = _ActivityManager<CustomPrereq>;
 
-export const ActivityManager = Globals.get('ActivityManager', () => new _ActivityManager());
+export const ActivityManager = new _ActivityManager();

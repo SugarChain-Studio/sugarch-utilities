@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.2.2
+
+### Patch Changes
+
+-   ActivityManager should not be global singleton.
+
 ## 0.2.1
 
 ### Patch Changes
