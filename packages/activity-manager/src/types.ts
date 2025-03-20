@@ -1,4 +1,4 @@
-import { ActivityInfo, Translation } from '@sugarch/bc-mod-types';
+import { ActivityInfo, ActivityTriggerMode, Translation } from '@sugarch/bc-mod-types';
 
 export type CustomActivityPrerequisite<CustomPrereq extends string = ActivityPrerequisite> =
     | ActivityPrerequisite
@@ -43,8 +43,6 @@ export type ActivityImageSetting =
 
 export type ActivityDialogKey = `Chat${'Other' | 'Self'}-${AssetGroupItemName}-${AnyActivityName}`;
 
-export type ActivityTriggerMode = 'SelfOnOthers' | 'OthersOnSelf' | 'SelfOnSelf' | 'AnyOnSelf';
-
 /**
  * A custom activity prerequisite, with name and test function
  */
@@ -57,6 +55,7 @@ export interface CustomActivityPrerequisiteItem<CustomPrereq extends string = Ac
  * A runnable activity.
  */
 export interface ActivityRunnable {
+    /** trigger mode, if undefined, will trigger  */
     readonly mode?: ActivityTriggerMode;
     run?: (player: PlayerCharacter, sender: Character, info: ActivityInfo) => void;
 }

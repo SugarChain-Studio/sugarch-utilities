@@ -1,7 +1,7 @@
-import { ActivityInfo } from '@sugarch/bc-mod-types';
+import { ActivityInfo, ActivityTriggerMode } from '@sugarch/bc-mod-types';
 import { Globals, sleepUntil } from '@sugarch/bc-mod-utility';
 
-type EventMode = 'SelfOnOthers' | 'OthersOnSelf' | 'SelfOnSelf' | 'AnyOnSelf';
+type EventMode = ActivityTriggerMode;
 
 type EventArgType = [sender: Character, player: PlayerCharacter, info: ActivityInfo];
 
@@ -46,10 +46,10 @@ function makeChatRoomMsgHandler (runner: HandlerRunner): ChatRoomMessageHandler 
 
             const mode: EventMode[] = (() => {
                 if (TargetMemberNumber === Player.MemberNumber) {
-                    if (sender.MemberNumber === TargetMemberNumber) return ['SelfOnSelf', 'AnyOnSelf'];
-                    return ['OthersOnSelf', 'AnyOnSelf'];
+                    if (sender.MemberNumber === TargetMemberNumber) return ['SelfOnSelf', 'AnyOnSelf', 'SelfInvolved'];
+                    return ['OthersOnSelf', 'AnyOnSelf', 'SelfInvolved'];
                 }
-                if (sender.MemberNumber === Player.MemberNumber) return ['SelfOnOthers'];
+                if (sender.MemberNumber === Player.MemberNumber) return ['SelfOnOthers', 'SelfInvolved'];
                 return [];
             })();
 

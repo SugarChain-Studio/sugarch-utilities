@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-types
 
+## 0.6.0
+
+### Minor Changes
+
+-   Refactor activity trigger, use 'SelfInvolved' as default trigger mode.
+
 ## 0.5.0
 
 ### Minor Changes
