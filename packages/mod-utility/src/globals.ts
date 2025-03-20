@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-interface INamespace<T = any> {
+export interface INamespace<T = any> {
     get(name: string, defaultValue: () => T): T;
+    getMayOverride(name: string, defaultValue: OverrideFuncion<T>): T;
     set(name: string, value: T): void;
     has(name: string): boolean;
     delete(name: string): boolean;
@@ -132,6 +133,7 @@ export class Globals {
     static createNamespace<T>(prefix: string): INamespace<T> {
         return {
             get: (name, defaultValue) => Globals.get<T>(`${prefix}.${name}`, defaultValue),
+            getMayOverride: (name, defaultValue) => Globals.getMayOverride<T>(`${prefix}.${name}`, defaultValue),
             set: (name, value) => Globals.set<T>(`${prefix}.${name}`, value),
             has: (name) => Globals.has(`${prefix}.${name}`),
             delete: (name) => Globals.delete(`${prefix}.${name}`),
