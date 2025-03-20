@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.3.0
+
+### Minor Changes
+
+-   Fix that some patch need to be handled globally.
+
 ## 0.2.16
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @sugarch/bc-image-mapping
 
+## 1.0.6
+
+### Patch Changes
+
+-   Updated dependencies
+    -   @sugarch/bc-mod-utility@0.2.0
+
 ## 1.0.5
 
 ### Patch Changes
