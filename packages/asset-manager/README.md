@@ -43,7 +43,7 @@ const assetDef: AssetDefinition = {
     Layer: [
         {
             // this means a picture resouce located at "Assets/ItemMisc/SimpleExample_Base.png"
-            // it will be drawn at [Left, Top] position related to character canvas
+            // it will be drawn at [Left, Top] position relative to character canvas
             Name: "Base",
             AllowColorize: true,
         },
@@ -59,9 +59,9 @@ function registerSimpleExample() {
     // Mapping the images
     AssetManager.addImageMapping({
         // the image for the Base layer
-        "Assets/Femal3DCG/ItemHandheld/SimpleExample_Base.png": `${yourBaseURL}/SimpleExample_Base.png`,
+        "Assets/Female3DCG/ItemHandheld/SimpleExample_Base.png": `${yourBaseURL}/SimpleExample_Base.png`,
         // the image for the dialog preview icon
-        "Assets/Femal3DCG/ItemHandheld/Preview/SimpleExample.png": `${yourBaseURL}/SimpleExample_Preview.png`,
+        "Assets/Female3DCG/ItemHandheld/Preview/SimpleExample.png": `${yourBaseURL}/SimpleExample_Preview.png`,
     })
 }
 
