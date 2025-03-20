@@ -1,8 +1,9 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { checkItemCustomed, getCustomAssets, getCustomGroups } from './customStash';
 import { getCustomMirrorGroups, resolvePreimage } from './mirrorGroup';
-import type { CustomGroupName, Translation } from "@sugarch/bc-mod-types";
+import type { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
 import { translateDialog, translateEntry, translateGroupedEntries } from './entryUtils';
+import { oncePatch } from './oncePatch';
 
 /**
  * Resolve translation entry by language
@@ -194,9 +195,12 @@ export function setupEntries (): void {
         HookManager.progressiveHook('TranslationAssetProcess').next().inject(loadAssetEntries);
     }
 
-    const ActionFunc = HookManager.randomGlobalFunction(
-        'CustomDialogInject',
-        (dictionary: DictionaryBuilder, _1: Character, _2: string, PrevItem: Item, NextItem: Item) => {
+    type DictionaryDecorators = {
+        decorators: ((dictionary: DictionaryBuilder, PrevItem: Item, NextItem: Item) => void)[];
+    };
+
+    oncePatch<DictionaryDecorators>().getMayOverride('ChatRoomPublishAction', old => {
+        const mDecorator = (dictionary: DictionaryBuilder, PrevItem: Item, NextItem: Item) => {
             for (const [key, item] of [
                 ['PrevAsset', PrevItem],
                 ['NextAsset', NextItem],
@@ -204,10 +208,27 @@ export function setupEntries (): void {
                 const customed = checkItemCustomed(item);
                 if (customed) dictionary.text(key, item.Asset.Description);
             }
-        }
-    );
+        };
 
-    HookManager.patchFunction('ChatRoomPublishAction', {
-        'ChatRoomCharacterItemUpdate(C);': `${ActionFunc}(dictionary, C, Action, PrevItem, NextItem);\nChatRoomCharacterItemUpdate(C);`,
+        if (old) {
+            const oldDecorators = (old as DictionaryDecorators).decorators;
+            oldDecorators.push(mDecorator);
+            return old;
+        } else {
+            const ret = { decorators: [mDecorator] };
+
+            const ActionFunc = HookManager.randomGlobalFunction(
+                'CustomDialogInject',
+                (dictionary: DictionaryBuilder, _1: Character, _2: string, PrevItem: Item, NextItem: Item) => {
+                    ret.decorators.forEach(decorator => decorator(dictionary, PrevItem, NextItem));
+                }
+            );
+
+            HookManager.patchFunction('ChatRoomPublishAction', {
+                'ChatRoomCharacterItemUpdate(C);': `${ActionFunc}(dictionary, C, Action, PrevItem, NextItem);\nChatRoomCharacterItemUpdate(C);`,
+            });
+
+            return ret;
+        }
     });
 }

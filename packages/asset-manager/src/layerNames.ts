@@ -1,5 +1,6 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
-import type { CustomGroupName, Translation } from "@sugarch/bc-mod-types";
+import type { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
+import { oncePatch } from './oncePatch';
 
 interface LayerNameDetails {
     desc: Translation.Entry;
@@ -104,12 +105,24 @@ export function addLayerNames<Custom extends string = AssetGroupBodyName> (
 
 // Create an async task that waits for ItemColorLayerNames to load and then writes cached layer names to ItemColorLayerNames
 export function setupLayerNameLoad () {
-    const FuncK = HookManager.randomGlobalFunction('LayerNameInject', (cacheGetter: () => TextCache) => {
-        cache = cacheGetter;
+    type CacheAccessor = { cache: (() => TextCache) | undefined };
+
+    oncePatch<CacheAccessor>().getMayOverride('ItemColorLoad', old => {
+        if (old) {
+            cache = old.cache;
+            return old;
+        } else {
+            const ret: CacheAccessor = { cache: undefined };
+            const FuncK = HookManager.randomGlobalFunction('LayerNameInject', (cacheGetter: () => TextCache) => {
+                ret.cache = cacheGetter;
+            });
+            HookManager.patchFunction('ItemColorLoad', {
+                'ItemColorLayerNames = new TextCache': `${FuncK}(()=>ItemColorLayerNames);\nItemColorLayerNames = new TextCache`,
+            });
+            return ret;
+        }
     });
-    HookManager.patchFunction('ItemColorLoad', {
-        'ItemColorLayerNames = new TextCache': `${FuncK}(()=>ItemColorLayerNames);\nItemColorLayerNames = new TextCache`,
-    });
+
     HookManager.progressiveHook('ItemColorLoad', 1)
         .next()
         .inject(() => {

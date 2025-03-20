@@ -1,5 +1,6 @@
 import { HookManager, HookManagerInterface } from '@sugarch/bc-mod-hook-manager';
-import type { CustomGroupName } from "@sugarch/bc-mod-types";
+import type { CustomGroupName } from '@sugarch/bc-mod-types';
+import { oncePatch } from './oncePatch';
 
 const customGroups: Record<string, AssetGroup> = {};
 
@@ -99,7 +100,9 @@ export function enableCustomAssets (): void {
             }
         });
 
-    const overrideAvailable = (...[args, next]: Parameters<HookManagerInterface.HookFunction<'InventoryAvailable'>>) => {
+    const overrideAvailable = (
+        ...[args, next]: Parameters<HookManagerInterface.HookFunction<'InventoryAvailable'>>
+    ) => {
         const [_, Name, Group] = args;
         if (AccessCustomAsset(Group, Name)) return true;
         return next(args);
@@ -109,25 +112,36 @@ export function enableCustomAssets (): void {
     HookManager.progressiveHook('InventoryAvailable').inside('CraftingItemListBuild').override(overrideAvailable);
     HookManager.progressiveHook('InventoryAvailable').inside('WardrobeFastLoad').override(overrideAvailable);
 
-    HookManager.progressiveHook('CraftingValidate').inject((args) => {
+    HookManager.progressiveHook('CraftingValidate').inject(args => {
         const item = args[0]?.Item;
         if (!item) return;
         const asset = CraftingAssets[item]?.[0];
         if (asset && isInListCustomAsset(asset.Group.Name, asset.Name)) args[3] = false;
     });
 
-    const pInventory = HookManager.randomGlobalFunction('CraftingInventory', () => {
-        return [
-            ...Player.Inventory,
-            ...Object.values(customAssets)
+    type CraftingInventoryStash = { providers: (() => Item[])[] };
+    oncePatch<CraftingInventoryStash>().getMayOverride('CraftingInventory', old => {
+        const flatCustomAssets = (custom: typeof customAssets) =>
+            Object.values(custom)
                 .map(x => Object.values(x))
                 .flat()
-                .map(Asset => ({ Asset })),
-        ];
-    });
+                .map(Asset => ({ Asset })) as Item[];
 
-    HookManager.patchFunction('CraftingRun', {
-        'for (let Item of Player.Inventory) {': `for (let Item of ${pInventory}()) {`,
+        if (old) {
+            const stash = old as CraftingInventoryStash;
+            stash.providers.push(() => flatCustomAssets(customAssets));
+            return stash;
+        } else {
+            const ret: CraftingInventoryStash = { providers: [] };
+            ret.providers.push(() => flatCustomAssets(customAssets));
+            const pInventory = HookManager.randomGlobalFunction('CraftingInventory', () => {
+                return [...Player.Inventory, ...ret.providers.map(x => x()).flat()];
+            });
+            HookManager.patchFunction('CraftingRun', {
+                'for (let Item of Player.Inventory) {': `for (let Item of ${pInventory}()) {`,
+            });
+            return ret;
+        }
     });
 }
 
