@@ -1,4 +1,4 @@
-# BC Mod Utilities
+# SugarChain BC Mod Utilities
 
 A collection of utilities and tools for developing mods for BC. This project is organized as a monorepo using pnpm to manage multiple packages.
 
