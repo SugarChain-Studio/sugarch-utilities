@@ -14,6 +14,9 @@ A package that wraps the bcModSdk to provide a more flexible hook mechanism. It 
 ### [@sugarch/bc-asset-manager](packages/asset-manager)
 A package for managing assets in BC. It includes functions for loading, modifying, and validating assets, as well as handling custom dialogs and image mappings.
 
+### [@sugarch/bc-activity-manager](packages/activity-manager)
+A package for managing activities in BC. It provides a simple interface for creating and managing activities, as well as handling custom activity types and activity data.
+
 ### [@sugarch/bc-event-handler](packages/event-handler)
 A package for handling BC chat events using the EventEmitter interface. It provides a robust event system to manage custom events, making it easier to create responsive and interactive mods.
 
