@@ -12,7 +12,7 @@ import { ILogger } from '@sugarch/bc-mod-types';
 export * from './types';
 export { CustomActivity };
 
-export class _ActivityManager<CustomPrereq extends string = ActivityPrerequisite> {
+export class _ActivityManager<CustomAct extends string = string, CustomPrereq extends string = ActivityPrerequisite> {
     /**
      * Add custom activity prerequisites
      * @param prereqs - Array of custom prerequisites to add
@@ -34,7 +34,7 @@ export class _ActivityManager<CustomPrereq extends string = ActivityPrerequisite
      * Add a custom activity
      * @param act - Custom activity definition
      */
-    addCustomActivity (act: CustomActivity<CustomPrereq>): void {
+    addCustomActivity (act: CustomActivity<CustomAct, CustomPrereq>): void {
         const copyAct = { ...act };
         pushLoad(() => {
             copyAct.activity.Prerequisite = enlistUnamedPrereq(copyAct.activity.Name, copyAct.activity.Prerequisite);
@@ -71,7 +71,7 @@ export class _ActivityManager<CustomPrereq extends string = ActivityPrerequisite
      * Add multiple custom activities
      * @param acts - Array of custom activities to add
      */
-    addCustomActivities (acts: CustomActivity<CustomPrereq>[]): void {
+    addCustomActivities (acts: CustomActivity<CustomAct, CustomPrereq>[]): void {
         acts.forEach(act => this.addCustomActivity(act));
     }
 
@@ -114,11 +114,23 @@ export class _ActivityManager<CustomPrereq extends string = ActivityPrerequisite
      * type safety, use this method to get a re-typed version
      * @returns retyped ActivityManager
      */
-    typePrerequisiteNames<T extends string>(){
-        return this as unknown as _ActivityManager<T>;
+    typePrerequisiteNames<T extends string> () {
+        return this as unknown as _ActivityManager<CustomAct, T>;
+    }
+
+    /**
+     * Retype ActivityManager, if you need to customize the activity names and ensure
+     * type safety, use this method to get a re-typed version
+     * @returns retyped ActivityManager
+     */
+    typeActivityNames<T extends string> () {
+        return this as unknown as _ActivityManager<T, CustomPrereq>;
     }
 }
 
-export type ActivityManagerType<CustomPrereq extends string = ActivityPrerequisite> = _ActivityManager<CustomPrereq>;
+export type ActivityManagerType<
+    CustomAct extends string = string,
+    CustomPrereq extends string = ActivityPrerequisite
+> = _ActivityManager<CustomAct, CustomPrereq>;
 
 export const ActivityManager = new _ActivityManager();

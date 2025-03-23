@@ -1,8 +1,11 @@
 import { CustomActivity } from './types';
 
-const customStorage: Record<string, CustomActivity<string>> = {};
+const customStorage: Record<string, CustomActivity<string, string>> = {};
 
-export function addCustomActivity<CustomPrereq extends string = ActivityPrerequisite> (act: CustomActivity<CustomPrereq>) {
+export function addCustomActivity<
+    CustomAct extends string = string,
+    CustomPrereq extends string = ActivityPrerequisite
+> (act: CustomActivity<CustomAct, CustomPrereq>) {
     customStorage[act.activity.Name] = act;
 }
 

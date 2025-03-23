@@ -118,8 +118,8 @@ function isTranslationEntry (src: Translation.ActivityEntry | Translation.Entry)
  * Add activity translation entries
  * @param src - Custom activity definition
  */
-export function addActivityEntry<CustomPrereq extends string = ActivityPrerequisite> (
-    src: CustomActivity<CustomPrereq>
+export function addActivityEntry<CustomAct extends string = string, CustomPrereq extends string = ActivityPrerequisite> (
+    src: CustomActivity<CustomAct, CustomPrereq>
 ): void {
     const { activity, label, labelSelf, dialog, dialogSelf } = src;
     const { Name, Target, TargetSelf } = activity;

@@ -17,11 +17,11 @@ export type ExCustomActivityPrerequisite<CustomPrereq extends string = ActivityP
 
 type AnyActivityName = string;
 
-export type CustomActivityDefinition<CustomPrereq extends string = ActivityPrerequisite> = Omit<
+export type CustomActivityDefinition<CustomAct extends string = string, CustomPrereq extends string = ActivityPrerequisite> = Omit<
     Activity,
     'Name' | 'Prerequisite' | 'ActivityID'
 > & {
-    Name: AnyActivityName;
+    Name: CustomAct;
     ActivityID?: number;
     Prerequisite: ExCustomActivityPrerequisite<CustomPrereq>[];
 };
@@ -70,8 +70,8 @@ export interface ActivityExtendedEvent extends Required<ActivityRunnable> {
 /**
  * Represents a custom activity.
  */
-export interface CustomActivity<CustomPrereq extends string = ActivityPrerequisite> extends ActivityRunnable {
-    readonly activity: CustomActivityDefinition<CustomPrereq>;
+export interface CustomActivity<CustomAct extends string = string, CustomPrereq extends string = ActivityPrerequisite> extends ActivityRunnable {
+    readonly activity: CustomActivityDefinition<CustomAct, CustomPrereq>;
 
     /** The image for activity in dialog, see {@link ActivityImageSetting} for details */
     readonly useImage?: ActivityImageSetting;

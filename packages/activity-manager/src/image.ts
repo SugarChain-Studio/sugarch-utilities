@@ -8,10 +8,10 @@ import { PathTools } from '@sugarch/bc-mod-utility';
  * @param mappings - Record of activity names to image names
  * @param category - Category of the mapping (Activity or an asset group)
  */
-export function addActivityImageMapping<CustomPrereq extends string = ActivityPrerequisite> (
-    activity: CustomActivityDefinition<CustomPrereq>,
-    useImage: ActivityImageSetting | undefined
-): void {
+export function addActivityImageMapping<
+    CustomAct extends string = string,
+    CustomPrereq extends string = ActivityPrerequisite
+> (activity: CustomActivityDefinition<CustomAct, CustomPrereq>, useImage: ActivityImageSetting | undefined): void {
     const mappingRecord: ImageMappingRecord = {};
     const key = PathTools.activityPreviewIconPath(activity as Activity);
     if (Array.isArray(useImage)) {
