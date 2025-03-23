@@ -108,6 +108,15 @@ export class _ActivityManager<CustomPrereq extends string = ActivityPrerequisite
     setLogger (logger: ILogger) {
         setLogger(logger);
     }
+
+    /**
+     * Retype ActivityManager, if you need to customize the prerequisite names and ensure
+     * type safety, use this method to get a re-typed version
+     * @returns retyped ActivityManager
+     */
+    typePrerequisiteNames<T extends string>(){
+        return this as unknown as _ActivityManager<T>;
+    }
 }
 
 export type ActivityManagerType<CustomPrereq extends string = ActivityPrerequisite> = _ActivityManager<CustomPrereq>;

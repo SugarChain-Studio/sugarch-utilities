@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.0
+
+### Minor Changes
+
+-   Add retype interface for activity manager
+
 ## 0.2.2
 
 ### Patch Changes
