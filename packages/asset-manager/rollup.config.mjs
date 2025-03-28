@@ -4,6 +4,11 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { dts } from "rollup-plugin-dts";
 import del from "rollup-plugin-delete";
+import { createBanner } from "../../utils/create-banner.mjs";
+import fs from "fs";
+
+const pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"));
+const banner = createBanner(pkg.name, pkg.version);
 
 export default [
     {
@@ -13,11 +18,13 @@ export default [
                 file: "dist/index.mjs",
                 format: "es",
                 sourcemap: true,
+                banner,
             },
             {
                 file: "dist/index.cjs",
                 format: "cjs",
                 sourcemap: true,
+                banner,
             },
         ],
         external: ["bondage-club-mod-sdk", "@sugarch/bc-mod-hook-manager"],
@@ -29,12 +36,16 @@ export default [
                 declaration: true,
                 declarationDir: "dist/types",
             }),
-            terser(),
+            terser({
+                format: {
+                    comments: /SugarChain|Copyright/i,
+                },
+            }),
         ],
     },
     {
         input: "dist/types/index.d.ts",
-        output: [{ file: "dist/index.d.ts", format: "es" }],
+        output: [{ file: "dist/index.d.ts", format: "es", banner }],
         plugins: [dts(), del({ targets: "dist/types", hook: "buildEnd" })],
     },
 ];

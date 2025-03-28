@@ -1,5 +1,14 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.2
+
+### Patch Changes
+
+-   Add package info in dist files
+-   Updated dependencies
+    -   @sugarch/bc-mod-hook-manager@0.2.12
+    -   @sugarch/bc-mod-utility@0.2.1
+
 ## 0.3.1
 
 ### Patch Changes

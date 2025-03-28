@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.1
+
+### Patch Changes
+
+-   Add package info in dist files
+
 ## 0.2.0
 
 ### Minor Changes
