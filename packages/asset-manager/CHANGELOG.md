@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.4.0
+
+### Minor Changes
+
+-   Add a `assetNameIsStrictCustomed` interface
+
 ## 0.3.1
 
 ### Patch Changes

@@ -3,7 +3,7 @@ import { loadGroup, mirrorGroup } from './groupUtils';
 import { pushAfterLoad, runSetupLoad } from './loadSchedule';
 import { addCustomDialog, setupCustomDialog } from './dialog';
 import { pickEntry, setupEntries } from './entries';
-import { enableCustomAssets, getCustomAssets } from './customStash';
+import { customAssetGetStrict, enableCustomAssets, getCustomAssets } from './customStash';
 import { addLayerNames, addLayerNamesByEntry, setupLayerNameLoad } from './layerNames';
 import { enableValidation, FromModUserTestFunc } from './validation';
 import type {
@@ -188,12 +188,20 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
-     * Check if an asset is custom
+     * Check if an asset is custom, this includes assets created by mirroring groups
      * @param asset The asset
      * @returns True if the asset is custom
      */
     assetIsCustomed (asset: Asset): boolean {
         return getCustomAssets()[asset.Group.Name]?.[asset.Name] !== undefined;
+    }
+
+    /**
+     * Check if a name of an asset is custom, this **does not** include assets created by mirroring groups
+     * @param assetName The name of the asset
+     */
+    assetNameIsStrictCustomed (assetName: string): boolean {
+        return customAssetGetStrict(assetName) !== undefined;
     }
 
     /**

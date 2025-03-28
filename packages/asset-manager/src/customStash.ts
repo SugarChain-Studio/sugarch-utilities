@@ -6,6 +6,8 @@ const customGroups: Record<string, AssetGroup> = {};
 
 const customAssets: Record<string, Record<string, Asset>> = {};
 
+const strictCustomAssets: {name: string, asset:Asset} [] = [];
+
 export const AccessCustomAsset = <Custom extends string = AssetGroupBodyName>(
     group: CustomGroupName<Custom>,
     name: string
@@ -19,6 +21,17 @@ export function customGroupAdd (...[family, groupDef]: Parameters<typeof AssetGr
     const Group = HookManager.invokeOriginal('AssetGroupAdd', family, groupDef);
     customGroups[Group.Name] = Group;
     return Promise.resolve(Group as Mutable<AssetGroup>);
+}
+
+/** 
+ * Mark a custom asset that is not created by mirroring groups
+ */
+export function customAssetMarkStrict (name: string, asset: Asset) {
+    strictCustomAssets.push({ name, asset });
+}
+
+export function customAssetGetStrict (name: string): Asset | undefined {
+    return strictCustomAssets.find(x => x.name === name)?.asset;
 }
 
 /**

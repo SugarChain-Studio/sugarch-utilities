@@ -1,5 +1,5 @@
 import { AssetConfig, ParsedAsset, resolveStringAsset } from './assetConfigs';
-import { customAssetAdd, getCustomAssets } from './customStash';
+import { customAssetAdd, customAssetMarkStrict, getCustomAssets } from './customStash';
 import { Entries, resolveEntry, solidfyEntry } from './entries';
 import { addLayerNames } from './layerNames';
 import { pushAfterLoad, pushAssetLoadEvent, pushDefsLoad, requireGroup } from './loadSchedule';
@@ -98,6 +98,7 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
                 }
             } else {
                 asset.Description = resolveEntry(solidDesc);
+                customAssetMarkStrict(assetDefRes.Name, asset);
                 addLayerNames(asset.DynamicGroupName, assetDefRes as CustomAssetDefinition, {
                     noOverride: true,
                 });
