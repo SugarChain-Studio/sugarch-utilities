@@ -113,7 +113,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param group
      * @param work
      */
-    modifyGroup (group: CustomGroupName, work: FuncWork<[Mutable<AssetGroup>]>) {
+    modifyGroup (group: CustomGroupName<Custom>, work: FuncWork<[Mutable<AssetGroup>]>) {
         modifyGroup(group, work);
     }
 

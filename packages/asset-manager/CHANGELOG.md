@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.4.2
+
+### Patch Changes
+
+-   Fix parameter typing for `modifyGroup`.
+
 ## 0.4.1
 
 ### Patch Changes
