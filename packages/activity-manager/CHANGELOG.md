@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.4
+
+### Patch Changes
+
+-   fix asset may not registered during loading for activity
+
 ## 0.3.3
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 import { ImageMapping } from '@sugarch/bc-image-mapping';
 import { ImageMappingRecord } from '@sugarch/bc-mod-types';
 import { ActivityImageSetting, CustomActivityDefinition } from './types';
-import { PathTools } from '@sugarch/bc-mod-utility';
+import { PathTools, sleepFor } from '@sugarch/bc-mod-utility';
 
 /**
  * Add custom activity image mappings
@@ -15,9 +15,7 @@ export function addActivityImageMapping<
     const mappingRecord: ImageMappingRecord = {};
     const key = PathTools.activityPreviewIconPath(activity as Activity);
     if (Array.isArray(useImage)) {
-        const asset = AssetGet('Female3DCG', useImage[0], useImage[1]);
-        if (!asset) return;
-        mappingRecord[key] = PathTools.assetPreviewIconPath(asset);
+        mappingRecord[key] = `Assets/Female3DCG/${useImage[0]}/Preview/${useImage[1]}.png`;
     } else if (useImage === 'None' || useImage === undefined) {
         mappingRecord[key] = PathTools.emptyImage;
     } else if (useImage.startsWith('http') || useImage.startsWith('data:image')) {
