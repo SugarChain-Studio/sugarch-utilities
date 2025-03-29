@@ -1,7 +1,7 @@
 import { ImageMapping } from '@sugarch/bc-image-mapping';
 import { ImageMappingRecord } from '@sugarch/bc-mod-types';
 import { ActivityImageSetting, CustomActivityDefinition } from './types';
-import { PathTools, sleepFor } from '@sugarch/bc-mod-utility';
+import { PathTools } from '@sugarch/bc-mod-utility';
 
 /**
  * Add custom activity image mappings
