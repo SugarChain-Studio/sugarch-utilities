@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.2
+
+### Patch Changes
+
+-   correct MIME type
+
 ## 0.2.1
 
 ### Patch Changes

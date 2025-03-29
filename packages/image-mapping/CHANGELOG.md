@@ -1,5 +1,13 @@
 # @sugarch/bc-image-mapping
 
+## 1.0.8
+
+### Patch Changes
+
+-   support and optimized for tree like mapping
+-   Updated dependencies
+    -   @sugarch/bc-mod-utility@0.2.2
+
 ## 1.0.7
 
 ### Patch Changes
