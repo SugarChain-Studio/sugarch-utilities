@@ -1,5 +1,11 @@
 # @sugarch/bc-event-handler
 
+## 0.5.0
+
+### Minor Changes
+
+-   New `'PlayerJoin'` and `'PlayerLeave'` event in `ChatRoomEvents`
+
 ## 0.4.2
 
 ### Patch Changes

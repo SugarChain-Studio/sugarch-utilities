@@ -60,7 +60,7 @@ class _ServerSendModifers {
      * @example
      * ```ts
      *    ServerSendModifiers.addModifier('ChatRoomChat', (data) => {
-     *       data.Message = 'Hello world';
+     *       data.Message = 'Hello world'; // This will change all messages to 'Hello world'
      *       return data;
      *    });
      * ```

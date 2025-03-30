@@ -79,9 +79,22 @@ class _ActivityEvents<T extends string = ActivityName> {
 
     /**
      * Register an event listener
+     * @param mode - The event mode to listen to
+     * @param activity - The activity name to listen to
+     * @param listener - The listener function
      */
     on<U extends EventMode> (mode: U, activity: T, listener: (...args: EventArgType) => void): void {
         this._handers.push({ mode, activity, listener });
+    }
+
+    /**
+     * Unregister an event listener
+     * @param mode - The event mode to stop listening to
+     * @param activity - The activity name to stop listening to
+     * @param listener - The listener function
+     */
+    off<U extends EventMode> (mode: U, activity: T, listener: (...args: EventArgType) => void): void {
+        this._handers = this._handers.filter(handler => handler.mode !== mode || handler.activity !== activity || handler.listener !== listener);
     }
 }
 

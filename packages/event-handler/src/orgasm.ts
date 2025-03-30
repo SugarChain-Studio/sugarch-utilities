@@ -3,54 +3,63 @@ import { Globals } from '@sugarch/bc-mod-utility';
 import EventEmitter from 'eventemitter3';
 
 // Define types for orgasm events
-type OrgasmType = 'orgasmed' | 'ruined' | 'resisted';
+type EventType = 'orgasmed' | 'ruined' | 'resisted';
 
 // Define custom event emitter interface with our specific events
-type OrgasmEventEmitter = EventEmitter<{
+type EventMap = {
     orgasmed: [{ Player: Character }];
     ruined: [{ Player: Character }];
     resisted: [{ Player: Character }];
-}>;
+};
 
-// Module's event handler instance
-let handler: OrgasmEventEmitter | undefined = undefined;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type OnFuncArgs<T extends EventType> = [event: T, listener: (eventData: { Player: Character }) => void, context?: any];
 
 class _OrgasmEvents {
+    private handler = new EventEmitter<EventMap>();
+
     constructor () {
-        if (handler !== undefined) return;
-
-        handler = new EventEmitter();
-
         HookManager.hookFunction('ActivityOrgasmStop', 9, (args, next) => {
             const [C, Progress] = args;
             if (C.IsPlayer()) {
-                if (ActivityOrgasmRuined) handler!.emit('ruined', { Player: C });
-                else if (Progress >= 60) handler!.emit('resisted', { Player: C });
+                if (ActivityOrgasmRuined) this.handler.emit('ruined', { Player: C });
+                else if (Progress >= 60) this.handler.emit('resisted', { Player: C });
             }
             next(args);
         });
 
         HookManager.hookFunction('ActivityOrgasmStart', 9, (args, next) => {
             const [C] = args;
-            if (C.IsPlayer() && !ActivityOrgasmRuined) handler!.emit('orgasmed', { Player: C });
+            if (C.IsPlayer() && !ActivityOrgasmRuined) this.handler.emit('orgasmed', { Player: C });
             next(args);
         });
     }
 
     /**
      * Register an event listener
+     * @param event - The event to listen to
+     * @param listener - The listener function
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    on<T extends OrgasmType> (event: T, listener: (eventData: { Player: Character }) => void, context?: any): void {
-        handler!.on(event, listener, context);
+    on<T extends EventType> (...args: OnFuncArgs<T>): void {
+        this.handler.on(...args);
     }
 
     /**
      * Register a one-time event listener
+     * @param event - The event to listen to
+     * @param listener - The listener function
      */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    once<T extends OrgasmType> (event: T, listener: (eventData: { Player: Character }) => void, context?: any): void {
-        handler!.once(event, listener, context);
+    once<T extends EventType> (...args: OnFuncArgs<T>): void {
+        this.handler.once(...args);
+    }
+
+    /**
+     * Unregister an event listener
+     * @param event - The event to stop listening to
+     * @param listener - The listener function
+     */
+    off<T extends EventType> (...args: OnFuncArgs<T>): void {
+        this.handler.off(...args);
     }
 }
 

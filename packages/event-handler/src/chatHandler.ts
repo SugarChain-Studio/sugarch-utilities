@@ -38,6 +38,8 @@ class _ChatRoomMessageHandlerEvents {
 
     /**
      * Register an event listener
+     * @param event - The event to listen to
+     * @param listener - The listener function
      */
     on<T extends EventType> (...args: OnFuncArgs<T>): void {
         this.handler.on(...args);
@@ -45,9 +47,20 @@ class _ChatRoomMessageHandlerEvents {
 
     /**
      * Register a one-time event listener
+     * @param event - The event to listen to
+     * @param listener - The listener function
      */
     once<T extends EventType> (...args: OnFuncArgs<T>): void {
         this.handler.once(...args);
+    }
+
+    /**
+     * Unregister an event listener
+     * @param event - The event to stop listening to
+     * @param listener - The listener function
+     */
+    off<T extends EventType> (...args: OnFuncArgs<T>): void {
+        this.handler.off(...args);
     }
 }
 
