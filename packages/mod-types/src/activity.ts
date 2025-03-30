@@ -1,13 +1,20 @@
 export interface ActivityInfo {
+    /** The character that started the activity */
     SourceCharacter: number;
+    /** The character that started the activity, as a Character object */
     SourceCharacterC: Character;
+    /** The character that is the target of the activity */
     TargetCharacter: number;
+    /** The target group of the activity */
     ActivityGroup: AssetItemGroup;
+    /** The name of the activity */
     ActivityName: string;
+    /** The asset of the activity, if any */
     Asset?: {
         Asset: Asset;
         CraftName?: string;
     };
+    /** The dictionary of the activity */
     Dictionary: ChatMessageDictionaryEntry[];
 }
 

@@ -46,25 +46,40 @@ namespace details {
     };
 }
 
-/** Custom body group definition, supports custom body group names */
+/** 
+ * Custom body group definition, supports custom body group names 
+ * @template Custom - Custom group name
+ */
 export type CustomGroupDefinition<Custom extends string = AssetGroupBodyName> =
     | details.CGroupDef.Item<Custom>
     | details.CGroupDef.Appearance<Custom>
     | details.CGroupDef.Script<Custom>;
 
-/** Custom item asset definition */
+/** 
+ * Custom item asset definition 
+ * @template Custom - Custom group name
+ */
 export type CustomAssetDefinitionItem<Custom extends string = AssetGroupBodyName> = details.CAssetDef.Item<Custom>;
 
-/** Custom appearance asset definition */
+/** 
+ * Custom appearance asset definition 
+ * @template Custom - Custom group name
+ */
 export type CustomAssetDefinitionAppearance<Custom extends string = AssetGroupBodyName> =
     details.CAssetDef.Appearance<Custom>;
 
-/** Custom asset definition, supports extended body group names */
+/** 
+ * Custom asset definition, supports extended body group names 
+ * @template Custom - Custom group name
+ */
 export type CustomAssetDefinition<Custom extends string = AssetGroupBodyName> =
     | CustomAssetDefinitionItem<Custom>
     | CustomAssetDefinitionAppearance<Custom>
     | details.CAssetDef.Script<Custom>;
 
-/** Asset definitions grouped by body group */
+/** 
+ * Asset definitions grouped by body group
+ * @template Custom - Custom group name
+ */
 export type CustomGroupedAssetDefinitions<Custom extends string = AssetGroupBodyName> =
     details.GroupedAssetType<Custom>;
