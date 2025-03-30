@@ -36,6 +36,9 @@ importers:
 
   packages/activity-manager:
     dependencies:
+      '@sugarch/bc-event-handler':
+        specifier: workspace:*
+        version: link:../event-handler
       '@sugarch/bc-mod-hook-manager':
         specifier: workspace:*
         version: link:../mod-hook-manager
@@ -61,9 +64,6 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^12.1.2
         version: 12.1.2(rollup@4.36.0)(tslib@2.8.1)(typescript@5.8.2)
-      '@sugarch/bc-event-handler':
-        specifier: workspace:*
-        version: link:../event-handler
       '@sugarch/bc-image-mapping':
         specifier: workspace:*
         version: link:../image-mapping
