@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.7
+
+### Patch Changes
+
+-   set event-handler as peer dependencies
+
 ## 0.3.6
 
 ### Patch Changes

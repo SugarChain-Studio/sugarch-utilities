@@ -27,7 +27,7 @@ export default [
                 banner,
             },
         ],
-        external: ["bondage-club-mod-sdk", "@sugarch/bc-mod-hook-manager"],
+        external: ["bondage-club-mod-sdk", "@sugarch/bc-mod-hook-manager", "@sugarch/bc-event-handler"],
         plugins: [
             resolve({ browser: true }),
             commonjs(),

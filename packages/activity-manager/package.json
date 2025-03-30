@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-activity-manager",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "An activity manager for BC mods, easily add custom activities to the game.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
@@ -36,7 +36,6 @@
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.2",
-    "@sugarch/bc-event-handler": "workspace:*",
     "@sugarch/bc-image-mapping": "workspace:*",
     "bc-stubs": "114.0.0",
     "eventemitter3": "^5.0.1",
@@ -47,6 +46,7 @@
   },
   "peerDependencies": {
     "@sugarch/bc-mod-hook-manager": "workspace:*",
+    "@sugarch/bc-event-handler": "workspace:*",
     "bondage-club-mod-sdk": "^1.2.0"
   }
 }
