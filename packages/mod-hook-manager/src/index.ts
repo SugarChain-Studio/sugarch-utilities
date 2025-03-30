@@ -3,27 +3,8 @@ import { ProgressiveHook } from './progressiveHook';
 import { HookManagerInterface } from './types';
 import type { FuncWork, ILogger } from '@sugarch/bc-mod-types';
 import { Logger, setLogger } from './logger';
+import { WorkList } from './workList';
 export {HookManagerInterface};
-
-class WorkList {
-    done: boolean;
-    list: FuncWork[];
-
-    constructor (done = false) {
-        this.done = done;
-        this.list = [];
-    }
-
-    run () {
-        this.done = true;
-        while (this.list.length > 0) this.list.shift()!();
-    }
-
-    push (work: FuncWork) {
-        if (this.done) work();
-        else this.list.push(work);
-    }
-}
 
 const afterInitList = new WorkList();
 const hookList = new WorkList();
@@ -42,11 +23,11 @@ function playerHook (work: FuncWork) {
     }
 }
 
-let mMod: HookManagerInterface.ModSDKModAPI | undefined = undefined;
-
 class _HookManager {
+    mMod: HookManagerInterface.ModSDKModAPI | undefined = undefined;
+
     get mod () {
-        return mMod;
+        return this.mMod;
     }
 
     push (list: WorkList, work: FuncWork) {
@@ -58,7 +39,7 @@ class _HookManager {
      * @param modinfo the mod info to register
      */
     init (modinfo: HookManagerInterface.ModSDKModInfo) {
-        mMod = bcModSdk.registerMod(modinfo);
+        this.mMod = bcModSdk.registerMod(modinfo);
         patchList.run();
         hookList.run();
 
@@ -81,7 +62,7 @@ class _HookManager {
      * @param mod a registered mod
      */
     initWithMod (mod: HookManagerInterface.ModSDKModAPI) {
-        mMod = mod;
+        this.mMod = mod;
         patchList.run();
         hookList.run();
 
@@ -165,6 +146,27 @@ class _HookManager {
         const hook = new ProgressiveHook<TFunctionName>(this);
         this.hookFunction(funcName, priority, (args, next) => hook.run(args, next));
         return hook;
+    }
+
+    /**
+     * Register a hook function that sets a flag to true when inside the function.
+     * The flag is set to false when the function returns.
+     * @param funcName function name
+     * @param priority hook priority
+     * @returns inside flag
+     */
+    insideFlag<TFunctionName extends string> (
+        funcName: TFunctionName,
+        priority = 1,
+    ){
+        const insideFlag = { inside: false };
+        this.hookFunction(funcName, priority, (args, next) => {
+            insideFlag.inside = true;
+            const ret = next(args);
+            insideFlag.inside = false;
+            return ret;
+        });
+        return insideFlag;
     }
 
     /**
