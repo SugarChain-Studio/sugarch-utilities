@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.3
+
+### Patch Changes
+
+-   Add a Messager to help sending chat messages
+
 ## 0.2.2
 
 ### Patch Changes

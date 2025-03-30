@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-hook-manager
 
+## 0.2.13
+
+### Patch Changes
+
+-   add a `insideFlag` interface to help handle hook hierachy
+
 ## 0.2.12
 
 ### Patch Changes

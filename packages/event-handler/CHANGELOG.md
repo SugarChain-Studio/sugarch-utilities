@@ -1,5 +1,13 @@
 # @sugarch/bc-event-handler
 
+## 0.4.2
+
+### Patch Changes
+
+-   add a server send modifier to help reduce ServerSend overhaul
+-   Updated dependencies
+    -   @sugarch/bc-mod-hook-manager@0.2.13
+
 ## 0.4.1
 
 ### Patch Changes
