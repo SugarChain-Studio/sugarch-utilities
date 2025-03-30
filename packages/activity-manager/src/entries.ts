@@ -124,7 +124,7 @@ export function addActivityEntry<CustomAct extends string = string, CustomPrereq
     const { activity, label, labelSelf, dialog, dialogSelf } = src;
     const { Name, Target, TargetSelf } = activity;
 
-    const dlabel = label ?? { CN: Name };
+    const dlabel = label ?? labelSelf ?? { CN: Name };
 
     if (isTranslationEntry(dlabel)) {
         recordFor(dlabel, (lang, entry) => {

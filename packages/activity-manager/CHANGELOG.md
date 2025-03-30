@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.5
+
+### Patch Changes
+
+-   fix label display for self only activity
+
 ## 0.3.4
 
 ### Patch Changes
