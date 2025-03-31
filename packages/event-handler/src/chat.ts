@@ -2,18 +2,19 @@ import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { Globals } from '@sugarch/bc-mod-utility';
 import EventEmitter from 'eventemitter3';
 
-type EventType = Exclude<ServerChatRoomMessageType, 'ServerMessage' | 'Status'>;
+type ChatRoomMessageEventType = Exclude<ServerChatRoomMessageType, 'ServerMessage' | 'Status'>;
 
 type EventMap = {
-    [key in EventType]: [message: ServerChatRoomMessage];
+    [key in ChatRoomMessageEventType]: [message: ServerChatRoomMessage];
 } & {
     PlayerJoin: [player: PlayerCharacter];
     PlayerLeave: [player: PlayerCharacter];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type OnFuncArgs<T extends EventType> = [event: T, listener: (message: ServerChatRoomMessage) => void, context?: any];
+type EventType = keyof EventMap;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type OnFuncArgs<T extends EventType> = [event: T, listener: (...args: EventMap[T]) => void, context?: any];
 class _ChatRoomEvents {
     private handler = new EventEmitter<EventMap>();
 

@@ -1,5 +1,11 @@
 # @sugarch/bc-event-handler
 
+## 0.5.1
+
+### Patch Changes
+
+-   Fix chat room event type restraint
+
 ## 0.5.0
 
 ### Minor Changes

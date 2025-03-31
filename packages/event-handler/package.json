@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-event-handler",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Handle BC events with EventEmitter.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
