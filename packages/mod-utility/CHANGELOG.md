@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.4
+
+### Patch Changes
+
+-   Make messager default constructible.
+
 ## 0.2.3
 
 ### Patch Changes

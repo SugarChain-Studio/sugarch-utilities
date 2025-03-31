@@ -2,7 +2,7 @@ export class Messager {
     /**
      * @param CUSTOM_ACTION_TAG - Custom tag used for action messages.
      */
-    constructor (private readonly CUSTOM_ACTION_TAG: string) {}
+    constructor (private readonly CUSTOM_ACTION_TAG: string = 'LUZI_MESSAGE_TAG') {}
 
     /**
      * Sends a custom action message to the chat room.
