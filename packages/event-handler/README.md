@@ -4,12 +4,19 @@ A package for handling BC chat events using the EventEmitter interface. It provi
 
 ## Installation
 
-This package requires the `@sugarch/bc-mod-hook-manager` package to be installed. Make sure to install it before installing this package.
+This package requires the [`@sugarch/bc-mod-hook-manager`](../mod-hook-manager/) package to be installed. Make sure to install it before installing this package.
 
 To install the package, use:
 
 ```bash
-npm add @sugarch/bc-event-handler --save-dev
+# Using pnpm
+pnpm add @sugarch/bc-event-handler
+
+# Using yarn
+yarn add @sugarch/bc-event-handler
+
+# Using npm
+npm install @sugarch/bc-event-handler
 ```
 
 ## Usage

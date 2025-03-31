@@ -3,12 +3,19 @@
 
 ## Installation
 
-This package requires the `@sugarch/bc-mod-hook-manager` package to be installed. Make sure to install it before installing this package.
+This package requires the [`@sugarch/bc-mod-hook-manager`](../mod-hook-manager/) and [`@sugarch/bc-event-handler`](../event-handler/) package to be installed. Make sure to install it before installing this package.
 
 To install the package, use:
 
 ```bash
-npm add @sugarch/bc-activity-manager --save-dev
+# Using pnpm
+pnpm add @sugarch/bc-activity-manager
+
+# Using yarn
+yarn add @sugarch/bc-activity-manager
+
+# Using npm
+npm install @sugarch/bc-activity-manager
 ```
 
 ## Usage
@@ -58,8 +65,13 @@ const activityDef: CustomActivity = {
 // Add the custom activity to the activity manager
 ActivityManager.addCustomActivity(activityDef);
 
+// Mod info for the mod, this is used to register the mod to bc mod sdk
+const modInfo = ...;
+
 // Initialize the hook manager, ActivityManager will use it to hook essential functions
-HookManager.initWithMod(bcModSdk.registerMod(...));
+HookManager.initWithMod(bcModSdk.registerMod(modInfo));
+// Or directly initialize the hook manager with modinfo
+// HookManager.init(modInfo);
 
 // Register the whole thing
 ActivityManager.init();

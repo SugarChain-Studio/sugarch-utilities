@@ -7,7 +7,14 @@ A package that wraps the bcModSdk to provide a more flexible hook mechanism. It 
 To install the package, use:
 
 ```bash
-npm add @sugarch/bc-mod-hook-manager --save-dev
+# Using pnpm
+pnpm add @sugarch/bc-mod-hook-manager
+
+# Using yarn
+yarn add @sugarch/bc-mod-hook-manager
+
+# Using npm
+npm install @sugarch/bc-mod-hook-manager
 ```
 
 ## Usage
