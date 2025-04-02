@@ -1,5 +1,15 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.10
+
+### Patch Changes
+
+-   6c16c34: Add possibility to set activity images dynamicly
+-   Updated dependencies [e162255]
+-   Updated dependencies [ea9625c]
+    -   @sugarch/bc-mod-utility@0.2.5
+    -   @sugarch/bc-event-handler@0.5.1
+
 ## 0.3.9
 
 ### Patch Changes

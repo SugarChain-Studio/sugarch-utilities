@@ -1,5 +1,12 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.5
+
+### Patch Changes
+
+-   e162255: Enhance Messager.action with detailed action dictionary
+-   ea9625c: clarify constructor parameter documentation for Messager class
+
 ## 0.2.4
 
 ### Patch Changes

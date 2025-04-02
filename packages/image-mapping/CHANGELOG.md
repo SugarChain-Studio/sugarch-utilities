@@ -1,5 +1,14 @@
 # @sugarch/bc-image-mapping
 
+## 1.0.11
+
+### Patch Changes
+
+-   6c16c34: Add possibility to set activity images dynamicly
+-   Updated dependencies [e162255]
+-   Updated dependencies [ea9625c]
+    -   @sugarch/bc-mod-utility@0.2.5
+
 ## 1.0.10
 
 ### Patch Changes
