@@ -4,7 +4,7 @@ import { pushLoad, setupLoad } from './load';
 import { addActivityEntry, setupEntry } from './entries';
 import { addPrerequisite, enlistUnamedPrereq, setupPrereq } from './prereq';
 import { addCustomActivity, testCustomActivity } from './stash';
-import { addActivityImageMapping } from './image';
+import { addActivityImageMapping, setupDynamicActivityImage } from './image';
 import { sleepUntil } from '@sugarch/bc-mod-utility';
 import { setLogger } from './logger';
 import { ILogger } from '@sugarch/bc-mod-types';
@@ -96,7 +96,8 @@ export class _ActivityManager<CustomAct extends string = string, CustomPrereq ex
             );
             setupLoad();
         })();
-
+        
+        setupDynamicActivityImage();
         setupEntry();
         setupPrereq();
     }

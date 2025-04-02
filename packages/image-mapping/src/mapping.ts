@@ -75,13 +75,14 @@ function setupImgMapping (): void {
 
         HookManager.hookFunction('ElementButton.CreateForActivity', 0, (args, next) => {
             const activity = args[1] as ItemActivity;
-            const srcImage = activity.Item
-                ? PathTools.assetPreviewIconPath(activity.Item.Asset)
-                : `Assets/Female3DCG/Activity/${activity.Activity.Name}.png`;
+            const srcImage =
+                args[4]?.image ??
+                (activity.Item
+                    ? PathTools.assetPreviewIconPath(activity.Item.Asset)
+                    : `Assets/Female3DCG/Activity/${activity.Activity.Name}.png`);
             storage.mapImg(srcImage, (image: string) => {
                 args[4] = { ...args[4], image };
             });
-
             return next(args);
         });
 

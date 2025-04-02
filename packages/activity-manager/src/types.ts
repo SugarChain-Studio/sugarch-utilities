@@ -27,6 +27,15 @@ export type CustomActivityDefinition<CustomAct extends string = string, CustomPr
 };
 
 /**
+ * A dynamic activity image provider function.
+ * @param activity - The activity to get the image for.
+ * @param target - The target character of the activity.
+ * @param group - The targeted group name of the activity.
+ * @returns The image URL or undefined if no image is available.
+ */
+export type DynamicActivityImageProvider = (activity: Activity, target:Character, group: string) => string | undefined;
+
+/**
  * Represents a custom activity image setting.
  * - ActivityName: reuses the image of the corresponding activity.
  * - [group name, item name]: reuses the image of the corresponding item.
@@ -37,6 +46,7 @@ export type CustomActivityDefinition<CustomAct extends string = string, CustomPr
 export type ActivityImageSetting =
     | [AssetGroupName, string]
     | ActivityName
+    | DynamicActivityImageProvider
     | `${'http://' | 'https://'}${string}`
     | `data:image/${string}`
     | 'None';
