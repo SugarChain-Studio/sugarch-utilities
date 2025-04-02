@@ -21,10 +21,10 @@ type CustomActionActivityOption = {
 
 interface CustomActionOptions {
     /**
-     * source character field, if not provided, the current player will be used
+     * source character field, if set to true, the Player character will be used as the source character
      * See {@link DictionaryBuilder.sourceCharacter} for more details.
      */
-    source?: boolean;
+    source?: boolean | Character;
     /**
      * Target character field
      * See {@link DictionaryBuilder.destinationCharacter} for more details.
@@ -78,7 +78,11 @@ export class Messager {
         dict.text(`MISSING TEXT IN "Interface.csv": ${this.CUSTOM_ACTION_TAG}`, content);
 
         if (option?.source) {
-            dict.sourceCharacter(Player);
+            if (option.source === true) {
+                dict.sourceCharacter(Player);
+            } else {
+                dict.sourceCharacter(option.source);
+            }
         }
         if (option?.destination) {
             dict.destinationCharacter(option.destination);
