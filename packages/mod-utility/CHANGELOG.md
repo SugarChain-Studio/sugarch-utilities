@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.6
+
+### Patch Changes
+
+-   Add `asset` in `Messager.action` options and fix `group` option
+
 ## 0.2.5
 
 ### Patch Changes

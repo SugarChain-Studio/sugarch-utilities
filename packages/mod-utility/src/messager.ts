@@ -20,31 +20,37 @@ type CustomActionActivityOption = {
 };
 
 interface CustomActionOptions {
-    /** 
-     * source character field, if not provided, the current player will be used 
+    /**
+     * source character field, if not provided, the current player will be used
      * See {@link DictionaryBuilder.sourceCharacter} for more details.
      */
     source?: boolean;
-    /** 
+    /**
      * Target character field
      * See {@link DictionaryBuilder.destinationCharacter} for more details.
      */
     destination?: Character;
-    /** 
-     * Target group field, applied before {@link CustomActionOptions.activity} 
+    /**
+     * Target group field, applied before {@link CustomActionOptions.activity}
      * See {@link DictionaryBuilder.focusGroup} for more details.
      */
     group?: AssetGroupItemName;
-    /** 
-     * Text field, used to contruct the action message 
+    /**
+     * Text field, used to contruct the action message
      * See {@link DictionaryBuilder.text} and {@link DictionaryBuilder.textLookup} for more details.
      */
     text?: CustomActionTextOption | CustomActionTextOption[];
-    /** 
-     * Activity field, contains the activity name and group, and optionally the item and count 
+    /**
+     * Activity field, contains the activity name and group, and optionally the item and count
      * See {@link DictionaryBuilder.performActivity} for more details.
      */
     activity?: CustomActionActivityOption;
+
+    /**
+     * Asset field, used to construct the action message
+     * See {@link DictionaryBuilder.asset} for more details.
+     */
+    asset?: Asset | { asset: Asset; tag?: string; craftName?: string };
 }
 
 function addTextToDictionary (dict: DictionaryBuilder, text: CustomActionTextOption) {
@@ -71,7 +77,7 @@ export class Messager {
         const dict = new DictionaryBuilder();
         dict.text(`MISSING TEXT IN "Interface.csv": ${this.CUSTOM_ACTION_TAG}`, content);
 
-        if(option?.source) {
+        if (option?.source) {
             dict.sourceCharacter(Player);
         }
         if (option?.destination) {
@@ -84,9 +90,19 @@ export class Messager {
                 addTextToDictionary(dict, option.text);
             }
         }
+        if(option?.group) {
+            dict.focusGroup(option.group);
+        }
         if (option?.activity) {
             const { name, group, item, count } = option.activity;
             dict.performActivity(name, { Name: group } as AssetGroup, item, count);
+        }
+        if (option?.asset) {
+            if ('asset' in option.asset) {
+                dict.asset(option.asset.asset, option.asset.tag ?? "AssetName", option.asset.craftName);
+            } else {
+                dict.asset(option.asset);
+            }
         }
 
         ServerSend('ChatRoomChat', {
