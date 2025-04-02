@@ -57,7 +57,7 @@ function addTextToDictionary (dict: DictionaryBuilder, text: CustomActionTextOpt
 
 export class Messager {
     /**
-     * @param CUSTOM_ACTION_TAG - Custom tag used for action messages.
+     * @param CUSTOM_ACTION_TAG - Custom tag used for action messages. this should never be conflicted with any other text tag in the message.
      */
     constructor (private readonly CUSTOM_ACTION_TAG: string = 'LUZI_MESSAGE_TAG') {}
 
