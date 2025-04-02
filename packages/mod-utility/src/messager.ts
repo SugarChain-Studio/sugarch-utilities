@@ -1,3 +1,60 @@
+type CustomActionTextOption =
+    | {
+          tag: string;
+          text: string;
+      }
+    | {
+          tag: string;
+          textToLookup: string;
+      };
+
+type CustomActionActivityOption = {
+    /** activity name */
+    name: ActivityName;
+    /** activitiy target group name */
+    group: AssetGroupItemName;
+    /** activity associated item, if any */
+    item?: Item;
+    /** activity associated count, e.g buttplugs */
+    count?: number;
+};
+
+interface CustomActionOptions {
+    /** 
+     * source character field, if not provided, the current player will be used 
+     * See {@link DictionaryBuilder.sourceCharacter} for more details.
+     */
+    source?: boolean;
+    /** 
+     * Target character field
+     * See {@link DictionaryBuilder.destinationCharacter} for more details.
+     */
+    destination?: Character;
+    /** 
+     * Target group field, applied before {@link CustomActionOptions.activity} 
+     * See {@link DictionaryBuilder.focusGroup} for more details.
+     */
+    group?: AssetGroupItemName;
+    /** 
+     * Text field, used to contruct the action message 
+     * See {@link DictionaryBuilder.text} and {@link DictionaryBuilder.textLookup} for more details.
+     */
+    text?: CustomActionTextOption | CustomActionTextOption[];
+    /** 
+     * Activity field, contains the activity name and group, and optionally the item and count 
+     * See {@link DictionaryBuilder.performActivity} for more details.
+     */
+    activity?: CustomActionActivityOption;
+}
+
+function addTextToDictionary (dict: DictionaryBuilder, text: CustomActionTextOption) {
+    if ('textToLookup' in text) {
+        dict.textLookup(text.tag, text.textToLookup);
+    } else {
+        dict.text(text.tag, text.text);
+    }
+}
+
 export class Messager {
     /**
      * @param CUSTOM_ACTION_TAG - Custom tag used for action messages.
@@ -6,40 +63,60 @@ export class Messager {
 
     /**
      * Sends a custom action message to the chat room.
-     * @param Content - The content of the action message.
+     * @param content - The content of the action message.
      */
-    public action (Content: string): void {
-        if (!Content || !Player || !Player.MemberNumber) return;
-        const DictItem = (content: string) => ({
-            Tag: `MISSING TEXT IN "Interface.csv": ${this.CUSTOM_ACTION_TAG}`,
-            Text: content,
-        });
+    public action (content: string, option?: CustomActionOptions): void {
+        if (!content || !Player || !Player.MemberNumber) return;
+        if (!ServerPlayerIsInChatRoom()) return;
+        const dict = new DictionaryBuilder();
+        dict.text(`MISSING TEXT IN "Interface.csv": ${this.CUSTOM_ACTION_TAG}`, content);
+
+        if(option?.source) {
+            dict.sourceCharacter(Player);
+        }
+        if (option?.destination) {
+            dict.destinationCharacter(option.destination);
+        }
+        if (option?.text) {
+            if (Array.isArray(option.text)) {
+                option.text.forEach(text => addTextToDictionary(dict, text));
+            } else {
+                addTextToDictionary(dict, option.text);
+            }
+        }
+        if (option?.activity) {
+            const { name, group, item, count } = option.activity;
+            dict.performActivity(name, { Name: group } as AssetGroup, item, count);
+        }
+
         ServerSend('ChatRoomChat', {
             Content: this.CUSTOM_ACTION_TAG,
             Type: 'Action',
-            Dictionary: [DictItem(Content)],
+            Dictionary: dict.build(),
         });
     }
 
     /**
      * Sends a chat message to the chat room.
-     * @param Content - The content of the chat message.
+     * @param content - The content of the chat message.
      */
-    public chat (Content: string): void {
-        if (!Content || !Player || !Player.MemberNumber) return;
+    public chat (content: string): void {
+        if (!content || !Player || !Player.MemberNumber) return;
+        if (!ServerPlayerIsInChatRoom()) return;
         ServerSend('ChatRoomChat', {
-            Content: Content,
+            Content: content,
             Type: 'Chat',
         });
     }
 
     /**
      * Sends a local action message to the chat room (only visible locally).
-     * @param Content - The content of the local action message.
-     * @param Timeout - Optional timeout for the message.
+     * @param content - The content of the local action message.
+     * @param timeout - Optional timeout for the message.
      */
-    public localAction (Content: string, Timeout?: number): void {
-        if (!Content || !Player || !Player.MemberNumber) return;
+    public localAction (content: string, timeout?: number): void {
+        if (!content || !Player || !Player.MemberNumber) return;
+        if (!ServerPlayerIsInChatRoom()) return;
         const DictItem = (content: string) => ({
             Tag: `MISSING TEXT IN "Interface.csv": ${this.CUSTOM_ACTION_TAG}`,
             Text: content,
@@ -48,35 +125,37 @@ export class Messager {
             Sender: Player.MemberNumber,
             Content: this.CUSTOM_ACTION_TAG,
             Type: 'Action',
-            Dictionary: [DictItem(Content)],
-            Timeout,
+            Dictionary: [DictItem(content)],
+            Timeout: timeout,
         });
     }
 
     /**
      * Sends a local informational message to the chat room (only visible locally).
-     * @param Content - The content of the informational message.
-     * @param Timeout - Optional timeout for the message.
+     * @param content - The content of the informational message.
+     * @param timeout - Optional timeout for the message.
      */
-    public localInfo (Content: string, Timeout?: number): void {
-        if (!Content || !Player || !Player.MemberNumber) return;
+    public localInfo (content: string, timeout?: number): void {
+        if (!content || !Player || !Player.MemberNumber) return;
+        if (!ServerPlayerIsInChatRoom()) return;
         ChatRoomMessage({
             Sender: Player.MemberNumber,
-            Content: Content,
+            Content: content,
             Type: 'LocalMessage',
-            Timeout,
+            Timeout: timeout,
         });
     }
 
     /**
      * Sends a whisper message to a specific target in the chat room.
      * @param target - The member number of the target.
-     * @param Content - The content of the whisper message.
+     * @param content - The content of the whisper message.
      */
-    public whisper (target: number, Content: string): void {
-        if (!Content || !Player || !Player.MemberNumber) return;
+    public whisper (target: number, content: string): void {
+        if (!content || !Player || !Player.MemberNumber) return;
+        if (!ServerPlayerIsInChatRoom()) return;
         ServerSend('ChatRoomChat', {
-            Content: Content,
+            Content: content,
             Type: 'Whisper',
             Target: target,
         });
@@ -85,13 +164,13 @@ export class Messager {
     /**
      * Sends a beep message to a specific target.
      * @param target - The member number of the target.
-     * @param Content - The content of the beep message.
+     * @param content - The content of the beep message.
      */
-    public beep (target: number, Content: string): void {
-        if (!Content || !Player || !Player.MemberNumber) return;
+    public beep (target: number, content: string): void {
+        if (!content || !Player || !Player.MemberNumber) return;
         ServerSend('AccountBeep', {
             MemberNumber: target,
-            Message: Content,
+            Message: content,
             BeepType: '',
             IsSecret: false,
         });
