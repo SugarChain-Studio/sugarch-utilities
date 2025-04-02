@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.4.4
+
+### Patch Changes
+
+-   Update dependencies
+
 ## 0.4.3
 
 ### Patch Changes
