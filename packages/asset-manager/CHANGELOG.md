@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.4.5
+
+### Patch Changes
+
+-   c16f7e9: Improve image mapping tools setup
+
 ## 0.4.4
 
 ### Patch Changes

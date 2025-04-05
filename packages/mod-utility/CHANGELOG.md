@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.8
+
+### Patch Changes
+
+-   7ed478e: Add a interface that resolve version for globals values
+
 ## 0.2.7
 
 ### Patch Changes

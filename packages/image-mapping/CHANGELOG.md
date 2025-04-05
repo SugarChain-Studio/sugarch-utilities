@@ -1,5 +1,13 @@
 # @sugarch/bc-image-mapping
 
+## 1.0.14
+
+### Patch Changes
+
+-   c16f7e9: Improve image mapping tools setup
+-   Updated dependencies [7ed478e]
+    -   @sugarch/bc-mod-utility@0.2.8
+
 ## 1.0.13
 
 ### Patch Changes

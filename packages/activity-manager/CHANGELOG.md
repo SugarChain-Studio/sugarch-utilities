@@ -1,5 +1,14 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.13
+
+### Patch Changes
+
+-   c16f7e9: Improve image mapping tools setup
+-   Updated dependencies [7ed478e]
+    -   @sugarch/bc-mod-utility@0.2.8
+    -   @sugarch/bc-event-handler@0.5.1
+
 ## 0.3.12
 
 ### Patch Changes
