@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import valid from "semver/functions/valid";
+import lt from "semver/functions/lt";
+
 export interface INamespace<T = any> {
     get(name: string, defaultValue: () => T): T;
     getMayOverride(name: string, defaultValue: OverrideFuncion<T>): T;
@@ -31,6 +34,17 @@ function setGlobal<T>(key: string, value: T): void {
  * @returns New value, if you don't want to override, return the old value
  */
 type OverrideFuncion<T> = (old: T | undefined) => T;
+
+interface VersionedGlobalItem<T> {
+    version: string;
+    value: T;
+}
+
+function isVersionedGlobalItem<T>(item: unknown): item is VersionedGlobalItem<T> {
+    return typeof item === "object" && item !== null && "version" in item && "value" in item
+        && typeof (item as any).version === "string" && typeof (item as any).value !== "undefined"
+        && valid((item as any).version) !== null;
+}
 
 export class Globals {
     /**
@@ -72,6 +86,37 @@ export class Globals {
         const storage = global<Record<string, any>>(this._namespace);
         storage[name] = defaultValue(storage[name]);
         return storage[name];
+    }
+
+    /**
+     * Get a global variable with versioning support
+     * @param name The name of the global variable
+     * @param defaultOp When the global variable is not set, this function will be called to set the default value
+     * @param upgradeOp When the global variable is set but the version is lower than the current version, this function will be called to upgrade the value
+     * @returns The value of the global variable
+     */
+    static getByVersion<T>(name: string, version: string, defaultOp: OverrideFuncion<T>, upgradeOp: (old: VersionedGlobalItem<T>) => T): any {
+        this._initStorage();
+        if (!valid(version)) {
+            throw new Error(`Invalid version for ${name}: ${version}`);
+        }
+        const storage = global<Record<string, any>>(this._namespace);
+        const old = storage[name];
+
+        if(!isVersionedGlobalItem(old)) {
+            storage[name] = {
+                version: version,
+                value: defaultOp(old)
+            } as VersionedGlobalItem<T>;
+        } else {
+            if(lt(old.version, version)) {
+                storage[name] = {
+                    version: version,
+                    value: upgradeOp(old as VersionedGlobalItem<T>)
+                } as VersionedGlobalItem<T>;
+            }
+        }
+        return storage[name].value as T;
     }
 
     /**

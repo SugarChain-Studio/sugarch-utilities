@@ -45,7 +45,6 @@ interface CustomActionOptions {
      * See {@link DictionaryBuilder.performActivity} for more details.
      */
     activity?: CustomActionActivityOption;
-
     /**
      * Asset field, used to construct the action message
      * See {@link DictionaryBuilder.asset} for more details.

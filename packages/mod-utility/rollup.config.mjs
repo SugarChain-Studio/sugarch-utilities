@@ -37,6 +37,7 @@ export default [
                 },
             }),
         ],
+        external: ["semver/functions/valid", "semver/functions/lt"],
     },
     {
         input: "dist/types/index.d.ts",
