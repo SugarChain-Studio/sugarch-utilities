@@ -80,6 +80,34 @@ export class ImageMappingStorage {
     }
 
     /**
+     * Rebuild custom mapping from customSrc.
+     */
+    rebuildCustomMapping (): void {
+        // Rebuild custom mapping from customSrc
+        const optimized = optimizeCustomMappings(this.customSrc);
+        if (!optimized) {
+            console.warn('Failed to rebuild mappings due to circular dependencies.');
+            return;
+        }
+        this.custom = optimized;
+    }
+
+    /**
+     * Migrate custom mappings to target.
+     * @param target - The target storage to migrate to
+     */
+    migrateTo(target: ImageMappingStorage): void {
+        // Migrate custom mappings to target
+        target.customSrc = { ...target.customSrc, ...this.customSrc };
+        target.basic = { ...target.basic, ...this.basic };
+        target.rebuildCustomMapping();
+
+        this.customSrc = target.customSrc;
+        this.basic = target.basic;
+        this.custom = target.custom;
+    }
+
+    /**
      * Set basic image mappings, **will not** override existing mappings.
      * @param mappings
      */

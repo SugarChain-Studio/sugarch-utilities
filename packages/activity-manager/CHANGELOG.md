@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.14
+
+### Patch Changes
+
+-   Enhance ImageMappingStorage with migration method
+
 ## 0.3.13
 
 ### Patch Changes

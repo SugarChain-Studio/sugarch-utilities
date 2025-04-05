@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.4.6
+
+### Patch Changes
+
+-   Enhance ImageMappingStorage with migration method
+
 ## 0.4.5
 
 ### Patch Changes

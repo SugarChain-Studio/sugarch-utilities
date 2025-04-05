@@ -24,7 +24,7 @@ export default [
                 sourcemap: true,
             },
         ],
-        external: ["bondage-club-mod-sdk", "@sugarch/bc-mod-hook-manager"],
+        external: ["bondage-club-mod-sdk", "@sugarch/bc-mod-hook-manager", "semver/functions/lt"],
         plugins: [
             resolve({ browser: true }),
             commonjs(),

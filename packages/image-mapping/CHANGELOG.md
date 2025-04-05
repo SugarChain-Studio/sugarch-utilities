@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 1.0.15
+
+### Patch Changes
+
+-   Enhance ImageMappingStorage with migration method
+
 ## 1.0.14
 
 ### Patch Changes

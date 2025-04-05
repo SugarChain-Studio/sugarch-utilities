@@ -186,6 +186,12 @@ importers:
       '@sugarch/bc-mod-utility':
         specifier: workspace:*
         version: link:../mod-utility
+      '@types/semver':
+        specifier: ^7.7.0
+        version: 7.7.0
+      semver:
+        specifier: ^7.7.1
+        version: 7.7.1
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^28.0.3
