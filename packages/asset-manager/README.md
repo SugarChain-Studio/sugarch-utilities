@@ -19,6 +19,9 @@ yarn add @sugarch/bc-asset-manager
 npm install @sugarch/bc-asset-manager
 ```
 
+> [!IMPORTANT]
+> This package have a peer dependency setting, if you encounter peer dependencies error, please install the required version of packages manually (add suffix `@x.x.x` to the package name in the install command, for example `@sugarch/bc-mod-hook-manager@0.2.12`)
+
 ## Usage
 
 Here's a basic example of how to use the `@sugarch/bc-asset-manager` package:
