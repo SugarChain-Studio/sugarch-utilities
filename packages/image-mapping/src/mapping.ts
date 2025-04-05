@@ -3,6 +3,7 @@ import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { sleepUntil, PathTools } from '@sugarch/bc-mod-utility';
 import { ImageMappingStorage } from './mappingStorage';
 import type { AssetOverrideContainer, ImageMappingRecord } from '@sugarch/bc-mod-types';
+import { version } from './package';
 
 const storage = new ImageMappingStorage();
 
@@ -102,6 +103,8 @@ class _ImageMapping {
         setupImgMapping();
     }
 
+    private storage = storage;
+
     /**
      * Add custom image mappings, **will** override existing mappings
      * @param mappings
@@ -119,4 +122,15 @@ class _ImageMapping {
     }
 }
 
-export const ImageMapping = Globals.get('ImageMapping', () => new _ImageMapping());
+export const ImageMapping = Globals.getByVersion('ImageMapping', version, 
+    () => new _ImageMapping(),
+    ({value})=>{
+        const ret = new _ImageMapping();
+        if(!value["storage"]) return ret;
+        const storage = value["storage"];
+        ret["storage"].basic = storage.basic || {};
+        ret["storage"].customSrc = storage.customSrc || {};
+        ret["storage"].custom = storage.custom || {};
+        return ret;
+    }
+);

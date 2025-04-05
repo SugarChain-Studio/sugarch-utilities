@@ -132,30 +132,32 @@ export function enableCustomAssets (): void {
         if (asset && isInListCustomAsset(asset.Group.Name, asset.Name)) args[3] = false;
     });
 
-    type CraftingInventoryStash = { providers: (() => Item[])[] };
-    oncePatch<CraftingInventoryStash>().getMayOverride('CraftingInventory', old => {
-        const flatCustomAssets = (custom: typeof customAssets) =>
-            Object.values(custom)
-                .map(x => Object.values(x))
-                .flat()
-                .map(Asset => ({ Asset })) as Item[];
-
-        if (old) {
-            const stash = old as CraftingInventoryStash;
-            stash.providers.push(() => flatCustomAssets(customAssets));
-            return stash;
-        } else {
-            const ret: CraftingInventoryStash = { providers: [] };
-            ret.providers.push(() => flatCustomAssets(customAssets));
-            const pInventory = HookManager.randomGlobalFunction('CraftingInventory', () => {
-                return [...Player.Inventory, ...ret.providers.map(x => x()).flat()];
-            });
-            HookManager.patchFunction('CraftingRun', {
-                'for (let Item of Player.Inventory) {': `for (let Item of ${pInventory}()) {`,
-            });
-            return ret;
-        }
-    });
+    if(GameVersion === "R114") {
+        type CraftingInventoryStash = { providers: (() => Item[])[] };
+        oncePatch<CraftingInventoryStash>().getMayOverride('CraftingInventory', old => {
+            const flatCustomAssets = (custom: typeof customAssets) =>
+                Object.values(custom)
+                    .map(x => Object.values(x))
+                    .flat()
+                    .map(Asset => ({ Asset })) as Item[];
+    
+            if (old) {
+                const stash = old as CraftingInventoryStash;
+                stash.providers.push(() => flatCustomAssets(customAssets));
+                return stash;
+            } else {
+                const ret: CraftingInventoryStash = { providers: [] };
+                ret.providers.push(() => flatCustomAssets(customAssets));
+                const pInventory = HookManager.randomGlobalFunction('CraftingInventory', () => {
+                    return [...Player.Inventory, ...ret.providers.map(x => x()).flat()];
+                });
+                HookManager.patchFunction('CraftingRun', {
+                    'for (let Item of Player.Inventory) {': `for (let Item of ${pInventory}()) {`,
+                });
+                return ret;
+            }
+        });
+    }
 }
 
 /**
