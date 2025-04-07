@@ -1,5 +1,13 @@
 # @sugarch/bc-image-mapping
 
+## 1.0.16
+
+### Patch Changes
+
+-   ba3f209: Export storage property in image mapping
+-   Updated dependencies [4873caf]
+    -   @sugarch/bc-mod-utility@0.2.9
+
 ## 1.0.15
 
 ### Patch Changes

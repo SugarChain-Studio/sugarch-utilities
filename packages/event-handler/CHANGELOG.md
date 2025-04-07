@@ -1,5 +1,11 @@
 # @sugarch/bc-event-handler
 
+## 0.5.3
+
+### Patch Changes
+
+-   bc5754c: Add version to related global names
+
 ## 0.5.2
 
 ### Patch Changes

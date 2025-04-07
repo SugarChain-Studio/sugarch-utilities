@@ -1,5 +1,15 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.16
+
+### Patch Changes
+
+-   ba3f209: Export storage property in image mapping
+-   Updated dependencies [bc5754c]
+-   Updated dependencies [4873caf]
+    -   @sugarch/bc-event-handler@0.5.3
+    -   @sugarch/bc-mod-utility@0.2.9
+
 ## 0.3.15
 
 ### Patch Changes

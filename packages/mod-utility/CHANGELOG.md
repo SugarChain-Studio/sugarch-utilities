@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.9
+
+### Patch Changes
+
+-   4873caf: Fix return typing for `getByVersion`
+
 ## 0.2.8
 
 ### Patch Changes

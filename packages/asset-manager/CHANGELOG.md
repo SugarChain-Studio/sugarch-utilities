@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.4.7
+
+### Patch Changes
+
+-   ba3f209: Export storage property in image mapping
+
 ## 0.4.6
 
 ### Patch Changes
