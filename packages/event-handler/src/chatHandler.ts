@@ -1,5 +1,6 @@
 import { Globals, sleepUntil } from '@sugarch/bc-mod-utility';
 import EventEmitter from 'eventemitter3';
+import { version } from './package';
 
 type EventArgType = Parameters<ChatRoomMessageHandler['Callback']>;
 type EventType = ServerChatRoomMessageType;
@@ -69,6 +70,6 @@ class _ChatRoomMessageHandlerEvents {
  * Thus hidden messages, either by filter setting or sensory deprivation will not be emitted.
  */
 export const ChatRoomMessageHandlerEvents = Globals.get(
-    'ChatRoomMessageHandlerEvents',
+    `ChatRoomMessageHandlerEvents@${version}`,
     () => new _ChatRoomMessageHandlerEvents()
 );

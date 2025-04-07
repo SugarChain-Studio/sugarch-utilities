@@ -1,5 +1,6 @@
 import { ActivityInfo, ActivityTriggerMode } from '@sugarch/bc-mod-types';
 import { Globals, sleepUntil } from '@sugarch/bc-mod-utility';
+import { version } from './package';
 
 type EventMode = ActivityTriggerMode;
 
@@ -19,7 +20,7 @@ type HandlerRunner = (modes: EventMode[], activityName: string, ...args: EventAr
  */
 function makeChatRoomMsgHandler (runner: HandlerRunner): ChatRoomMessageHandler {
     return {
-        Description: `SugarChain Activity Handler`,
+        Description: `SugarChain Activity Handler v${version}`,
         Priority: 290, // must between 210 (arousal processing) and 300 (sensory deprivation)
         // eslint-disable-next-line @typescript-eslint/naming-convention
         Callback: (data, sender, msg, metadata) => {
@@ -62,7 +63,7 @@ function makeChatRoomMsgHandler (runner: HandlerRunner): ChatRoomMessageHandler 
     };
 }
 class _ActivityEvents<T extends string = ActivityName> {
-    private _handers: Handler[] = [];
+    private _handlers: Handler[] = [];
 
     constructor () {
         (async () => {
@@ -72,7 +73,7 @@ class _ActivityEvents<T extends string = ActivityName> {
     }
 
     private emit (modes: EventMode[], activityName: string, ...args: EventArgType) {
-        this._handers
+        this._handlers
             .filter(handler => activityName === handler.activity && modes.includes(handler.mode))
             .forEach(async handler => handler.listener(...args));
     }
@@ -84,7 +85,7 @@ class _ActivityEvents<T extends string = ActivityName> {
      * @param listener - The listener function
      */
     on<U extends EventMode> (mode: U, activity: T, listener: (...args: EventArgType) => void): void {
-        this._handers.push({ mode, activity, listener });
+        this._handlers.push({ mode, activity, listener });
     }
 
     /**
@@ -94,7 +95,7 @@ class _ActivityEvents<T extends string = ActivityName> {
      * @param listener - The listener function
      */
     off<U extends EventMode> (mode: U, activity: T, listener: (...args: EventArgType) => void): void {
-        this._handers = this._handers.filter(handler => handler.mode !== mode || handler.activity !== activity || handler.listener !== listener);
+        this._handlers = this._handlers.filter(handler => handler.mode !== mode || handler.activity !== activity || handler.listener !== listener);
     }
 }
 
@@ -102,4 +103,4 @@ class _ActivityEvents<T extends string = ActivityName> {
  * Chat handler events emitter, this event is emitted from a message handler in the last process order.
  * Thus hidden messages, either by filter setting or sensory deprivation will not be emitted.
  */
-export const ActivityEvents = Globals.get('ActivityEvents', () => new _ActivityEvents());
+export const ActivityEvents = Globals.get(`ActivityEvents@${version}`, ()=> new _ActivityEvents());

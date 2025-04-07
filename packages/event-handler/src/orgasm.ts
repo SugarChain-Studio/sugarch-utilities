@@ -1,6 +1,7 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { Globals } from '@sugarch/bc-mod-utility';
 import EventEmitter from 'eventemitter3';
+import { version } from './package';
 
 // Define types for orgasm events
 type EventType = 'orgasmed' | 'ruined' | 'resisted';
@@ -16,7 +17,7 @@ type EventMap = {
 type OnFuncArgs<T extends EventType> = [event: T, listener: (eventData: { Player: Character }) => void, context?: any];
 
 class _OrgasmEvents {
-    private handler = new EventEmitter<EventMap>();
+    handler = new EventEmitter<EventMap>();
 
     constructor () {
         HookManager.hookFunction('ActivityOrgasmStop', 9, (args, next) => {
@@ -63,4 +64,4 @@ class _OrgasmEvents {
     }
 }
 
-export const OrgasmEvents = Globals.get('OrgasmEvents', () => new _OrgasmEvents());
+export const OrgasmEvents = Globals.get(`OrgasmEvents@${version}`, () => new _OrgasmEvents());

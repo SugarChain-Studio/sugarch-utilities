@@ -1,6 +1,7 @@
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
+import replace from "@rollup/plugin-replace";
 import commonjs from "@rollup/plugin-commonjs";
 import { dts } from "rollup-plugin-dts";
 import del from "rollup-plugin-delete";
@@ -31,6 +32,12 @@ export default [
         plugins: [
             resolve({ browser: true }),
             commonjs(),
+            replace({
+                preventAssignment: true,
+                values: {
+                    ROLLUP_VAR_VERSION: JSON.stringify(pkg.version),
+                },
+            }),
             typescript({
                 tsconfig: "./tsconfig.json",
                 declaration: true,

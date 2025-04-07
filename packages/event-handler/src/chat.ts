@@ -1,6 +1,7 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { Globals } from '@sugarch/bc-mod-utility';
 import EventEmitter from 'eventemitter3';
+import { version } from './package';
 
 type ChatRoomMessageEventType = Exclude<ServerChatRoomMessageType, 'ServerMessage' | 'Status'>;
 
@@ -69,4 +70,4 @@ class _ChatRoomEvents {
 /**
  * Chat events emitter, note that the events are emitted before the message is processed by the game.
  */
-export const ChatRoomEvents = Globals.get('ChatRoomEvents', () => new _ChatRoomEvents());
+export const ChatRoomEvents = Globals.get(`ChatRoomEvents@${version}`, () => new _ChatRoomEvents());
