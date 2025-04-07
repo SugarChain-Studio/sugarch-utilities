@@ -95,7 +95,7 @@ export class Globals {
      * @param upgradeOp When the global variable is set but the version is lower than the current version, this function will be called to upgrade the value
      * @returns The value of the global variable
      */
-    static getByVersion<T>(name: string, version: string, defaultOp: OverrideFuncion<T>, upgradeOp: (old: VersionedGlobalItem<T>) => T): any {
+    static getByVersion<T>(name: string, version: string, defaultOp: OverrideFuncion<T>, upgradeOp: (old: VersionedGlobalItem<T>) => T): T {
         this._initStorage();
         if (!valid(version)) {
             throw new Error(`Invalid version for ${name}: ${version}`);
