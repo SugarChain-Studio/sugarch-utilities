@@ -1,5 +1,11 @@
 # @sugarch/bc-event-handler
 
+## 0.5.2
+
+### Patch Changes
+
+-   Fix 'PlayerJoin' event handling, it should happen after chatroom join is done
+
 ## 0.5.1
 
 ### Patch Changes

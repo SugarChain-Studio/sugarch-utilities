@@ -21,15 +21,15 @@ class _ChatRoomEvents {
     constructor () {
         HookManager.hookFunction('ChatRoomMessage', 10, (args, next) => {
             const { Type } = args[0];
-            if(Type !== 'ServerMessage' && Type !== 'Status') 
-                this.handler.emit(Type, args[0]);
+            if (Type !== 'ServerMessage' && Type !== 'Status') this.handler.emit(Type, args[0]);
             return next(args);
         });
 
         HookManager.hookFunction('ChatRoomSync', 1, (args, next) => {
-            if (Player && (!ChatRoomData || !Player.LastChatRoom || ChatRoomData.Name !== Player.LastChatRoom.Name))
-                this.handler.emit('PlayerJoin', Player);
-            return next(args);
+            const shouldEmit = Player && !ServerPlayerIsInChatRoom() && RelogData?.ChatRoomName !== args[0].Name;
+            const ret = next(args);
+            if (shouldEmit) this.handler.emit('PlayerJoin', Player);
+            return ret;
         });
 
         HookManager.hookFunction('ServerSend', 1, (args, next) => {
