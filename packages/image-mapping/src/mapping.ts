@@ -104,8 +104,10 @@ class _ImageMapping {
         setupImgMapping();
     }
 
-    private storage = storage;
-
+    get storage() {
+        return storage;
+    }
+    
     /**
      * Add custom image mappings, **will** override existing mappings
      * @param mappings
