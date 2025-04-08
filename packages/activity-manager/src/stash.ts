@@ -6,7 +6,7 @@ export function addCustomActivity<
     CustomAct extends string = string,
     CustomPrereq extends string = ActivityPrerequisite
 > (act: CustomActivity<CustomAct, CustomPrereq>) {
-    customStorage[act.activity.Name] = act;
+    customStorage[act.activity.Name] = act as unknown as CustomActivity<string, string>;
 }
 
 export function testCustomActivity (name: string) {
