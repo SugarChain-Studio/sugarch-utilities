@@ -128,11 +128,11 @@ class _ImageMapping {
 
 export const ImageMapping = Globals.getByVersion('ImageMapping', version, 
     () => new _ImageMapping(),
-    ({version, value})=>{
+    (version, value)=>{
         const ret = new _ImageMapping();
         if(!value["storage"]) return ret;
-        if(!valid(version)) {
-            ret.storage.customSrc = {...value["storage"].customSrc};
+        else if(!version || !valid(version)) {
+            ret.storage.customSrc = {...value["storage"].custom};
             ret.storage.basic = {...value["storage"].basic};
             value.addImgMapping = (mappings: Record<string, string>) => ret.storage.addImgMapping(mappings);
             value.setBasicImgMapping = (mappings: Record<string, string>) => ret.storage.setBasicImgMapping(mappings);
@@ -141,7 +141,7 @@ export const ImageMapping = Globals.getByVersion('ImageMapping', version,
             };
             value["storage"].mapImgSrc = <T extends string | HTMLImageElement | HTMLCanvasElement>(str: T) => ret.storage.mapImgSrc(str) as T;
         }
-        if(lt("1.0.14", version)) value["storage"].migrateTo(ret["storage"]);
+        else if(lt("1.0.14", version)) value["storage"].migrateTo(ret["storage"]);
         return ret;
     }
 );

@@ -93,7 +93,7 @@ export class Globals {
         name: string,
         version: string,
         defaultOp: OverrideFuncion<T>,
-        upgradeOp: (old: VersionedGlobalItem<T>) => T
+        upgradeOp: (version: string | undefined, value: T) => T
     ): T {
         this._initStorage();
         if (!valid(version)) {
@@ -110,11 +110,11 @@ export class Globals {
             storage[versionName] = version;
         } else {
             if (!oldVersion || lt(oldVersion, version)) {
-                storage[name] = upgradeOp({ version: oldVersion, value: old });
+                storage[name] = upgradeOp(oldVersion, old);
                 storage[versionName] = version;
             }
         }
-        return storage[name].value as T;
+        return storage[name] as T;
     }
 
     /**
