@@ -35,11 +35,6 @@ function setGlobal<T> (key: string, value: T): void {
  */
 type OverrideFuncion<T> = (old: T | undefined) => T;
 
-interface VersionedGlobalItem<T> {
-    version: string;
-    value: T;
-}
-
 export class Globals {
     /**
      * Namespace used to store global variables
