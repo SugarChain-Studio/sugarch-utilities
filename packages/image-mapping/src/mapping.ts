@@ -5,6 +5,7 @@ import { ImageMappingStorage } from './mappingStorage';
 import type { AssetOverrideContainer, ImageMappingRecord } from '@sugarch/bc-mod-types';
 import { version } from './package';
 import lt from 'semver/functions/lt';
+import valid from 'semver/functions/valid';
 
 const storage = new ImageMappingStorage();
 
@@ -130,6 +131,16 @@ export const ImageMapping = Globals.getByVersion('ImageMapping', version,
     ({version, value})=>{
         const ret = new _ImageMapping();
         if(!value["storage"]) return ret;
+        if(!valid(version)) {
+            ret.storage.customSrc = {...value["storage"].customSrc};
+            ret.storage.basic = {...value["storage"].basic};
+            value.addImgMapping = (mappings: Record<string, string>) => ret.storage.addImgMapping(mappings);
+            value.setBasicImgMapping = (mappings: Record<string, string>) => ret.storage.setBasicImgMapping(mappings);
+            value["storage"].mapImg = (str: string, callback: (image: string) => void) => {
+                ret.storage.mapImg(str, callback);
+            };
+            value["storage"].mapImgSrc = <T extends string | HTMLImageElement | HTMLCanvasElement>(str: T) => ret.storage.mapImgSrc(str) as T;
+        }
         if(lt("1.0.14", version)) value["storage"].migrateTo(ret["storage"]);
         return ret;
     }
