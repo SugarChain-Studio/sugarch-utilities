@@ -21,9 +21,131 @@ npm install @sugarch/bc-activity-manager
 > [!IMPORTANT]
 > This package have a peer dependency setting, if you encounter peer dependencies error, please install the required version of packages manually (add suffix `@x.x.x` to the package name in the install command, for example `@sugarch/bc-mod-hook-manager@0.2.12`)
 
-## Usage
+## Example Usage
 
-Here's a basic example of how to use the `@sugarch/bc-activity-manager` package:
+Bellow is a simple example of how to use the `@sugarch/bc-activity-manager` package:
+
+```typescript
+import { ActivityManager } from '@sugarch/bc-activity-manager';
+
+// Add a custom activity
+ActivityManager.addCustomActivity({
+    activity: {
+        Name: "MyKneelDown",
+        Prerequisite: ["CantUseFeet"],
+        MaxProgress: 0,
+        Target: [],
+        TargetSelf: ["ItemLegs"],
+    },
+    useImage: "Wiggle",
+    labelSelf: { EN: "Kneel Down" },
+    dialogSelf: { EN: "SourceCharacter kneels down gently." },
+});
+
+// Check if an activity is custom
+console.log(ActivityManager.activityIsCustom("MyKneelDown")); // true
+
+// Remove a custom activity
+ActivityManager.removeCustomActivity("MyKneelDown");
+```
+
+## API Reference
+
+The `ActivityManager` class provides a set of methods to manage custom activities in Bondage Club. Below is a detailed description of each method:
+
+### `addPrerequisites(prereqs: CustomActivityPrerequisiteItem<CustomPrereq>[]): void`
+
+Adds custom activity prerequisites.
+
+- **Parameters**:
+  - `prereqs`: An array of custom prerequisites to add.
+
+---
+
+### `checkActivityAvailability(name: string): boolean`
+
+Checks if an activity name is available.
+
+- **Parameters**:
+  - `name`: The name of the activity to check.
+- **Returns**: `true` if the activity name is available, otherwise `false`.
+
+---
+
+### `addCustomActivity(act: CustomActivity<CustomAct, CustomPrereq>): void`
+
+Adds a custom activity to the activity manager.
+
+- **Parameters**:
+  - `act`: The custom activity definition.
+
+---
+
+### `removeCustomActivity(name: string): void`
+
+Removes a custom activity from the activity manager.
+
+- **Parameters**:
+  - `name`: The name of the activity to remove.
+
+---
+
+### `activityIsCustom(name: string): boolean`
+
+Checks if an activity is custom.
+
+- **Parameters**:
+  - `name`: The name of the activity to check.
+- **Returns**: `true` if the activity is custom, otherwise `false`.
+
+---
+
+### `addCustomActivities(acts: CustomActivity<CustomAct, CustomPrereq>[]): void`
+
+Adds multiple custom activities to the activity manager.
+
+- **Parameters**:
+  - `acts`: An array of custom activities to add.
+
+---
+
+### `activityTrigger(modifier: ActivityExtendedEvent): void`
+
+Adds an additional trigger function for an existing activity.
+
+- **Parameters**:
+  - `modifier`: The activity modifier definition.
+
+---
+
+### `setLogger(logger: ILogger): void`
+
+Sets the logger for the activity manager.
+
+- **Parameters**:
+  - `logger`: The logger instance to use.
+
+---
+
+### `typePrerequisiteNames<T extends string>(): _ActivityManager<CustomAct, T>`
+
+Retypes the `ActivityManager` to customize prerequisite names and ensure type safety.
+
+- **Returns**: A retyped `ActivityManager` instance.
+
+---
+
+### `typeActivityNames<T extends string>(): _ActivityManager<T, CustomPrereq>`
+
+Retypes the `ActivityManager` to customize activity names and ensure type safety.
+
+- **Returns**: A retyped `ActivityManager` instance.
+
+---
+
+## Detailed Usage
+
+Here's a detailed example of how to use the `@sugarch/bc-activity-manager` package:
 
 ```typescript
 import { ActivityManager, CustomActivity } from '@sugarch/bc-activity-manager';

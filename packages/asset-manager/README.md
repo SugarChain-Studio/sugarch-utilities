@@ -22,9 +22,240 @@ npm install @sugarch/bc-asset-manager
 > [!IMPORTANT]
 > This package have a peer dependency setting, if you encounter peer dependencies error, please install the required version of packages manually (add suffix `@x.x.x` to the package name in the install command, for example `@sugarch/bc-mod-hook-manager@0.2.12`)
 
-## Usage
+---
 
-Here's a basic example of how to use the `@sugarch/bc-asset-manager` package:
+## Simple Example
+
+Here's a quick example of how to use the `AssetManager`:
+
+```typescript
+import { AssetManager } from '@sugarch/bc-asset-manager';
+
+// Define a simple asset
+const assetDef = {
+    Name: "SimpleExample",
+    Left: 150,
+    Top: 200,
+    Priority: 40,
+    DefaultColor: ["#FFFFFF"],
+    Layer: [
+        {
+            Name: "Base",
+            AllowColorize: true,
+        },
+    ],
+};
+
+AssetManager.init(() => {
+    // Add the asset to the game
+    AssetManager.addAsset("ItemHandheld", assetDef);
+
+    // Add image mappings for the asset
+    AssetManager.addImageMapping({
+        "Assets/Female3DCG/ItemHandheld/SimpleExample_Base.png": "https://example.com/SimpleExample_Base.png",
+        "Assets/Female3DCG/ItemHandheld/Preview/SimpleExample.png": "https://example.com/SimpleExample_Preview.png",
+    });
+});
+```
+
+---
+
+## API Reference
+
+The `AssetManager` class provides a set of methods to manage assets in Bondage Club. Below is a detailed description of each method:
+
+### `addAsset(group: CustomGroupName, asset: CustomAssetDefinition, extended?, description?, noMirror = false): void`
+
+Adds an asset to a specific group. If the asset belongs to `ItemTorso` or `ItemTorso2`, a mirror will be automatically added.
+
+- **Parameters**:
+  - `group`: The asset group name.
+  - `asset`: The asset definition.
+  - `extended` (optional): Extended asset properties.
+  - `description` (optional): Translated name of the asset.
+  - `noMirror` (default `false`): Whether to disable automatic mirroring.
+
+---
+
+### `addGroupedAssets(groupedAssets: CustomGroupedAssetDefinitions, descriptions?, extended?): void`
+
+Adds multiple assets to multiple groups.
+
+- **Parameters**:
+  - `groupedAssets`: A mapping of groups to their respective assets.
+  - `descriptions` (optional): Translations for asset names.
+  - `extended` (optional): Extended asset properties.
+
+---
+
+### `addGroupedConfig(extendedConfig: ExtendedItemMainConfig): void`
+
+Adds grouped configuration for assets.
+
+- **Parameters**:
+  - `extendedConfig`: The grouped configuration.
+
+---
+
+### `modifyAsset(group: CustomGroupName, asset: string, work: FuncWork): void`
+
+Modifies an asset's properties.
+
+- **Parameters**:
+  - `group`: The asset group name.
+  - `asset`: The asset name.
+  - `work`: A function to modify the asset.
+
+---
+
+### `modifyAssetLayers(filter: (asset: Asset) => boolean, work: FuncWork): void`
+
+Modifies the layers of assets that match a filter.
+
+- **Parameters**:
+  - `filter`: A function to filter assets.
+  - `work`: A function to modify the asset layers.
+
+---
+
+### `modifyGroup(group: CustomGroupName, work: FuncWork): void`
+
+Modifies a body group's properties.
+
+- **Parameters**:
+  - `group`: The body group name.
+  - `work`: A function to modify the group.
+
+---
+
+### `addCustomDialog(dialog: Translation.Dialog): void`
+
+Adds a custom dialog.
+
+- **Parameters**:
+  - `dialog`: The dialog definition.
+
+---
+
+### `addImageMapping(mappings: ImageMappingRecord): void`
+
+Adds custom image mappings.
+
+- **Parameters**:
+  - `mappings`: A record of image mappings.
+
+---
+
+### `addGroup(groupDef: CustomGroupDefinition, description?): void`
+
+Adds a new body group.
+
+- **Parameters**:
+  - `groupDef`: The group definition.
+  - `description` (optional): Translated name of the group.
+
+---
+
+### `addCopyGroup(newGroup: CustomGroupName, copyFrom: AssetGroupName, description?): void`
+
+Adds a new body group by copying configuration from an existing group.
+
+- **Parameters**:
+  - `newGroup`: The new group name.
+  - `copyFrom`: The existing group to copy from.
+  - `description` (optional): Translated name of the new group.
+
+---
+
+### `addLayerNames(group: CustomGroupName, assetDef: CustomAssetDefinition, entries: Translation.CustomRecord): void`
+
+Adds custom layer names based on the asset definition.
+
+- **Parameters**:
+  - `group`: The body group name.
+  - `assetDef`: The asset definition.
+  - `entries`: Layer names grouped by language.
+
+---
+
+### `addLayerNamesByEntry(group: CustomGroupName, assetName: string, entries: Translation.CustomRecord): void`
+
+Adds custom layer names based on entries.
+
+- **Parameters**:
+  - `group`: The body group name.
+  - `assetName`: The asset name.
+  - `entries`: Layer names grouped by language.
+
+---
+
+### `assetIsCustomed(asset: Asset): boolean`
+
+Checks if an asset is custom.
+
+- **Parameters**:
+  - `asset`: The asset to check.
+- **Returns**: `true` if the asset is custom, otherwise `false`.
+
+---
+
+### `assetNameIsStrictCustomed(assetName: string): boolean`
+
+Checks if an asset name is strictly custom.
+
+- **Parameters**:
+  - `assetName`: The name of the asset.
+- **Returns**: `true` if the asset name is strictly custom, otherwise `false`.
+
+---
+
+### `afterLoad(wk: () => void): void`
+
+Adds an event to be executed after loading is complete.
+
+- **Parameters**:
+  - `wk`: The function to execute.
+
+---
+
+### `init(componentSetup: FuncWork): void`
+
+Initializes the asset manager and adds custom components.
+
+- **Parameters**:
+  - `componentSetup`: A function to set up custom components.
+
+---
+
+### `enableValidation(fromModUserTest: FromModUserTestFunc): void`
+
+Enables validation for non-mod removal.
+
+- **Parameters**:
+  - `fromModUserTest`: A function to determine if the user is from a mod.
+
+---
+
+### `setLogger(logger: ILogger): void`
+
+Sets the logger for the asset manager.
+
+- **Parameters**:
+  - `logger`: The logger instance.
+
+---
+
+### `typeBodyGroupNames<T extends string>(): _AssetManager<T>`
+
+Retypes the `AssetManager` to customize body group names and ensure type safety.
+
+- **Returns**: A retyped `AssetManager` instance.
+
+---
+
+## Detailed Example
+
+For a more detailed example, including how to register mods and initialize the `AssetManager`, see below:
 
 ```typescript
 import { AssetManager } from '@sugarch/bc-asset-manager';
@@ -88,10 +319,3 @@ AssetManager.init(() => {
     registerSimpleExample();
 });
 ```
-
-This `addAsset` method also accepts three optional parameters:
-
-- `extended`: You can provide `ExtendedAssetDefinition` with this parameter to add more features to the asset. Also you can skip this with `null` or `undefined`.
-- `description`: Actually it's not a "description". It's translated name. (The property for this in BC is `Description`) Here you can provide a `Record<Language, string>` to add translations, e.g. : `{ EN: "Simple Example", DE: "Einfaches Beispiel" }`.
-  - The name will fallback to `assetDef.Name` if not provided, so there should be no `missing description` appearing in the game with this method.
-- `noMirror` (default `false`): There are some "mirror groups" in BC, like `ItemTorso` and `ItemTorso2`, adding the asset to one group will automatically add it to the other group. If you don't want this behavior, you can set this parameter to `true`.
