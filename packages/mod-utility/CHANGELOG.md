@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.10
+
+### Patch Changes
+
+-   a7540c1: Use a separate key for global version for compability
+
 ## 0.2.9
 
 ### Patch Changes

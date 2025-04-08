@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.4.8
+
+### Patch Changes
+
+-   a04df7c: Fix migrate imageMapping
+
 ## 0.4.7
 
 ### Patch Changes

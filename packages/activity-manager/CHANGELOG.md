@@ -1,5 +1,14 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.17
+
+### Patch Changes
+
+-   a04df7c: Fix migrate imageMapping
+-   Updated dependencies [a7540c1]
+    -   @sugarch/bc-mod-utility@0.2.10
+    -   @sugarch/bc-event-handler@0.5.3
+
 ## 0.3.16
 
 ### Patch Changes

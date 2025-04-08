@@ -1,5 +1,13 @@
 # @sugarch/bc-image-mapping
 
+## 1.0.17
+
+### Patch Changes
+
+-   a04df7c: Fix migrate imageMapping
+-   Updated dependencies [a7540c1]
+    -   @sugarch/bc-mod-utility@0.2.10
+
 ## 1.0.16
 
 ### Patch Changes
