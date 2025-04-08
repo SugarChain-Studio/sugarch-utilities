@@ -16,8 +16,8 @@ export function addOverrideIfEligible<CustomAct extends string = string, CustomP
 
 export function setupOverride() {
     HookManager.hookFunction('ActivityRun', 0, (args, next) => {
-        if(overrides[args[0].Name]) {
-            const override = overrides[args[0].Name];
+        const override = overrides[args[3].Activity.Name];
+        if(override) {
             return override(args[0], args[1], args[2], args[3] as unknown as ExtItemActivity<string>);
         }
         return next(args);
