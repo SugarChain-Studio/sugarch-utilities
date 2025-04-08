@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.18
+
+### Patch Changes
+
+-   bb96f1f: Activity override functionality
+
 ## 0.3.17
 
 ### Patch Changes
