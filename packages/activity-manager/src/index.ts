@@ -8,6 +8,7 @@ import { addActivityImageMapping, setupDynamicActivityImage } from './image';
 import { sleepUntil } from '@sugarch/bc-mod-utility';
 import { setLogger } from './logger';
 import { ILogger } from '@sugarch/bc-mod-types';
+import { addOverrideIfEligible, setupOverride } from './actOverride';
 
 export * from './types';
 export { CustomActivity };
@@ -45,6 +46,7 @@ export class _ActivityManager<CustomAct extends string = string, CustomPrereq ex
             addActivityEntry(copyAct);
             pushHandler(copyAct.activity.Name, copyAct);
             addCustomActivity(copyAct);
+            addOverrideIfEligible(copyAct);
             addActivityImageMapping(copyAct.activity, copyAct.useImage);
         });
     }
@@ -97,6 +99,7 @@ export class _ActivityManager<CustomAct extends string = string, CustomPrereq ex
             setupLoad();
         })();
         
+        setupOverride();
         setupDynamicActivityImage();
         setupEntry();
         setupPrereq();

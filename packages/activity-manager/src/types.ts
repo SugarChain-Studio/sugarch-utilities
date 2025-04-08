@@ -17,10 +17,10 @@ export type ExCustomActivityPrerequisite<CustomPrereq extends string = ActivityP
 
 type AnyActivityName = string;
 
-export type CustomActivityDefinition<CustomAct extends string = string, CustomPrereq extends string = ActivityPrerequisite> = Omit<
-    Activity,
-    'Name' | 'Prerequisite' | 'ActivityID'
-> & {
+export type CustomActivityDefinition<
+    CustomAct extends string = string,
+    CustomPrereq extends string = ActivityPrerequisite
+> = Omit<Activity, 'Name' | 'Prerequisite' | 'ActivityID'> & {
     Name: CustomAct;
     ActivityID?: number;
     Prerequisite: ExCustomActivityPrerequisite<CustomPrereq>[];
@@ -33,7 +33,7 @@ export type CustomActivityDefinition<CustomAct extends string = string, CustomPr
  * @param group - The targeted group name of the activity.
  * @returns The image URL or undefined if no image is available.
  */
-export type DynamicActivityImageProvider = (activity: Activity, target:Character, group: string) => string | undefined;
+export type DynamicActivityImageProvider = (activity: Activity, target: Character, group: string) => string | undefined;
 
 /**
  * Represents a custom activity image setting.
@@ -77,14 +77,37 @@ export interface ActivityExtendedEvent extends Required<ActivityRunnable> {
     readonly name: ActivityName;
 }
 
+export type ExtItemActivity<CustomAct extends string = string> = Omit<ItemActivity, 'Activity'> & {
+    readonly Activity: CustomAct;
+};
+
 /**
  * Represents a custom activity.
  */
-export interface CustomActivity<CustomAct extends string = string, CustomPrereq extends string = ActivityPrerequisite> extends ActivityRunnable {
+export interface CustomActivity<CustomAct extends string = string, CustomPrereq extends string = ActivityPrerequisite>
+    extends ActivityRunnable {
     readonly activity: CustomActivityDefinition<CustomAct, CustomPrereq>;
 
     /** The image for activity in dialog, see {@link ActivityImageSetting} for details */
     readonly useImage?: ActivityImageSetting;
+
+    /**
+     * An optional function to override the default activity behavior.
+     * This function will be called when the activity in the dialog is clicked.
+     * And further activity processing will be skipped.
+     * It can be used to customize the behavior of the activity.
+     * @param actor the actor of the activity, always the player
+     * @param acted the activity target
+     * @param targetGroup the target group of the activity
+     * @param info the activity info, an extended version of {@link ItemActivity}
+     * @returns void
+     */
+    readonly override?: (
+        actor: Character,
+        acted: Character,
+        targetGroup: AssetItemGroup,
+        info: ExtItemActivity<CustomAct>
+    ) => void;
 
     /** The activity name when used on others */
     readonly label?: Translation.ActivityEntry | Translation.Entry;
