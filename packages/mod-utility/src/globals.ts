@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import valid from "semver/functions/valid";
-import lt from "semver/functions/lt";
+import valid from 'semver/functions/valid';
+import lt from 'semver/functions/lt';
 
 export interface INamespace<T = any> {
     get(name: string, defaultValue: () => T): T;
@@ -15,7 +15,7 @@ export interface INamespace<T = any> {
  * Access global variables safely in TypeScript
  * @param key - Key to access on globalThis
  */
-function global<T = any>(key: string): T {
+function global<T = any> (key: string): T {
     return (globalThis as any)[key];
 }
 
@@ -24,7 +24,7 @@ function global<T = any>(key: string): T {
  * @param key - Key to set on globalThis
  * @param value - Value to set
  */
-function setGlobal<T>(key: string, value: T): void {
+function setGlobal<T> (key: string, value: T): void {
     (globalThis as any)[key] = value;
 }
 
@@ -40,23 +40,17 @@ interface VersionedGlobalItem<T> {
     value: T;
 }
 
-function isVersionedGlobalItem<T>(item: unknown): item is VersionedGlobalItem<T> {
-    return typeof item === "object" && item !== null && "version" in item && "value" in item
-        && typeof (item as any).version === "string" && typeof (item as any).value !== "undefined"
-        && valid((item as any).version) !== null;
-}
-
 export class Globals {
     /**
      * Namespace used to store global variables
      * @private
      */
-    private static _namespace = "__BC_LUZI_GLOBALS__";
+    private static _namespace = '__BC_LUZI_GLOBALS__';
 
     /**
      * Initialize storage if it doesn't exist
      */
-    private static _initStorage(): void {
+    private static _initStorage (): void {
         if (!global(this._namespace)) {
             setGlobal(this._namespace, {});
         }
@@ -67,7 +61,7 @@ export class Globals {
      * @param name - Variable name
      * @param defaultValue - Default value
      */
-    static get<T>(name: string, defaultValue: () => T): T {
+    static get<T> (name: string, defaultValue: () => T): T {
         this._initStorage();
         const storage = global<Record<string, any>>(this._namespace);
         if (!(name in storage)) {
@@ -81,7 +75,7 @@ export class Globals {
      * @param name - Variable name
      * @param defaultValue - Default value function that receives the old value
      */
-    static getMayOverride<T>(name: string, defaultValue: OverrideFuncion<T>): T {
+    static getMayOverride<T> (name: string, defaultValue: OverrideFuncion<T>): T {
         this._initStorage();
         const storage = global<Record<string, any>>(this._namespace);
         storage[name] = defaultValue(storage[name]);
@@ -95,25 +89,29 @@ export class Globals {
      * @param upgradeOp When the global variable is set but the version is lower than the current version, this function will be called to upgrade the value
      * @returns The value of the global variable
      */
-    static getByVersion<T>(name: string, version: string, defaultOp: OverrideFuncion<T>, upgradeOp: (old: VersionedGlobalItem<T>) => T): T {
+    static getByVersion<T> (
+        name: string,
+        version: string,
+        defaultOp: OverrideFuncion<T>,
+        upgradeOp: (old: VersionedGlobalItem<T>) => T
+    ): T {
         this._initStorage();
         if (!valid(version)) {
             throw new Error(`Invalid version for ${name}: ${version}`);
         }
         const storage = global<Record<string, any>>(this._namespace);
-        const old = storage[name];
+        const versionName = `${name}.__Version`;
 
-        if(!isVersionedGlobalItem(old)) {
-            storage[name] = {
-                version: version,
-                value: defaultOp(old)
-            } as VersionedGlobalItem<T>;
+        const old = storage[name];
+        const oldVersion = storage[versionName];
+
+        if (!old) {
+            storage[name] = defaultOp(old);
+            storage[versionName] = version;
         } else {
-            if(lt(old.version, version)) {
-                storage[name] = {
-                    version: version,
-                    value: upgradeOp(old as VersionedGlobalItem<T>)
-                } as VersionedGlobalItem<T>;
+            if (!oldVersion || lt(oldVersion, version)) {
+                storage[name] = upgradeOp({ version: oldVersion, value: old });
+                storage[versionName] = version;
             }
         }
         return storage[name].value as T;
@@ -124,7 +122,7 @@ export class Globals {
      * @param name - Variable name
      * @param value - Variable value
      */
-    static set<T>(name: string, value: T): void {
+    static set<T> (name: string, value: T): void {
         this._initStorage();
         const storage = global<Record<string, any>>(this._namespace);
         storage[name] = value;
@@ -135,7 +133,7 @@ export class Globals {
      * @param name - Variable name
      * @returns True if the variable exists
      */
-    static has(name: string): boolean {
+    static has (name: string): boolean {
         this._initStorage();
         const storage = global<Record<string, any>>(this._namespace);
         return name in storage;
@@ -146,7 +144,7 @@ export class Globals {
      * @param name - Variable name
      * @returns True if the variable existed and was deleted
      */
-    static delete(name: string): boolean {
+    static delete (name: string): boolean {
         this._initStorage();
         const storage = global<Record<string, any>>(this._namespace);
         if (name in storage) {
@@ -159,12 +157,12 @@ export class Globals {
      * Change implementation by replacing methods
      * @param implementation - Implementation that satisfies duck typing
      */
-    static setImplementation(implementation: Partial<typeof Globals>): void {
+    static setImplementation (implementation: Partial<typeof Globals>): void {
         // Check if implementation meets requirements
-        const requiredMethods = ["get", "set", "has", "delete"] as const;
+        const requiredMethods = ['get', 'set', 'has', 'delete'] as const;
 
         for (const method of requiredMethods) {
-            if (typeof implementation[method] !== "function") {
+            if (typeof implementation[method] !== 'function') {
                 throw new Error(`Implementation must provide a '${method}' function`);
             }
             Globals[method] = implementation[method] as any;
@@ -175,13 +173,13 @@ export class Globals {
      * Create a namespace
      * @param prefix - Namespace prefix
      */
-    static createNamespace<T>(prefix: string): INamespace<T> {
+    static createNamespace<T> (prefix: string): INamespace<T> {
         return {
             get: (name, defaultValue) => Globals.get<T>(`${prefix}.${name}`, defaultValue),
             getMayOverride: (name, defaultValue) => Globals.getMayOverride<T>(`${prefix}.${name}`, defaultValue),
             set: (name, value) => Globals.set<T>(`${prefix}.${name}`, value),
-            has: (name) => Globals.has(`${prefix}.${name}`),
-            delete: (name) => Globals.delete(`${prefix}.${name}`),
+            has: name => Globals.has(`${prefix}.${name}`),
+            delete: name => Globals.delete(`${prefix}.${name}`),
         };
     }
 }
