@@ -18,7 +18,7 @@ type OnFuncArgs<T extends EventType> = [event: T, listener: (...args: EventArgTy
  */
 function makeChatRoomMsgHandler (emitter: EventEmitter<EventMap>): ChatRoomMessageHandler {
     return {
-        Description: `SugarChain ChatMessage Handler`,
+        Description: `SugarChain ChatMessage Handler v${version}`,
         Priority: 1024, // The last handler for base BC is 500, choose 1024 as a lucky number
         // eslint-disable-next-line @typescript-eslint/naming-convention
         Callback: (data, sender, msg, metadata) => {
