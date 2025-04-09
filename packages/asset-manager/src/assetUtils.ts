@@ -3,7 +3,7 @@ import { customAssetAdd, customAssetMarkStrict, getCustomAssets } from './custom
 import { Entries, resolveEntry, solidfyEntry } from './entries';
 import { addLayerNames } from './layerNames';
 import { pushAfterLoad, pushAssetLoadEvent, pushDefsLoad, requireGroup } from './loadSchedule';
-import type {  CustomAssetDefinition, CustomGroupName, FuncWork, Translation } from "@sugarch/bc-mod-types";
+import type { CustomAssetDefinition, CustomGroupName, FuncWork, Translation } from '@sugarch/bc-mod-types';
 
 /**
  * Mirror a global function between asset groups
@@ -12,7 +12,6 @@ import type {  CustomAssetDefinition, CustomGroupName, FuncWork, Translation } f
  * @param asset
  * @param category
  */
- 
 function globalFunctionMirror<Custom extends string = AssetGroupBodyName> (
     group: CustomGroupName<Custom>,
     preimageGroup: CustomGroupName<Custom>,
@@ -129,25 +128,28 @@ const missingAsset: Record<string, Set<string>> = {};
  * @param work
  */
 export function modifyAsset<Custom extends string = AssetGroupBodyName> (
-    groupName: CustomGroupName<Custom>,
+    groupNames: CustomGroupName<Custom> | CustomGroupName<Custom>[],
     assetName: string,
     work: FuncWork<[Mutable<AssetGroup>, Mutable<Asset>]>
 ) {
-    const wk = (groupObj: AssetGroup) => {
-        const asset = AssetGet('Female3DCG', groupObj.Name, assetName);
-        if (!asset) {
-            if (!missingAsset[groupName]) missingAsset[groupName] = new Set();
-            if (missingAsset[groupName]!.has(assetName)) {
-                console.error(`[AssetManager] Asset ${groupName}:${assetName} not found`);
-                return;
-            } else {
-                missingAsset[groupName]!.add(assetName);
-                pushAssetLoadEvent(groupName, wk);
-            }
-        } else work(groupObj as Mutable<AssetGroup>, asset as Mutable<Asset>);
-    };
+    if (typeof groupNames === 'string') groupNames = [groupNames];
+    for(const groupName of groupNames) {
+        const wk = (groupObj: AssetGroup) => {
+            const asset = AssetGet('Female3DCG', groupObj.Name, assetName);
+            if (!asset) {
+                if (!missingAsset[groupName]) missingAsset[groupName] = new Set();
+                if (missingAsset[groupName]!.has(assetName)) {
+                    console.error(`[AssetManager] Asset ${groupName}:${assetName} not found`);
+                    return;
+                } else {
+                    missingAsset[groupName]!.add(assetName);
+                    pushAssetLoadEvent(groupName, wk);
+                }
+            } else work(groupObj as Mutable<AssetGroup>, asset as Mutable<Asset>);
+        };
 
-    pushAssetLoadEvent(groupName, wk);
+        pushAssetLoadEvent(groupName, wk);
+    }
 }
 
 /**

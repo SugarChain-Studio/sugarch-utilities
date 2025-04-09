@@ -30,10 +30,7 @@ export type {
     ILogger,
 };
 
-export type {
-    CustomAssetDefinitionItem,
-    CustomAssetDefinitionAppearance,
-} from "@sugarch/bc-mod-types";
+export type { CustomAssetDefinitionItem, CustomAssetDefinitionAppearance } from '@sugarch/bc-mod-types';
 
 export { resolveAssetOverrides } from '@sugarch/bc-image-mapping';
 
@@ -95,7 +92,11 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param asset The asset name
      * @param work
      */
-    modifyAsset (group: CustomGroupName, asset: string, work: FuncWork<[Mutable<AssetGroup>, Mutable<Asset>]>) {
+    modifyAsset (
+        group: CustomGroupName | CustomGroupName[],
+        asset: string,
+        work: FuncWork<[Mutable<AssetGroup>, Mutable<Asset>]>
+    ) {
         modifyAsset(group, asset, work);
     }
 
@@ -176,11 +177,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     /**
      * @deprecated Use `addLayerNames` instead
      */
-    addLayerNamesByEntry (
-        _1: CustomGroupName<Custom>,
-        _2: string,
-        _3: Translation.CustomRecord<string, string>
-    ) {}
+    addLayerNamesByEntry (_1: CustomGroupName<Custom>, _2: string, _3: Translation.CustomRecord<string, string>) {}
 
     /**
      * Check if an asset is custom, this includes assets created by mirroring groups
