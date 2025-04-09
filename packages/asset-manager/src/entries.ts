@@ -3,7 +3,7 @@ import { checkItemCustomed, getCustomAssets, getCustomGroups } from './customSta
 import { getCustomMirrorGroups, resolvePreimage } from './mirrorGroup';
 import type { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
 import { translateDialog, translateEntry, translateGroupedEntries } from './entryUtils';
-import { oncePatch } from './oncePatch';
+import { globalPipeline } from '@sugarch/bc-mod-utility';
 
 /**
  * Resolve translation entry by language
@@ -195,40 +195,20 @@ export function setupEntries (): void {
         HookManager.progressiveHook('TranslationAssetProcess').next().inject(loadAssetEntries);
     }
 
-    type DictionaryDecorators = {
-        decorators: ((dictionary: DictionaryBuilder, PrevItem: Item, NextItem: Item) => void)[];
-    };
-
-    oncePatch<DictionaryDecorators>().getMayOverride('ChatRoomPublishAction', old => {
-        const mDecorator = (dictionary: DictionaryBuilder, PrevItem: Item, NextItem: Item) => {
-            for (const [key, item] of [
-                ['PrevAsset', PrevItem],
-                ['NextAsset', NextItem],
-            ] as const) {
-                const customed = checkItemCustomed(item);
-                if (customed) dictionary.text(key, item.Asset.Description);
-            }
-        };
-
-        if (old) {
-            const oldDecorators = (old as DictionaryDecorators).decorators;
-            oldDecorators.push(mDecorator);
-            return old;
-        } else {
-            const ret = { decorators: [mDecorator] };
-
-            const ActionFunc = HookManager.randomGlobalFunction(
-                'CustomDialogInject',
-                (dictionary: DictionaryBuilder, _1: Character, _2: string, PrevItem: Item, NextItem: Item) => {
-                    ret.decorators.forEach(decorator => decorator(dictionary, PrevItem, NextItem));
-                }
-            );
-
+    globalPipeline<(dictionary: DictionaryBuilder, PrevItem: Item, NextItem: Item) => void>(
+        'CustomDialogInject',
+        () => {},
+        pipeline =>
             HookManager.patchFunction('ChatRoomPublishAction', {
-                'ChatRoomCharacterItemUpdate(C);': `${ActionFunc}(dictionary, C, Action, PrevItem, NextItem);\nChatRoomCharacterItemUpdate(C);`,
-            });
-
-            return ret;
+                '\t\tdictionary.focusGroup(C.FocusGroup.Name);\n\t}': `\t\tdictionary.focusGroup(C.FocusGroup.Name);\n\t}\n\t${pipeline.globalFuncName}(dictionary, PrevItem, NextItem);\n`,
+            })
+    ).register((_, dictionary, PrevItem, NextItem) => {
+        for (const [key, item] of [
+            ['PrevAsset', PrevItem],
+            ['NextAsset', NextItem],
+        ] as const) {
+            const customed = checkItemCustomed(item);
+            if (customed) dictionary.text(key, item.Asset.Description);
         }
     });
 }

@@ -1,12 +1,12 @@
 import { HookManager, HookManagerInterface } from '@sugarch/bc-mod-hook-manager';
 import type { CustomGroupName } from '@sugarch/bc-mod-types';
-import { oncePatch } from './oncePatch';
+import { globalPipeline } from '@sugarch/bc-mod-utility';
 
 const customGroups: Record<string, AssetGroup> = {};
 
 const customAssets: Record<string, Record<string, Asset>> = {};
 
-const strictCustomAssets: {name: string, asset:Asset} [] = [];
+const strictCustomAssets: { name: string; asset: Asset }[] = [];
 
 export const AccessCustomAsset = <Custom extends string = AssetGroupBodyName>(
     group: CustomGroupName<Custom>,
@@ -23,7 +23,7 @@ export function customGroupAdd (...[family, groupDef]: Parameters<typeof AssetGr
     return Promise.resolve(Group as Mutable<AssetGroup>);
 }
 
-/** 
+/**
  * Mark a custom asset that is not created by mirroring groups
  */
 export function customAssetMarkStrict (name: string, asset: Asset) {
@@ -125,38 +125,32 @@ export function enableCustomAssets (): void {
     HookManager.progressiveHook('InventoryAvailable').inside('CraftingItemListBuild').override(overrideAvailable);
     HookManager.progressiveHook('InventoryAvailable').inside('WardrobeFastLoad').override(overrideAvailable);
 
-    HookManager.progressiveHook('CraftingValidate').inject(args => {
-        const item = args[0]?.Item;
-        if (!item) return;
-        const asset = CraftingAssets[item]?.[0];
-        if (asset && isInListCustomAsset(asset.Group.Name, asset.Name)) args[3] = false;
-    });
-
-    if(GameVersion === "R114") {
-        type CraftingInventoryStash = { providers: (() => Item[])[] };
-        oncePatch<CraftingInventoryStash>().getMayOverride('CraftingInventory', old => {
-            const flatCustomAssets = (custom: typeof customAssets) =>
-                Object.values(custom)
-                    .map(x => Object.values(x))
-                    .flat()
-                    .map(Asset => ({ Asset })) as Item[];
-    
-            if (old) {
-                const stash = old as CraftingInventoryStash;
-                stash.providers.push(() => flatCustomAssets(customAssets));
-                return stash;
-            } else {
-                const ret: CraftingInventoryStash = { providers: [] };
-                ret.providers.push(() => flatCustomAssets(customAssets));
-                const pInventory = HookManager.randomGlobalFunction('CraftingInventory', () => {
-                    return [...Player.Inventory, ...ret.providers.map(x => x()).flat()];
-                });
-                HookManager.patchFunction('CraftingRun', {
-                    'for (let Item of Player.Inventory) {': `for (let Item of ${pInventory}()) {`,
-                });
-                return ret;
-            }
+    if (GameVersion === 'R114') {
+        HookManager.progressiveHook('CraftingValidate').inject(args => {
+            const item = args[0]?.Item;
+            if (!item) return;
+            const asset = CraftingAssets[item]?.[0];
+            if (asset && isInListCustomAsset(asset.Group.Name, asset.Name)) args[3] = false;
         });
+
+        const flatCustomAssets = (custom: typeof customAssets) =>
+            Object.values(custom)
+                .map(x => Object.values(x))
+                .flat()
+                .map(Asset => ({ Asset })) as InventoryItem[];
+
+        globalPipeline(
+            'CraftingInventory',
+            () => Player.Inventory,
+            pipeline =>
+                HookManager.patchFunction('CraftingRun', {
+                    'for (let Item of Player.Inventory) {': `for (let Item of ${pipeline.globalFuncName}()) {`,
+                })
+        ).register(acc => {
+            return [...acc, ...flatCustomAssets(customAssets).flat()];
+        });
+    } else {
+        HookManager.progressiveHook('InventoryAvailable').inside('CraftingValidate').override(overrideAvailable);
     }
 }
 

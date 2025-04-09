@@ -178,17 +178,6 @@ Adds custom layer names based on the asset definition.
 
 ---
 
-### `addLayerNamesByEntry(group: CustomGroupName, assetName: string, entries: Translation.CustomRecord): void`
-
-Adds custom layer names based on entries.
-
-- **Parameters**:
-  - `group`: The body group name.
-  - `assetName`: The asset name.
-  - `entries`: Layer names grouped by language.
-
----
-
 ### `assetIsCustomed(asset: Asset): boolean`
 
 Checks if an asset is custom.

@@ -4,7 +4,7 @@ import { pushAfterLoad, runSetupLoad } from './loadSchedule';
 import { addCustomDialog, setupCustomDialog } from './dialog';
 import { pickEntry, setupEntries } from './entries';
 import { customAssetGetStrict, enableCustomAssets, getCustomAssets } from './customStash';
-import { addLayerNames, addLayerNamesByEntry, setupLayerNameLoad } from './layerNames';
+import { addLayerNames, setupLayerNameLoad } from './layerNames';
 import { enableValidation, FromModUserTestFunc } from './validation';
 import type {
     CustomAssetDefinition,
@@ -174,18 +174,13 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
-     * Add custom layer names. Layer names are obtained from entries.
-     * @param group The body group name
-     * @param assetName The asset name
-     * @param entries Layer-name, grouped by language
+     * @deprecated Use `addLayerNames` instead
      */
     addLayerNamesByEntry (
-        group: CustomGroupName<Custom>,
-        assetName: string,
-        entries: Translation.CustomRecord<string, string>
-    ) {
-        addLayerNamesByEntry(group, assetName, entries);
-    }
+        _1: CustomGroupName<Custom>,
+        _2: string,
+        _3: Translation.CustomRecord<string, string>
+    ) {}
 
     /**
      * Check if an asset is custom, this includes assets created by mirroring groups
