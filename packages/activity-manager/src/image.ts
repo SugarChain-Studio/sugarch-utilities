@@ -38,9 +38,6 @@ export function setupDynamicActivityImage () {
     // priority should be higher than the image mapping facility (priority = 0)
     HookManager.hookFunction('ElementButton.CreateForActivity', 1, (args, next) => {
         const [_, activitiy, target] = args;
-        
-        console.warn('[DEBUG] ElementButton hook run x1!');
-
         const provider = dynamicActivityImageProviders[activitiy.Activity.Name];
         if (provider) {
             const image = provider(activitiy.Activity, target, activitiy.Group) ?? PathTools.emptyImage;
