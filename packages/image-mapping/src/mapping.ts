@@ -1,11 +1,9 @@
-import { Globals } from '@sugarch/bc-mod-utility';
+import { Globals, once } from '@sugarch/bc-mod-utility';
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { sleepUntil, PathTools } from '@sugarch/bc-mod-utility';
 import { ImageMappingStorage } from './mappingStorage';
 import type { AssetOverrideContainer, ImageMappingRecord } from '@sugarch/bc-mod-types';
 import { version } from './package';
-import lt from 'semver/functions/lt';
-import valid from 'semver/functions/valid';
 
 const storage = new ImageMappingStorage();
 
@@ -53,9 +51,11 @@ export async function resolveAssetOverrides (
 }
 
 function setupImgMapping (): void {
-    // Cross-origin image loading
-    HookManager.patchFunction('GLDrawLoadImage', {
-        'Img.src = url;': 'Img.crossOrigin = "Anonymous";\n\t\tImg.src = url;',
+    once('ImgMappingOnce.GLDrawLoadImage.crossOrigin', () => {
+        // Cross-origin image loading
+        HookManager.patchFunction('GLDrawLoadImage', {
+            'Img.src = url;': 'Img.crossOrigin = "Anonymous";\n\t\tImg.src = url;',
+        });
     });
 
     (['DrawImageEx', 'DrawImageResize', 'GLDrawImage', 'DrawGetImage'] as const).forEach(fn => {
@@ -89,13 +89,28 @@ function setupImgMapping (): void {
             return next(args);
         });
 
-        const func = HookManager.randomGlobalFunction<[string], string>(
-            'mapImage',
-            src => storage.mapImgSrc(src) as string
-        );
-
-        HookManager.patchFunction('ElementButton._ParseIcons', {
-            'src = `./Assets/Female3DCG/ItemMisc/Preview/${icon}.png`': `src = ${func}(\`./Assets/Female3DCG/ItemMisc/Preview/\${icon}.png\`)`,
+        HookManager.hookFunction('ElementButton.Create', 0, (args, next) => {
+            const options = args[2];
+            if (options?.icons) {
+                options.icons = options.icons.map(icon => {
+                    if (typeof icon === 'string' && icon.endsWith('Padlock')) {
+                        const src = `Assets/Female3DCG/ItemMisc/Preview/${icon}.png`;
+                        const img = storage.mapImgSrc(src);
+                        if (img !== src) {
+                            return {
+                                name: icon,
+                                iconSrc: img,
+                                tooltipText: InterfaceTextGet('PreviewIconPadlock').replace(
+                                    'AssetName',
+                                    AssetGet('Female3DCG', 'ItemMisc', icon)?.Description ?? icon
+                                ),
+                            };
+                        }
+                    }
+                    return icon;
+                });
+            }
+            return next(args);
         });
     })();
 }
@@ -105,10 +120,10 @@ class _ImageMapping {
         setupImgMapping();
     }
 
-    get storage() {
+    get storage () {
         return storage;
     }
-    
+
     /**
      * Add custom image mappings, **will** override existing mappings
      * @param mappings
@@ -126,22 +141,4 @@ class _ImageMapping {
     }
 }
 
-export const ImageMapping = Globals.getByVersion('ImageMapping', version, 
-    () => new _ImageMapping(),
-    (version, value)=>{
-        const ret = new _ImageMapping();
-        if(!value["storage"]) return ret;
-        else if(!version || !valid(version)) {
-            ret.storage.customSrc = {...value["storage"].custom};
-            ret.storage.basic = {...value["storage"].basic};
-            value.addImgMapping = (mappings: Record<string, string>) => ret.storage.addImgMapping(mappings);
-            value.setBasicImgMapping = (mappings: Record<string, string>) => ret.storage.setBasicImgMapping(mappings);
-            value["storage"].mapImg = (str: string, callback: (image: string) => void) => {
-                ret.storage.mapImg(str, callback);
-            };
-            value["storage"].mapImgSrc = <T extends string | HTMLImageElement | HTMLCanvasElement>(str: T) => ret.storage.mapImgSrc(str) as T;
-        }
-        else if(lt("1.0.14", version)) value["storage"].migrateTo(ret["storage"]);
-        return ret;
-    }
-);
+export const ImageMapping = Globals.get(`ImageMapping@${version}`, () => new _ImageMapping());
