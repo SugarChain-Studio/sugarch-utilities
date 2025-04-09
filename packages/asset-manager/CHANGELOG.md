@@ -1,5 +1,12 @@
 # @sugarch/bc-asset-manager
 
+## 0.4.9
+
+### Patch Changes
+
+-   eda2362: Allow group parameter in modifyAsset to accept an array
+-   17f2b3b: Support for R115 preview change
+
 ## 0.4.8
 
 ### Patch Changes

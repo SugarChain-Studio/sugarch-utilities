@@ -1,5 +1,13 @@
 # @sugarch/bc-image-mapping
 
+## 1.0.18
+
+### Patch Changes
+
+-   b7a4061: Refactor to avoid patchFunction use for better compatililty.
+-   Updated dependencies [eb2b6ee]
+    -   @sugarch/bc-mod-utility@0.2.11
+
 ## 1.0.17
 
 ### Patch Changes

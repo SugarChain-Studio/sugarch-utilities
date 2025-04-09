@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.11
+
+### Patch Changes
+
+-   eb2b6ee: Add a `globalPipeline` to help manage global pipelines
+
 ## 0.2.10
 
 ### Patch Changes

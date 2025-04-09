@@ -1,5 +1,11 @@
 # @sugarch/bc-event-handler
 
+## 0.5.4
+
+### Patch Changes
+
+-   7803dd2: Add version to chat room handler name
+
 ## 0.5.3
 
 ### Patch Changes

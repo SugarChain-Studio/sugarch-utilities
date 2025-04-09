@@ -1,5 +1,15 @@
 # @sugarch/bc-activity-manager
 
+## 0.3.19
+
+### Patch Changes
+
+-   88d0d7c: Clean unused logs
+-   Updated dependencies [eb2b6ee]
+-   Updated dependencies [7803dd2]
+    -   @sugarch/bc-mod-utility@0.2.11
+    -   @sugarch/bc-event-handler@0.5.4
+
 ## 0.3.18
 
 ### Patch Changes
