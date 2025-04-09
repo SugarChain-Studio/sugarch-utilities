@@ -65,6 +65,19 @@ function setupImgMapping (): void {
         });
     });
 
+    if(GameVersion !== "R114") {
+        HookManager.hookFunction('GLDrawLoadTextureAlphaMask', 0, (args, next) => {
+            if(Array.isArray(args[5])) {
+                // @ts-ignore
+                args[5] = args[5].map((mask)=> ({
+                    ...mask,
+                    Url: storage.mapImgSrc(mask.Url),
+                }))
+            }
+            return next(args);
+        });
+    }
+
     (async () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await sleepUntil(() => (globalThis as any)['ElementButton'] !== undefined);

@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.4.10
+
+### Patch Changes
+
+-   Supports alpha texture mapping
+
 ## 0.4.9
 
 ### Patch Changes

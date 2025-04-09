@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 1.0.19
+
+### Patch Changes
+
+-   Supports alpha texture mapping
+
 ## 1.0.18
 
 ### Patch Changes
