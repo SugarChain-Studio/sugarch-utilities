@@ -103,25 +103,34 @@ function setupImgMapping (): void {
         });
 
         HookManager.hookFunction('ElementButton.Create', 0, (args, next) => {
-            const options = args[2];
-            if (options?.icons) {
-                options.icons = options.icons.map(icon => {
-                    if (typeof icon === 'string' && icon.endsWith('Padlock')) {
-                        const src = `Assets/Female3DCG/ItemMisc/Preview/${icon}.png`;
-                        const img = storage.mapImgSrc(src);
-                        if (img !== src) {
-                            return {
-                                name: icon,
-                                iconSrc: img,
-                                tooltipText: InterfaceTextGet('PreviewIconPadlock').replace(
-                                    'AssetName',
-                                    AssetGet('Female3DCG', 'ItemMisc', icon)?.Description ?? icon
-                                ),
-                            };
+            if(args[0]?.startsWith('dialog-inventory')) {
+                const options = args[2];
+                if (options?.icons) {
+                    options.icons = options.icons.map(icon => {
+                        if (typeof icon === 'string' && icon.endsWith('Padlock')) {
+                            const src = `Assets/Female3DCG/ItemMisc/Preview/${icon}.png`;
+                            const img = storage.mapImgSrc(src);
+                            if (img !== src) {
+                                return {
+                                    name: icon,
+                                    iconSrc: img,
+                                    tooltipText: InterfaceTextGet('PreviewIconPadlock').replace(
+                                        'AssetName',
+                                        AssetGet('Female3DCG', 'ItemMisc', icon)?.Description ?? icon
+                                    ),
+                                };
+                            }
                         }
-                    }
-                    return icon;
-                });
+                        return icon;
+                    });
+                }
+            }
+
+            if(args[0]?.startsWith('dialog-expression-button-grid-Emoticon')) {
+                const options = args[2];
+                if (options?.image) {
+                    options.image = storage.mapImgSrc(options.image);
+                }
             }
             return next(args);
         });

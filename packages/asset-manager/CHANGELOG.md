@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.0
+
+### Minor Changes
+
+-   Implements emoticon image mapping, finalize support for R114Beta changes
+
 ## 0.4.10
 
 ### Patch Changes

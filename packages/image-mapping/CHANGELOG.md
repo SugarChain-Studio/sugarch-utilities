@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 1.1.0
+
+### Minor Changes
+
+-   Implements emoticon image mapping, finalize support for R114Beta changes
+
 ## 1.0.19
 
 ### Patch Changes

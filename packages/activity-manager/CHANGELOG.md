@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.4.0
+
+### Minor Changes
+
+-   Implements emoticon image mapping, finalize support for R114Beta changes
+
 ## 0.3.20
 
 ### Patch Changes
