@@ -172,6 +172,17 @@ const activityDef: CustomActivity = {
         // provide the target for self here (optional)
         TargetSelf: ["ItemLegs"],
     },
+
+    // How the `run` function should be called, self on self means the activity is performed on self
+    // see @sugarch/bc-event-handler for more details
+    mode: "SelfOnSelf",
+    run: (player, sender, info) => {
+        // The function to run when the activity is performed
+        // This is where you can define the behavior of the activity
+        // For example, you can use the following code to make the acting character kneel down
+        PoseSetActive(acted, "Kneel");
+    },
+
     // The image to use for the activity, may use URL, data:image, or reuse the base game image
     // here we reuse the base game image for "Wiggle" activity
     useImage: "Wiggle",
