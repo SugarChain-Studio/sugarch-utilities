@@ -76,7 +76,7 @@ This event emitter supports all events coming from `ChatRoomMessage` function, i
 - `"Hidden"`: Triggered when a hidden message is sent in the chat room.
 - `"LocalMessage"`: Triggered when a local message is sent in the chat room. Typically from `ChatRoomSendLocal` function.
 
-Additionally, it also supports following events that related to player joining and leaving the chat room (note that the listener is different with those above): 
+Additionally, it also supports following events that related to player joining and leaving the chat room (note that the listener parameters for these events is different with those above): 
 - `"PlayerJoin"`: Triggered when a player joins the chat room. When the event is triggered, player should be in the chat room already.
 - `"PlayerLeave"`: Triggered when a player leaves the chat room. This event is triggered before the server sends the player out of the chat room, so the player is still in the chat room when the event is triggered.
 
