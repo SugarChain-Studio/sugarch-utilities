@@ -85,7 +85,7 @@ export function addLayerNames<Custom extends string = AssetGroupBodyName> (
         entries,
         noOverride,
     }: {
-        entries?: Translation.CustomRecord<string, string>;
+        entries?: Translation.Dialog;
         noOverride?: boolean;
     } = {}
 ) {

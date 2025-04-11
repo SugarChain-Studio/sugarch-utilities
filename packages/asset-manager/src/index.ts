@@ -18,6 +18,7 @@ import type {
 } from '@sugarch/bc-mod-types';
 import { ImageMapping } from '@sugarch/bc-image-mapping';
 import { setLogger } from './logger';
+import { AddAssetConfig, isAddAssetConfig, isBasicAddAssetConfig, ExtendedAddAssetConfig } from './types';
 
 export type {
     CustomAssetDefinition,
@@ -39,19 +40,87 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * Add an asset. If the asset is ItemTorso or ItemTorso2, a mirror will be automatically added.
      * @param group The asset group
      * @param asset The asset definition
+     */
+    addAsset(group: CustomGroupName<Custom>, asset: CustomAssetDefinition<Custom>): void;
+
+    /**
+     * Add an asset with detailed configuration. 
+     * 
+     * ---
+     * You should provide `description` and `layerNames` for the asset, for example: 
+     *   ```ts
+     *   addAsset(group, assetDef, { 
+     *     description: { EN: 'Asset Name' }, 
+     *     layerNames: { EN: { 'Layer1': 'Layer1 Name' } }, 
+     *   })
+     *   ```
+     * Note that typical layer name and color group name key is like `"ItemTorsoMyAssetLayer1"`, in the config above, you should use `"Layer1"` as the key,
+     * the prefix group name `"ItemTorso"` and asset name `"MyAsset"` will be automatically added.
+     * 
+     * ---
+     * If the asset is ItemTorso or ItemTorso2, a mirror will be automatically added. This behaviour can be turned off by 
+     * ```ts
+     * addAsset(group, assetDef, { noMirror : true })
+     * ```
+     * 
+     * ---
+     * If you want to add ExtendedConfig to the asset, you can do it like this:
+     * ```ts
+     * addAsset(group, assetDef, {
+     *   extended: { Archetype: ExtendedArchetype.MODULAR, , ... }, // Extended asset properties
+     *   customDialogs: { EN : { "SelectBase" : "...", "ModuleM1": "...", ...  } }, // Asset custom dialogs translation
+     * })
+     * ```
+     *   Note that typical asset dialog key is like `"ItemTorsoMyAssetOptiona1"`, in the config above, you should use `"Optiona1"` as the key,
+     *   the prefix group name `"ItemTorso"` and asset name `"MyAsset"` will be automatically added. 
+     * 
+     * 
+     * @param group The asset group
+     * @param asset The asset definition
+     * @param config The asset configuration
+     */
+    addAsset(group: CustomGroupName<Custom>, asset: CustomAssetDefinition<Custom>, config: AddAssetConfig): void;
+
+    /**
+     * Add an asset with basic setup.
+     * @param group The asset group
+     * @param asset The asset definition
      * @param extended Optional extended asset properties
      * @param description Optional asset name translation
      * @param noMirror Whether to not add a mirror
      */
+    addAsset(
+        group: CustomGroupName<Custom>,
+        asset: CustomAssetDefinition<Custom>,
+        extended: AssetArchetypeConfig,
+        description?: Translation.Entry,
+        noMirror?: boolean
+    ): void;
+
     addAsset (
         group: CustomGroupName<Custom>,
         asset: CustomAssetDefinition<Custom>,
-        extended?: AssetArchetypeConfig,
+        param3?: AddAssetConfig | AssetArchetypeConfig,
         description?: Translation.Entry,
         noMirror = false
     ) {
-        const extendedConfig = extended && { [group]: { [asset.Name]: extended } };
-        loadAsset(group, asset, { extendedConfig, description, noMirror });
+        if (!param3) {
+            loadAsset(group, asset, { description, noMirror });
+        } else if (isAddAssetConfig(param3)) {
+            const config: Parameters<typeof loadAsset>[2] = {
+                description: param3.description,
+                noMirror: param3.noMirror,
+                layerNames: param3.layerNames
+            }
+            if(!isBasicAddAssetConfig(param3)) {
+                config.extendedConfig = { [group]: { [asset.Name]: (param3 as ExtendedAddAssetConfig).extended } };
+                config.assetDialogs = (param3 as ExtendedAddAssetConfig).assetDialogs;
+            }
+            loadAsset(group, asset, config);
+        } else {
+            const extendedConfig = { [group]: { [asset.Name]: param3 } };
+            loadAsset(group, asset, { extendedConfig, description, noMirror });
+        }
     }
 
     /**
@@ -169,7 +238,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     addLayerNames (
         group: CustomGroupName<Custom>,
         assetDef: CustomAssetDefinition<Custom>,
-        entries: Translation.CustomRecord<string, string>
+        entries: Translation.Dialog
     ) {
         addLayerNames(group, assetDef, { entries });
     }
