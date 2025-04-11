@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.1
+
+### Patch Changes
+
+-   23333ad: Provide a new method to add asset `addAssetWithConfig`, it supports more configs in a single call.
+
 ## 0.5.0
 
 ### Minor Changes
