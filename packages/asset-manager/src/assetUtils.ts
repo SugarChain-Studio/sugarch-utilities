@@ -105,7 +105,7 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
                 customAssetMarkStrict(assetDefRes.Name, asset);
                 addLayerNames(asset.DynamicGroupName, assetDefRes as CustomAssetDefinition, {
                     entries: layerNames,
-                    noOverride: true,
+                    noOverride: !layerNames,
                 });
             }
             

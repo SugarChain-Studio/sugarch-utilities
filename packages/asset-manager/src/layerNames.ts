@@ -59,13 +59,17 @@ function writeColorGroupNames (cache: TextCache) {
  * @param entries
  * @returns A function that resolves layer names
  */
-const createLayerNameResolver = (entries?: Translation.CustomRecord<string, string>) => (layerName: string) =>
-    Object.entries(entries || { CN: { [layerName]: layerName } })
-        .map(([key, value]) => [key, value[layerName] || key] as [ServerChatRoomLanguage, string])
-        .reduce((acc, [key, value]) => {
-            acc[key] = value;
-            return acc;
-        }, {} as Partial<Record<ServerChatRoomLanguage, string>>);
+function createLayerNameResolver (entries?: Translation.Dialog) {
+    if (!entries) return (layerName: string) => ({ CN: layerName });
+    const resolver: Record<string, Translation.Entry> = {};
+    for (const [lang, entry] of Object.entries(entries)) {
+        for (const [key, value] of Object.entries(entry)) {
+            if (!resolver[key]) resolver[key] = {};
+            resolver[key][lang as ServerChatRoomLanguage] = value;
+        }
+    }
+    return (layerName: string) => resolver[layerName];
+}
 
 /**
  * Add layer names
@@ -79,7 +83,10 @@ export function addLayerNames<Custom extends string = AssetGroupBodyName> (
     group: CustomGroupName<Custom>,
     assetDef: {
         Name: string;
-        Layer?: Pick<AssetLayerDefinition, 'Name' | 'ColorGroup'>[];
+        Layer?: Pick<
+            AssetLayerDefinition,
+            'Name' | 'ColorGroup' | 'CopyLayerColor' | 'AllowColorize' | 'HideColoring'
+        >[];
     },
     {
         entries,
@@ -90,7 +97,12 @@ export function addLayerNames<Custom extends string = AssetGroupBodyName> (
     } = {}
 ) {
     const resolve = createLayerNameResolver(entries);
-    assetDef.Layer?.forEach(({ Name, ColorGroup }) => {
+
+    const colorGroupNames = new Set<string>();
+
+    assetDef.Layer?.filter(
+        layer => !layer.CopyLayerColor && (layer.AllowColorize ?? true) && !layer.HideColoring
+    ).forEach(({ Name, ColorGroup }) => {
         if (!Name) {
             pushLayerName(
                 `${group}${assetDef.Name}`,
@@ -100,10 +112,12 @@ export function addLayerNames<Custom extends string = AssetGroupBodyName> (
             );
         } else pushLayerName(`${group}${assetDef.Name}${Name}`, resolve(Name), Name, !!noOverride);
 
-        if (ColorGroup) {
-            pushColorGroupName(`${group}${assetDef.Name}${ColorGroup}`, resolve(ColorGroup), ColorGroup, false);
-        }
+        if (ColorGroup) colorGroupNames.add(ColorGroup);
     });
+
+    colorGroupNames.forEach(colorGroup =>
+        pushColorGroupName(`${group}${assetDef.Name}${colorGroup}`, resolve(colorGroup), colorGroup, !!noOverride)
+    );
 }
 
 // Create an async task that waits for ItemColorLayerNames to load and then writes cached layer names to ItemColorLayerNames
@@ -120,17 +134,17 @@ export function setupLayerNameLoad () {
         colorGroupCache = groupNames;
     });
 
-    HookManager.progressiveHook('ItemColorLoad', 1)
-        .next()
-        .inject(() => {
-            const cacheV = layerCache?.();
-            if (cacheV && cacheV.cache) {
-                writeLayerNames(cacheV);
-            }
+    HookManager.hookFunction('ItemColorLoad', 0, (args, next) => {
+        const ret = next(args);
+        const cacheV = layerCache?.();
+        if (cacheV && cacheV.cache) {
+            writeLayerNames(cacheV);
+        }
 
-            const groupCacheV = colorGroupCache?.();
-            if (groupCacheV && groupCacheV.cache) {
-                writeColorGroupNames(groupCacheV);
-            }
-        });
+        const groupCacheV = colorGroupCache?.();
+        if (groupCacheV && groupCacheV.cache) {
+            writeColorGroupNames(groupCacheV);
+        }
+        return ret;
+    });
 }

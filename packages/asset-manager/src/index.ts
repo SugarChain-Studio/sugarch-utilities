@@ -18,7 +18,7 @@ import type {
 } from '@sugarch/bc-mod-types';
 import { ImageMapping } from '@sugarch/bc-image-mapping';
 import { setLogger } from './logger';
-import { AddAssetConfig, isAddAssetConfig, isBasicAddAssetConfig, ExtendedAddAssetConfig } from './types';
+import { AddAssetConfig, isExtendedAddAssetConfig } from './types';
 
 export type {
     CustomAssetDefinition,
@@ -42,6 +42,37 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param asset The asset definition
      */
     addAsset(group: CustomGroupName<Custom>, asset: CustomAssetDefinition<Custom>): void;
+
+    /**
+     * Add an asset with basic setup.
+     * @param group The asset group
+     * @param asset The asset definition
+     * @param extended Optional extended asset properties
+     * @param description Optional asset name translation
+     * @param noMirror Whether to not add a mirror
+     */
+    addAsset(
+        group: CustomGroupName<Custom>,
+        asset: CustomAssetDefinition<Custom>,
+        extended: AssetArchetypeConfig,
+        description?: Translation.Entry,
+        noMirror?: boolean
+    ): void;
+
+    addAsset (
+        group: CustomGroupName<Custom>,
+        asset: CustomAssetDefinition<Custom>,
+        extended?: AssetArchetypeConfig,
+        description?: Translation.Entry,
+        noMirror = false
+    ) {
+        if (!extended) {
+            loadAsset(group, asset, { description, noMirror });
+        } else {
+            const extendedConfig = { [group]: { [asset.Name]: extended } };
+            loadAsset(group, asset, { extendedConfig, description, noMirror });
+        }
+    }
 
     /**
      * Add an asset with detailed configuration. 
@@ -79,48 +110,17 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param asset The asset definition
      * @param config The asset configuration
      */
-    addAsset(group: CustomGroupName<Custom>, asset: CustomAssetDefinition<Custom>, config: AddAssetConfig): void;
-
-    /**
-     * Add an asset with basic setup.
-     * @param group The asset group
-     * @param asset The asset definition
-     * @param extended Optional extended asset properties
-     * @param description Optional asset name translation
-     * @param noMirror Whether to not add a mirror
-     */
-    addAsset(
-        group: CustomGroupName<Custom>,
-        asset: CustomAssetDefinition<Custom>,
-        extended: AssetArchetypeConfig,
-        description?: Translation.Entry,
-        noMirror?: boolean
-    ): void;
-
-    addAsset (
-        group: CustomGroupName<Custom>,
-        asset: CustomAssetDefinition<Custom>,
-        param3?: AddAssetConfig | AssetArchetypeConfig,
-        description?: Translation.Entry,
-        noMirror = false
-    ) {
-        if (!param3) {
-            loadAsset(group, asset, { description, noMirror });
-        } else if (isAddAssetConfig(param3)) {
-            const config: Parameters<typeof loadAsset>[2] = {
-                description: param3.description,
-                noMirror: param3.noMirror,
-                layerNames: param3.layerNames
-            }
-            if(!isBasicAddAssetConfig(param3)) {
-                config.extendedConfig = { [group]: { [asset.Name]: (param3 as ExtendedAddAssetConfig).extended } };
-                config.assetDialogs = (param3 as ExtendedAddAssetConfig).assetDialogs;
-            }
-            loadAsset(group, asset, config);
-        } else {
-            const extendedConfig = { [group]: { [asset.Name]: param3 } };
-            loadAsset(group, asset, { extendedConfig, description, noMirror });
+    addAssetWithConfig(group: CustomGroupName<Custom>, asset: CustomAssetDefinition<Custom>, config: AddAssetConfig): void{
+        const rConfig: Parameters<typeof loadAsset>[2] = {
+            description: config.description,
+            noMirror: config.noMirror,
+            layerNames: config.layerNames
         }
+        if(isExtendedAddAssetConfig(config)) {
+            rConfig.extendedConfig = { [group]: { [asset.Name]: config.extended } };
+            rConfig.assetDialogs = config.assetDialogs;
+        }
+        loadAsset(group, asset, rConfig);
     }
 
     /**
