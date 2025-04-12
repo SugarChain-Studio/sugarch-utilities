@@ -1,4 +1,4 @@
-import { Translation } from '@sugarch/bc-mod-types';
+import { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
 
 export interface BasicAddAssetConfig {
     /** Asset name translation (non optional) */
@@ -25,3 +25,5 @@ export function isAddAssetConfig (value: AddAssetConfig | AssetArchetypeConfig |
 export function isExtendedAddAssetConfig (value: AddAssetConfig): value is ExtendedAddAssetConfig {
     return 'extended' in value && 'assetDialogs' in value;
 }
+
+export type GroupedDialogs<Custom extends string = AssetGroupBodyName> = Translation.CustomRecord<CustomGroupName<Custom>, Record<string, Record<string, string>>>

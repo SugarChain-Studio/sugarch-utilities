@@ -4,6 +4,7 @@ import { getCustomMirrorGroups, resolvePreimage } from './mirrorGroup';
 import type { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
 import { translateDialog, translateEntry, translateGroupedEntries } from './entryUtils';
 import { globalPipeline } from '@sugarch/bc-mod-utility';
+import { GroupedDialogs } from './types';
 
 /**
  * Resolve translation entry by language
@@ -22,6 +23,25 @@ export function solidfyEntry (entryItem: Translation.Entry | undefined, fallback
     if (!entryItem) return { CN: fallback };
     if (entryItem['CN']) return entryItem as Translation.SolidEntry;
     return { ...entryItem, CN: fallback };
+}
+
+/**
+ * Lang-Group-Asset-Layer-String 
+ * Lang-Layer-String
+ * @param group
+ * @param asset
+ * @param groupedEntry
+ */
+export function pickDialogs<Custom extends string = AssetGroupBodyName> (
+    group: CustomGroupName<Custom>,
+    asset: string,
+    groupedLayerNames: GroupedDialogs<Custom>,
+): Translation.Dialog {
+    const ret: Translation.Dialog = {};
+    for (const [lang, entries] of Object.entries(groupedLayerNames)) {
+        if (entries[group]?.[asset]) ret[lang as ServerChatRoomLanguage] = entries[group][asset];
+    }
+    return ret;
 }
 
 /**

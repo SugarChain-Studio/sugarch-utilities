@@ -2,7 +2,7 @@ import { loadAsset, loadExtendedConfig, modifyAsset, modifyAssetLayers, modifyGr
 import { loadGroup, mirrorGroup } from './groupUtils';
 import { pushAfterLoad, runSetupLoad } from './loadSchedule';
 import { addCustomDialog, setupCustomDialog } from './dialog';
-import { pickEntry, setupEntries } from './entries';
+import { pickEntry, pickDialogs, setupEntries } from './entries';
 import { customAssetGetStrict, enableCustomAssets, getCustomAssets } from './customStash';
 import { addLayerNames, setupLayerNameLoad } from './layerNames';
 import { enableValidation, FromModUserTestFunc } from './validation';
@@ -18,7 +18,7 @@ import type {
 } from '@sugarch/bc-mod-types';
 import { ImageMapping } from '@sugarch/bc-image-mapping';
 import { setLogger } from './logger';
-import { AddAssetConfig, isExtendedAddAssetConfig } from './types';
+import { AddAssetConfig, GroupedDialogs, isExtendedAddAssetConfig } from './types';
 
 export type {
     CustomAssetDefinition,
@@ -75,25 +75,25 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
-     * Add an asset with detailed configuration. 
-     * 
+     * Add an asset with detailed configuration.
+     *
      * ---
-     * You should provide `description` and `layerNames` for the asset, for example: 
+     * You should provide `description` and `layerNames` for the asset, for example:
      *   ```ts
-     *   addAsset(group, assetDef, { 
-     *     description: { EN: 'Asset Name' }, 
-     *     layerNames: { EN: { 'Layer1': 'Layer1 Name' } }, 
+     *   addAsset(group, assetDef, {
+     *     description: { EN: 'Asset Name' },
+     *     layerNames: { EN: { 'Layer1': 'Layer1 Name' } },
      *   })
      *   ```
      * Note that typical layer name and color group name key is like `"ItemTorsoMyAssetLayer1"`, in the config above, you should use `"Layer1"` as the key,
      * the prefix group name `"ItemTorso"` and asset name `"MyAsset"` will be automatically added.
-     * 
+     *
      * ---
-     * If the asset is ItemTorso or ItemTorso2, a mirror will be automatically added. This behaviour can be turned off by 
+     * If the asset is ItemTorso or ItemTorso2, a mirror will be automatically added. This behaviour can be turned off by
      * ```ts
      * addAsset(group, assetDef, { noMirror : true })
      * ```
-     * 
+     *
      * ---
      * If you want to add ExtendedConfig to the asset, you can do it like this:
      * ```ts
@@ -103,24 +103,49 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * })
      * ```
      *   Note that typical asset dialog key is like `"ItemTorsoMyAssetOptiona1"`, in the config above, you should use `"Optiona1"` as the key,
-     *   the prefix group name `"ItemTorso"` and asset name `"MyAsset"` will be automatically added. 
-     * 
-     * 
+     *   the prefix group name `"ItemTorso"` and asset name `"MyAsset"` will be automatically added.
+     *
+     *
      * @param group The asset group
      * @param asset The asset definition
      * @param config The asset configuration
      */
-    addAssetWithConfig(group: CustomGroupName<Custom>, asset: CustomAssetDefinition<Custom>, config: AddAssetConfig): void{
+    addAssetWithConfig (
+        group: CustomGroupName<Custom>,
+        asset: CustomAssetDefinition<Custom>,
+        config: AddAssetConfig
+    ): void {
         const rConfig: Parameters<typeof loadAsset>[2] = {
             description: config.description,
             noMirror: config.noMirror,
-            layerNames: config.layerNames
-        }
-        if(isExtendedAddAssetConfig(config)) {
+            layerNames: config.layerNames,
+        };
+        if (isExtendedAddAssetConfig(config)) {
             rConfig.extendedConfig = { [group]: { [asset.Name]: config.extended } };
             rConfig.assetDialogs = config.assetDialogs;
         }
         loadAsset(group, asset, rConfig);
+    }
+
+    /**
+     * Add many assets to many groups
+     * @param groupedAssets Assets to be added, organized by group
+     * @param descriptions Asset name translations, organized by group
+     * @param groupedLayerNames Layer names, organized by group
+     */
+    addGroupedAssetsWithConfig (
+        groupedAssets: CustomGroupedAssetDefinitions<Custom>,
+        descriptions: Translation.GroupedEntries,
+        groupedLayerNames: GroupedDialogs<Custom>,
+    ) {
+        for (const [group, assets] of Object.entries(groupedAssets)) {
+            for (const asset of assets) {
+                const groupName = group as CustomGroupName<Custom>;
+                const description = pickEntry(groupName, asset.Name, descriptions);
+                const layerNames = pickDialogs(groupName, asset.Name, groupedLayerNames);
+                loadAsset(groupName, asset, { description, layerNames });
+            }
+        }
     }
 
     /**
