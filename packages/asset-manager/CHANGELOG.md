@@ -1,5 +1,13 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.2
+
+### Patch Changes
+
+-   a383ae8: Add a `addGroupedAssetsWithConfig` as a grouped flavor of `addAssetWithConfig`
+-   b7501b7: Fix switching language result in missing description
+-   4c99fd5: Fix layer name resolve
+
 ## 0.5.1
 
 ### Patch Changes
