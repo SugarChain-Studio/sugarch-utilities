@@ -68,7 +68,7 @@ function createLayerNameResolver (entries?: Translation.Dialog) {
             resolver[key][lang as ServerChatRoomLanguage] = value;
         }
     }
-    return (layerName: string) => resolver[layerName] || layerName;
+    return (layerName: string) => resolver[layerName] || { CN: layerName };
 }
 
 /**
