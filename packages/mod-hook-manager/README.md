@@ -85,6 +85,7 @@ HookManager.afterInit(() => {
 ### `afterPlayerLogin`
 
 The `afterPlayerLogin` method allows you to add callbacks that will be executed after the player logs in. If the player is already logged in, the callback will be executed immediately.
+The callback will not be invoked when the player is disconnected and reconnected.
 
 ```typescript
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
