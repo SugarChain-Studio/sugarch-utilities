@@ -10,6 +10,7 @@ type Handler = {
     mode: EventMode;
     activity: string;
     listener: (...args: EventArgType) => void;
+    once: boolean;
 };
 
 type HandlerRunner = (modes: EventMode[], activityName: string, ...args: EventArgType) => void;
@@ -73,9 +74,22 @@ class _ActivityEvents<T extends string = ActivityName> {
     }
 
     private emit (modes: EventMode[], activityName: string, ...args: EventArgType) {
-        this._handlers
-            .filter(handler => activityName === handler.activity && modes.includes(handler.mode))
-            .forEach(async handler => handler.listener(...args));
+        let nHandlers = [];
+
+        for(const handler of this._handlers) {
+            if (activityName === handler.activity && modes.includes(handler.mode)) {
+                try {
+                    handler.listener(...args);
+                } catch (e) {
+                    console.error(`Error in activity event listener for ${handler.activity} (${handler.mode}):`, e);
+                }
+                if(!handler.once) {
+                    nHandlers.push(handler);
+                }
+            } else {
+                nHandlers.push(handler);
+            }
+        }
     }
 
     /**
@@ -85,7 +99,17 @@ class _ActivityEvents<T extends string = ActivityName> {
      * @param listener - The listener function
      */
     on<U extends EventMode> (mode: U, activity: T, listener: (...args: EventArgType) => void): void {
-        this._handlers.push({ mode, activity, listener });
+        this._handlers.push({ mode, activity, listener, once: false });
+    }
+
+    /**
+     * Register an event listener
+     * @param mode - The event mode to listen to
+     * @param activity - The activity name to listen to
+     * @param listener - The listener function
+     */
+    once<U extends EventMode> (mode: U, activity: T, listener: (...args: EventArgType) => void): void {
+        this._handlers.push({ mode, activity, listener, once: true });
     }
 
     /**
