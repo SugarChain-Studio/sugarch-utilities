@@ -54,7 +54,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     addAsset(
         group: CustomGroupName<Custom>,
         asset: CustomAssetDefinition<Custom>,
-        extended: AssetArchetypeConfig,
+        extended?: AssetArchetypeConfig,
         description?: Translation.Entry,
         noMirror?: boolean
     ): void;

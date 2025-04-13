@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.3
+
+### Patch Changes
+
+-   The extended config in params of addAsset should be optional
+
 ## 0.5.2
 
 ### Patch Changes
