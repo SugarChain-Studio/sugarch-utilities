@@ -208,12 +208,13 @@ export function setupEntries (): void {
     if (assetCache && assetCache.loaded && (TranslationLanguage === 'EN' || assetCache.get('Bloated') !== 'Bloated')) {
         // Already loaded, directly load descriptions
         loadAssetEntries();
-    } else {
-        // Load CSV descriptions
-        HookManager.progressiveHook('AssetBuildDescription').next().inject(loadAssetEntries);
-        // Translation loading phase
-        HookManager.progressiveHook('TranslationAssetProcess').next().inject(loadAssetEntries);
     }
+    
+    // Load CSV descriptions
+    HookManager.progressiveHook('AssetBuildDescription').next().inject(loadAssetEntries);
+    // Translation loading phase
+    HookManager.progressiveHook('TranslationAssetProcess').next().inject(loadAssetEntries);
+    
 
     globalPipeline<(dictionary: DictionaryBuilder, PrevItem: Item, NextItem: Item) => void>(
         'CustomDialogInject',
