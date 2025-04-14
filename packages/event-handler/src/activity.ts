@@ -22,7 +22,7 @@ type HandlerRunner = (modes: EventMode[], activityName: string, ...args: EventAr
 function makeChatRoomMsgHandler (runner: HandlerRunner): ChatRoomMessageHandler {
     return {
         Description: `SugarChain Activity Handler v${version}`,
-        Priority: 290, // must between 210 (arousal processing) and 300 (sensory deprivation)
+        Priority: 290, // must be between 210 (arousal processing) and 300 (sensory deprivation)
         // eslint-disable-next-line @typescript-eslint/naming-convention
         Callback: (data, sender, msg, metadata) => {
             if (data.Type !== 'Activity' || !data.Dictionary || !metadata) return false;
@@ -63,6 +63,7 @@ function makeChatRoomMsgHandler (runner: HandlerRunner): ChatRoomMessageHandler 
         },
     };
 }
+
 class _ActivityEvents<T extends string = ActivityName> {
     private _handlers: Handler[] = [];
 
@@ -74,22 +75,27 @@ class _ActivityEvents<T extends string = ActivityName> {
     }
 
     private emit (modes: EventMode[], activityName: string, ...args: EventArgType) {
-        let nHandlers = [];
+        const cpListeners: Handler[] = [...this._handlers];
+        const nHandlers: Handler[] = [];
 
-        for(const handler of this._handlers) {
+        for (const handler of cpListeners) {
             if (activityName === handler.activity && modes.includes(handler.mode)) {
                 try {
                     handler.listener(...args);
                 } catch (e) {
                     console.error(`Error in activity event listener for ${handler.activity} (${handler.mode}):`, e);
                 }
-                if(!handler.once) {
+
+                if (!handler.once) {
                     nHandlers.push(handler);
                 }
             } else {
                 nHandlers.push(handler);
             }
         }
+
+        // Update handlers after iteration
+        this._handlers = nHandlers;
     }
 
     /**
@@ -103,7 +109,7 @@ class _ActivityEvents<T extends string = ActivityName> {
     }
 
     /**
-     * Register an event listener
+     * Register a one-time event listener
      * @param mode - The event mode to listen to
      * @param activity - The activity name to listen to
      * @param listener - The listener function
@@ -114,17 +120,28 @@ class _ActivityEvents<T extends string = ActivityName> {
 
     /**
      * Unregister an event listener
+     * If the listener is undefined, all handlers for the specified mode and activity will be removed.
      * @param mode - The event mode to stop listening to
      * @param activity - The activity name to stop listening to
-     * @param listener - The listener function
+     * @param listener - The listener function (optional)
      */
-    off<U extends EventMode> (mode: U, activity: T, listener: (...args: EventArgType) => void): void {
-        this._handlers = this._handlers.filter(handler => handler.mode !== mode || handler.activity !== activity || handler.listener !== listener);
+    off<U extends EventMode> (mode: U, activity: T, listener?: (...args: EventArgType) => void): void {
+        if (!listener) {
+            // Remove all handlers for the specified mode and activity
+            this._handlers = this._handlers.filter(handler => handler.mode !== mode || handler.activity !== activity);
+        } else {
+            // Remove only the specified listener
+            this._handlers = this._handlers.filter(
+                handler => handler.mode !== mode || handler.activity !== activity || handler.listener !== listener
+            );
+        }
     }
 }
 
 /**
  * Chat handler events emitter, this event is emitted from a message handler in the last process order.
- * Thus hidden messages, either by filter setting or sensory deprivation will not be emitted.
+ * Thus hidden messages, either by filter setting or sensory deprivation, will not be emitted.
+ *
+ * The version number is used to ensure that different versions of the global variable are independent.
  */
-export const ActivityEvents = Globals.get(`ActivityEvents@${version}`, ()=> new _ActivityEvents());
+export const ActivityEvents = Globals.get(`ActivityEvents@${version}`, () => new _ActivityEvents());

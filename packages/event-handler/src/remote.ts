@@ -31,6 +31,7 @@ import { ChatRoomEvents } from './chat';
  * @param target - Optional target member number for private events
  */
 function sendEvent (event: string, arg: object, target?: number) {
+    if (!ServerPlayerIsInChatRoom()) return;
     ServerSend('ChatRoomChat', {
         Type: 'Hidden',
         ...(target ? { Target: target } : {}),
@@ -42,20 +43,30 @@ function sendEvent (event: string, arg: object, target?: number) {
 // Set of prefixes that cannot be used for custom events to prevent conflicts
 const invalidPrefix = new Set(['OwnerRule', 'LoverRule', 'PayQuest', 'ChatRoomBot', 'Pandora', 'PortalLink']);
 
+type ValidTypes = object | string;
+
 /**
  * Type utility to extract event names from an event types object
  * @template T - The event types object
  */
-type EventNames<T extends object> = keyof T extends string ? keyof T : never;
+type EventNames<T extends ValidTypes> = T extends string ? T : keyof T;
 
 /**
  * Type utility to extract argument types for a specific event
  * @template T - The event types object
  * @template K - The specific event key
  */
-type EventArgs<T extends Object, K extends keyof T> = {
-    [K in keyof T]: T[K] extends (...args: any[]) => void ? Parameters<T[K]> : T[K] extends any[] ? T[K] : never;
-}[K];
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type EventArgs<T extends ValidTypes, K extends keyof any> = T extends string
+    ? any[]
+    : K extends keyof T
+    ? T[K] extends (...args: any[]) => void
+        ? Parameters<T[K]>
+        : T[K] extends any[]
+        ? T[K]
+        : never
+    : never;
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 /**
  * Event message information
@@ -69,26 +80,30 @@ interface EventInfo {
  * Type for event listener functions
  * @template T - The event types object
  * @template K - The specific event key
+ * @param info - Information about the event sender
+ * @param args - The arguments that passed to the event listener when the event is emitted
  */
-type EventListener<T extends object, K extends keyof T> = (info:EventInfo, ...args: EventArgs<T, K>) => void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type EventListener<T extends ValidTypes, K extends keyof any> = (info: EventInfo, ...args: EventArgs<T, K>) => void;
 
 /**
  * Internal interface for storing event listeners
  */
 interface _EventItem {
     /** The event listener function */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fn: (...args: any[]) => void;
     /** Whether this is a one-time listener */
     once: boolean;
 }
 
+const EVENT_SEPARATOR = ':';
+
 /**
  * A class for handling remote events through the chat room system
  * @template EventTypes - Object defining the event names and their argument types
  */
-export class ChatRoomRemoteEventEmitter<EventTypes extends object> {
-    /** Prefix used to identify events from this emitter */
-    private prefix: string;
+export class ChatRoomRemoteEventEmitter<EventTypes extends ValidTypes = string> {
     /** Map of registered event listeners */
     private _events: Record<string, _EventItem[]> = {};
 
@@ -97,8 +112,7 @@ export class ChatRoomRemoteEventEmitter<EventTypes extends object> {
      * @param prefix - Unique prefix to identify events from this emitter
      * @throws Error if the prefix is in the invalid list
      */
-    constructor (prefix: string) {
-        this.prefix = prefix;
+    constructor (readonly prefix: string) {
         if (invalidPrefix.has(prefix)) {
             throw new Error(`Invalid remote event prefix: ${prefix}`);
         }
@@ -108,58 +122,78 @@ export class ChatRoomRemoteEventEmitter<EventTypes extends object> {
     }
 
     /**
-     * Attempts to invoke event listeners for a received message
-     * @param data - The chat room message data
+     * Attempts to invoke event listeners for a received message.
+     * @param data - The chat room message data.
+     *
+     * This method:
+     * - Extracts the event name from the message content.
+     * - Parses the event arguments from the message dictionary.
+     * - Invokes all registered listeners for the event.
+     * - Removes one-time listeners after invocation.
      */
     private tryInvoke (data: ServerChatRoomMessage) {
-        // Extract the event name by removing the prefix
-        const event = data.Content.slice(this.prefix.length);
-        // Find the event arguments in the message dictionary
-        const argData = data?.Dictionary?.find(item => (item as any).rEventArg) as unknown as { rEventArg: string };
-        if (!argData) return;
+        // Ensure the message content starts with the expected prefix
+        if (!data || !data.Content || !data.Content.startsWith(`${this.prefix}${EVENT_SEPARATOR}`)) return;
 
+        // Extract the event name by removing the prefix and separator
+        const event = data.Content.slice(this.prefix.length + 1);
+        if (!event || !this._events[event]) return;
+
+        // Find the event arguments in the message dictionary
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const argData = data?.Dictionary?.find(item => (item as any).rEventArg) as unknown as { rEventArg: string };
+        if (!argData || typeof argData.rEventArg !== 'string') return;
+
+        // Find the sender and their character
         const sender = data.Sender;
         const senderCharacter = ChatRoomCharacter.find(c => c.MemberNumber === sender);
-        if (!sender || !senderCharacter) return;
+        if (!sender || !senderCharacter) {
+            console.error(`Sender character not found for member number: ${sender}`);
+            return;
+        }
+
+        // Create event information object
         const info: EventInfo = {
             sender,
             senderCharacter,
         };
 
+        let eArgs;
         try {
             // Parse the event arguments
-            const eArgs = JSON.parse(argData.rEventArg);
-            if (eArgs && Array.isArray(eArgs)) {
-                // Create a copy of listeners to avoid modification during iteration
-                let cpListeners: _EventItem[] = [];
-                if (this._events[event]) {
-                    cpListeners = this._events[event].slice();
-                }
-
-                // Keep track of listeners to retain after invocation
-                let remainedListeners: _EventItem[] = [];
-                for (const listener of cpListeners) {
-                    try {
-                        // Invoke the listener with the event arguments
-                        listener.fn(info, ...eArgs);
-                    } catch (e) {
-                        console.error(`Error invoking listener for event ${event}:`, e);
-                    }
-                    // Keep non-once listeners
-                    if (!listener.once) {
-                        remainedListeners.push(listener);
-                    }
-                }
-
-                // Update or clean up the listeners list
-                if (remainedListeners.length === 0) {
-                    delete this._events[event];
-                } else {
-                    this._events[event] = remainedListeners;
-                }
+            eArgs = JSON.parse(argData.rEventArg);
+            if (!eArgs || !Array.isArray(eArgs)) {
+                console.error('Invalid event arguments:', eArgs);
+                return;
             }
         } catch (e) {
             console.error('Error parsing event args:', e);
+            return;
+        }
+
+        // Create a copy of listeners to avoid modification during iteration
+        const cpListeners: _EventItem[] = [...this._events[event]];
+
+        // Keep track of listeners to retain after invocation
+        const remainedListeners: _EventItem[] = [];
+        for (const listener of cpListeners) {
+            try {
+                // Invoke the listener with the event arguments
+                listener.fn(info, ...eArgs);
+            } catch (e) {
+                console.error(`Error invoking listener for event ${event}:`, e);
+            }
+            // Keep non-once listeners
+            if (!listener.once) {
+                remainedListeners.push(listener);
+            }
+        }
+
+        // Update or clean up the listeners list
+        if (remainedListeners.length === 0) {
+            delete this._events[event];
+        } else {
+            this._events[event] = remainedListeners;
         }
     }
 
@@ -213,25 +247,29 @@ export class ChatRoomRemoteEventEmitter<EventTypes extends object> {
     }
 
     /**
-     * Emits an event to all players in the chat room
-     * @param event - The event name
-     * @param args - The event arguments
+     * Emits an event to all players in the chat room.
+     * @param event - The event name.
+     * @param args - The event arguments.
      */
     emitAll<T extends EventNames<EventTypes>> (event: T, ...args: EventArgs<EventTypes, T>): void {
-        sendEvent(`${this.prefix}${event}`, args);
+        sendEvent(`${this.prefix}${EVENT_SEPARATOR}${event}`, args);
     }
 
     /**
-     * Emits an event to a specific player
-     * @param target - The target character or member number
-     * @param event - The event name
-     * @param args - The event arguments
+     * Emits an event to a specific player.
+     * @param target - The target character or member number.
+     * @param event - The event name.
+     * @param args - The event arguments.
      */
     emit<T extends EventNames<EventTypes>> (
         target: Character | number,
         event: T,
         ...args: EventArgs<EventTypes, T>
     ): void {
-        sendEvent(`${this.prefix}${event}`, args, typeof target === 'number' ? target : target.MemberNumber);
+        sendEvent(
+            `${this.prefix}${EVENT_SEPARATOR}${event}`,
+            args,
+            typeof target === 'number' ? target : target.MemberNumber
+        );
     }
 }
