@@ -1,5 +1,15 @@
 # @sugarch/bc-event-handler
 
+## 0.6.0
+
+### Minor Changes
+
+-   f1cba84: Add `ChatRoomRemoteEventEmitter` class for handling remote events
+
+### Patch Changes
+
+-   23aa1be: Enhance activity event listener, support `once`.
+
 ## 0.5.4
 
 ### Patch Changes
