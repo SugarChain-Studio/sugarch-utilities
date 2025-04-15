@@ -1,12 +1,12 @@
 # @sugarch/bc-activity-manager
 
-## 1.0.1
+## 0.4.2
 
 ### Patch Changes
 
 -   Enhance addCustomActivity method to accept both single and multiple activities
 
-## 1.0.0
+## 0.4.1
 
 ### Patch Changes
 
