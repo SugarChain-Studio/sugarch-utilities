@@ -109,6 +109,21 @@ export interface CustomActivity<CustomAct extends string = string, CustomPrereq 
         info: ExtItemActivity<CustomAct>
     ) => void;
 
+    /**
+     * An optional function to get the item used in the activity.
+     * @param actor the actor of the activity, always the player
+     * @param acted the activity target
+     * @param targetGroup the target group of the activity
+     * @param info the activity info, an extended version of {@link ItemActivity}
+     * @returns The item used in the activity, or undefined if no item is used.
+     */
+    readonly item?: (
+        actor: Character,
+        acted: Character,
+        targetGroup: AssetItemGroup,
+        info: ExtItemActivity<CustomAct>
+    ) => Item | undefined;
+
     /** The activity name when used on others */
     readonly label?: Translation.ActivityEntry | Translation.Entry;
     /** The dialog when used on others */

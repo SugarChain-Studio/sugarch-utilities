@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.4.3
+
+### Patch Changes
+
+-   Add support for item providers in activity overrides
+
 ## 0.4.2
 
 ### Patch Changes
