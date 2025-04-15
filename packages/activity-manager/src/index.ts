@@ -35,20 +35,23 @@ export class _ActivityManager<CustomAct extends string = string, CustomPrereq ex
      * Add a custom activity
      * @param act - Custom activity definition
      */
-    addCustomActivity (act: CustomActivity<CustomAct, CustomPrereq>): void {
-        const copyAct = { ...act };
-        pushLoad(() => {
-            copyAct.activity.Prerequisite = enlistUnamedPrereq(copyAct.activity.Name, copyAct.activity.Prerequisite);
-            copyAct.activity.ActivityID = -1;
-
-            ActivityFemale3DCG.push(copyAct.activity as Activity);
-            ActivityFemale3DCGOrdering.push(copyAct.activity.Name as ActivityName);
-            addActivityEntry(copyAct);
-            pushHandler(copyAct.activity.Name, copyAct);
-            addCustomActivity(copyAct);
-            addOverrideIfEligible(copyAct);
-            addActivityImageMapping(copyAct.activity, copyAct.useImage);
-        });
+    addCustomActivity (act: CustomActivity<CustomAct, CustomPrereq> | CustomActivity<CustomAct, CustomPrereq>[]): void {
+        if(!Array.isArray(act)) act = [act];
+        for(const activity of act) {
+            const copyAct = { ...activity };
+            pushLoad(() => {
+                copyAct.activity.Prerequisite = enlistUnamedPrereq(copyAct.activity.Name, copyAct.activity.Prerequisite);
+                copyAct.activity.ActivityID = -1;
+    
+                ActivityFemale3DCG.push(copyAct.activity as Activity);
+                ActivityFemale3DCGOrdering.push(copyAct.activity.Name as ActivityName);
+                addActivityEntry(copyAct);
+                pushHandler(copyAct.activity.Name, copyAct);
+                addCustomActivity(copyAct);
+                addOverrideIfEligible(copyAct);
+                addActivityImageMapping(copyAct.activity, copyAct.useImage);
+            });
+        }
     }
 
     /**
@@ -74,7 +77,7 @@ export class _ActivityManager<CustomAct extends string = string, CustomPrereq ex
      * @param acts - Array of custom activities to add
      */
     addCustomActivities (acts: CustomActivity<CustomAct, CustomPrereq>[]): void {
-        acts.forEach(act => this.addCustomActivity(act));
+        this.addCustomActivity(acts);
     }
 
     /**
