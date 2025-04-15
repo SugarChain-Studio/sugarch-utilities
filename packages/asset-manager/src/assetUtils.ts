@@ -34,7 +34,7 @@ function globalFunctionMirror<Custom extends string = AssetGroupBodyName> (
  * @param asset Item definition
  * @param config Additional configuration
  * @param config.extendedConfig Extended configuration
- * @param config.description Display name
+ * @param config.translation Display name
  * @param config.dynamicName Dynamic group name
  * @param config.preimage Preimage group (for mirroring)
  * @param config.noMirror Whether to not add a mirror
@@ -44,14 +44,14 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
     asset: CustomAssetDefinition<Custom>,
     {
         extendedConfig,
-        description,
+        translation,
         dynamicName,
         preimage,
         noMirror,
         layerNames,
         assetDialogs,
     }: {
-        description?: Translation.Entry;
+        translation?: Translation.Entry;
         dynamicName?: CustomGroupName<Custom>;
         layerNames?: Translation.Dialog;
         preimage?: AssetGroup;
@@ -77,7 +77,7 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
         const assetDefRes = AssetResolveCopyConfig.AssetDefinition(assetDef, groupName, ParsedAsset.value);
         if (!assetDefRes) return;
 
-        const solidDesc = solidfyEntry(description, assetDefRes.Name.replace(/_.*?Luzi$/, ''));
+        const solidDesc = solidfyEntry(translation, assetDefRes.Name.replace(/_.*?Luzi$/, ''));
 
         if (getCustomAssets()[groupName]?.[assetDef.Name] !== undefined) {
             console.warn(`[AssetManager] Asset {${groupName}:${assetDef.Name}} already existed!`);

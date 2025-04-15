@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.4
+
+### Patch Changes
+
+-   Rename 'description' parameter to 'translation'
+
 ## 0.5.3
 
 ### Patch Changes

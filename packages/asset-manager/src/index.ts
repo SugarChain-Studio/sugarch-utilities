@@ -48,14 +48,14 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param group The asset group
      * @param asset The asset definition
      * @param extended Optional extended asset properties
-     * @param description Optional asset name translation
+     * @param translation Optional asset name translation
      * @param noMirror Whether to not add a mirror
      */
     addAsset(
         group: CustomGroupName<Custom>,
         asset: CustomAssetDefinition<Custom>,
         extended?: AssetArchetypeConfig,
-        description?: Translation.Entry,
+        translation?: Translation.Entry,
         noMirror?: boolean
     ): void;
 
@@ -63,14 +63,14 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
         group: CustomGroupName<Custom>,
         asset: CustomAssetDefinition<Custom>,
         extended?: AssetArchetypeConfig,
-        description?: Translation.Entry,
+        translation?: Translation.Entry,
         noMirror = false
     ) {
         if (!extended) {
-            loadAsset(group, asset, { description, noMirror });
+            loadAsset(group, asset, { translation, noMirror });
         } else {
             const extendedConfig = { [group]: { [asset.Name]: extended } };
-            loadAsset(group, asset, { extendedConfig, description, noMirror });
+            loadAsset(group, asset, { extendedConfig, translation, noMirror });
         }
     }
 
@@ -78,10 +78,10 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * Add an asset with detailed configuration.
      *
      * ---
-     * You should provide `description` and `layerNames` for the asset, for example:
+     * You should provide `translation` and `layerNames` for the asset, for example:
      *   ```ts
      *   addAsset(group, assetDef, {
-     *     description: { EN: 'Asset Name' },
+     *     translation: { EN: 'Asset Name' },
      *     layerNames: { EN: { 'Layer1': 'Layer1 Name' } },
      *   })
      *   ```
@@ -116,7 +116,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
         config: AddAssetConfig
     ): void {
         const rConfig: Parameters<typeof loadAsset>[2] = {
-            description: config.description,
+            translation: config.translation,
             noMirror: config.noMirror,
             layerNames: config.layerNames,
         };
@@ -130,20 +130,20 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     /**
      * Add many assets to many groups
      * @param groupedAssets Assets to be added, organized by group
-     * @param descriptions Asset name translations, organized by group
+     * @param translations Asset name translations, organized by group
      * @param groupedLayerNames Layer names, organized by group
      */
     addGroupedAssetsWithConfig (
         groupedAssets: CustomGroupedAssetDefinitions<Custom>,
-        descriptions: Translation.GroupedEntries,
+        translations: Translation.GroupedEntries,
         groupedLayerNames: GroupedDialogs<Custom>,
     ) {
         for (const [group, assets] of Object.entries(groupedAssets)) {
             for (const asset of assets) {
                 const groupName = group as CustomGroupName<Custom>;
-                const description = pickEntry(groupName, asset.Name, descriptions);
+                const translation = pickEntry(groupName, asset.Name, translations);
                 const layerNames = pickDialogs(groupName, asset.Name, groupedLayerNames);
-                loadAsset(groupName, asset, { description, layerNames });
+                loadAsset(groupName, asset, { translation, layerNames });
             }
         }
     }
@@ -151,23 +151,23 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     /**
      * Add many assets to many groups
      * @param groupedAssets Many assets!
-     * @param descriptions Many asset name translations!
+     * @param translations Many asset name translations!
      * @param extended Optional extended asset properties
      */
     addGroupedAssets (
         groupedAssets: CustomGroupedAssetDefinitions<Custom>,
-        descriptions?: Translation.GroupedEntries,
+        translations?: Translation.GroupedEntries,
         extended?: ExtendedItemMainConfig
     ) {
         for (const [group, assets] of Object.entries(groupedAssets)) {
             for (const asset of assets) {
                 const groupName = group as CustomGroupName;
-                const description = descriptions && pickEntry(groupName, asset.Name, descriptions);
+                const translation = translations && pickEntry(groupName, asset.Name, translations);
                 const extendedConfig = extended &&
                     extended[groupName]?.[asset.Name] && {
                         [groupName]: { [asset.Name]: extended[groupName][asset.Name] },
                     };
-                loadAsset(groupName, asset, { extendedConfig, description });
+                loadAsset(groupName, asset, { extendedConfig, translation });
             }
         }
     }
@@ -238,20 +238,20 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     /**
      * Add a new body group
      * @param groupDef
-     * @param description
+     * @param translation
      */
-    addGroup (groupDef: CustomGroupDefinition<Custom>, description?: Translation.Entry) {
-        loadGroup(groupDef, { description });
+    addGroup (groupDef: CustomGroupDefinition<Custom>, translation?: Translation.Entry) {
+        loadGroup(groupDef, { translation });
     }
 
     /**
      * Add a new body group by copying configuration from an existing group
      * @param newGroup
      * @param copyFrom
-     * @param description
+     * @param translation
      */
-    addCopyGroup (newGroup: CustomGroupName<Custom>, copyFrom: AssetGroupName, description?: Translation.Entry) {
-        mirrorGroup(newGroup, copyFrom, description);
+    addCopyGroup (newGroup: CustomGroupName<Custom>, copyFrom: AssetGroupName, translation?: Translation.Entry) {
+        mirrorGroup(newGroup, copyFrom, translation);
     }
 
     /**

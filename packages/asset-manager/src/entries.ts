@@ -67,7 +67,7 @@ const customGroupEntries: Translation.CustomRecord<string, string> = {};
 
 export class Entries {
     /**
-     * Set item description (display name)
+     * Set item name (display name)
      * @param group
      * @param asset
      * @param entries
@@ -86,7 +86,7 @@ export class Entries {
     }
 
     /**
-     * Set body group description (display name)
+     * Set body group name (display name)
      * @param group
      * @param entries
      */
@@ -128,7 +128,7 @@ function groupEntryString<Custom extends string = AssetGroupBodyName> (group: Cu
 }
 
 /**
- * Assign a description to an object
+ * Assign a description (display name) to an object
  * @param obj
  * @param desc
  */
@@ -137,16 +137,16 @@ function assignDesc (obj: { Description: string }, desc: string): void {
 }
 
 function loadAssetEntries (): void {
-    // Custom group descriptions
+    // Custom group names
     Object.values(getCustomGroups()).forEach(group => assignDesc(group, groupEntryString(group.Name)));
 
-    // Custom item descriptions
+    // Custom item names
     Object.values(getCustomAssets())
         .map(asset => Object.values(asset))
         .flat()
         .forEach(asset => assignDesc(asset, assetEntryString(asset.Group.Name, asset.Name)));
 
-    // Mirror group descriptions
+    // Mirror group names
     Object.entries(getCustomAssets())
         .map(([group, asset]) => ({
             group: resolvePreimage(group as CustomGroupName),
@@ -199,18 +199,18 @@ export function setupEntries (): void {
 
     // BC has three loading phases:
     // Phase 1: Load assets
-    // Phase 2: Load CSV descriptions
+    // Phase 2: Load CSV descriptions (display names)
     // Phase 3: Load translations (not always performed)
-    // To ensure correct translations, we need to reload descriptions after phases 2 and 3
+    // To ensure correct translations, we need to reload names after phases 2 and 3
 
     const assetCache = TextAllScreenCache.get(AssetStringsPath);
 
     if (assetCache && assetCache.loaded && (TranslationLanguage === 'EN' || assetCache.get('Bloated') !== 'Bloated')) {
-        // Already loaded, directly load descriptions
+        // Already loaded, directly load names
         loadAssetEntries();
     }
     
-    // Load CSV descriptions
+    // Load CSV descriptions (display names)
     HookManager.progressiveHook('AssetBuildDescription').next().inject(loadAssetEntries);
     // Translation loading phase
     HookManager.progressiveHook('TranslationAssetProcess').next().inject(loadAssetEntries);

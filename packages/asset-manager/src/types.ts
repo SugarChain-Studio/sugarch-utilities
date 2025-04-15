@@ -2,7 +2,7 @@ import { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
 
 export interface BasicAddAssetConfig {
     /** Asset name translation (non optional) */
-    description: Translation.Entry;
+    translation: Translation.Entry;
     /** Asset layer and color groups translation */
     layerNames: Translation.Dialog;
     /** Whether to not add this asset to mirrored groups */
@@ -19,7 +19,7 @@ export type ExtendedAddAssetConfig = BasicAddAssetConfig & {
 export type AddAssetConfig = BasicAddAssetConfig | ExtendedAddAssetConfig;
 
 export function isAddAssetConfig (value: AddAssetConfig | AssetArchetypeConfig | undefined): value is AddAssetConfig {
-    return !!value && typeof value === 'object' && 'description' in value;
+    return !!value && typeof value === 'object' && 'translation' in value;
 }
 
 export function isExtendedAddAssetConfig (value: AddAssetConfig): value is ExtendedAddAssetConfig {

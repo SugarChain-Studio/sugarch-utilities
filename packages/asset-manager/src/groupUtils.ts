@@ -8,26 +8,26 @@ import type { CustomAssetDefinition, CustomGroupDefinition, CustomGroupName, Tra
 
 /**
  * Register a custom group
- * @param groupDef
- * @param param
- * @param param.description
+ * @param groupDef Group definition
+ * @param param 
+ * @param param.translation
  * @param param.dynamicName
  * @param param.preimage
  */
 export function loadGroup<Custom extends string = AssetGroupBodyName> (
     groupDef: CustomGroupDefinition<Custom>,
     {
-        description,
+        translation,
         dynamicName,
         preimage,
     }: {
-        description?: Translation.Entry;
+        translation?: Translation.Entry;
         dynamicName?: CustomGroupName<Custom>;
         preimage?: AssetGroup;
     } = {}
 ) {
     pushGroupLoad(() => {
-        const solidDesc = solidfyEntry(description, groupDef.Group.replace(/_.*?Luzi$/, ''));
+        const solidDesc = solidfyEntry(translation, groupDef.Group.replace(/_.*?Luzi$/, ''));
         customGroupAdd('Female3DCG', groupDef as AssetGroupDefinition).then(grp => {
             grp.Description = resolveEntry(solidDesc);
             if (dynamicName) grp.DynamicGroupName = dynamicName as AssetGroupName;
@@ -55,12 +55,12 @@ const missingGroup = new Set<CustomGroupName>();
  * Mirror a group configuration to create a new group based on an existing one
  * @param newGroup
  * @param copyFrom
- * @param description
+ * @param translation
  */
 export function mirrorGroup<Custom extends string = AssetGroupBodyName> (
     newGroup: CustomGroupName<Custom>,
     copyFrom: CustomGroupName,
-    description?: Translation.Entry
+    translation?: Translation.Entry
 ) {
     const wk = () => {
         const fromDef = AssetFemale3DCG.find(def => def.Group === copyFrom);
@@ -82,7 +82,7 @@ export function mirrorGroup<Custom extends string = AssetGroupBodyName> (
 
         registerMirror(copyFrom as CustomGroupName<Custom>, newGroup);
 
-        const soldDesc = solidfyEntry(description, newGroup.replace(/_.*?Luzi$/, ''));
+        const soldDesc = solidfyEntry(translation, newGroup.replace(/_.*?Luzi$/, ''));
 
         loadGroup(
             {
@@ -92,7 +92,7 @@ export function mirrorGroup<Custom extends string = AssetGroupBodyName> (
                 Random: false,
             } as CustomGroupDefinition,
             {
-                description: soldDesc,
+                translation: soldDesc,
                 dynamicName: fromDef.DynamicGroupName || fromDef.Group,
                 preimage: fromGrp,
             }
