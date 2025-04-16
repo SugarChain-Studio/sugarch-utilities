@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-types
 
+## 0.6.1
+
+### Patch Changes
+
+-   rename translation-related functions and types for clarity
+
 ## 0.6.0
 
 ### Minor Changes

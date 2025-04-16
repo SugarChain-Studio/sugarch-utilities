@@ -1,5 +1,15 @@
 # @sugarch/bc-activity-manager
 
+## 0.4.4
+
+### Patch Changes
+
+-   rename translation-related functions and types for clarity
+-   Updated dependencies
+    -   @sugarch/bc-mod-types@0.6.1
+    -   @sugarch/bc-event-handler@0.6.1
+    -   @sugarch/bc-mod-hook-manager@0.2.14
+
 ## 0.4.3
 
 ### Patch Changes

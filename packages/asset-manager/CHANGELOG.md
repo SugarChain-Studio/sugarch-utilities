@@ -1,5 +1,14 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.5
+
+### Patch Changes
+
+-   rename translation-related functions and types for clarity
+-   Updated dependencies
+    -   @sugarch/bc-mod-types@0.6.1
+    -   @sugarch/bc-mod-hook-manager@0.2.14
+
 ## 0.5.4
 
 ### Patch Changes
