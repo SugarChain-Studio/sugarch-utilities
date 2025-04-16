@@ -64,7 +64,7 @@ AssetManager.init(() => {
 
 The `AssetManager` class provides a set of methods to manage assets in Bondage Club. Below is a detailed description of each method:
 
-### `addAsset(group: CustomGroupName, asset: CustomAssetDefinition, extended?, description?, noMirror = false): void`
+### `addAsset(group: CustomGroupName, asset: CustomAssetDefinition, extended?, translation?, noMirror = false): void`
 
 Adds an asset to a specific group. If the asset belongs to `ItemTorso` or `ItemTorso2`, a mirror will be automatically added.
 
@@ -72,19 +72,46 @@ Adds an asset to a specific group. If the asset belongs to `ItemTorso` or `ItemT
   - `group`: The asset group name.
   - `asset`: The asset definition.
   - `extended` (optional): Extended asset properties.
-  - `description` (optional): Translated name of the asset.
+  - `translation` (optional): Translated name of the asset.
   - `noMirror` (default `false`): Whether to disable automatic mirroring.
 
 ---
 
-### `addGroupedAssets(groupedAssets: CustomGroupedAssetDefinitions, descriptions?, extended?): void`
+### `addAssetWithConfig(group: CustomGroupName, asset: CustomAssetDefinition, config: AddAssetConfig): void`
+
+Adds an asset with detailed configuration.
+
+- **Parameters**:
+  - `group`: The asset group name.
+  - `asset`: The asset definition.
+  - `config`: The asset configuration, including:
+    - `translation`: Translated name of the asset.
+    - `noMirror`: Whether to disable automatic mirroring.
+    - `layerNames`: Custom layer names.
+    - `extended`: Extended asset properties.
+    - `assetStrings`: Custom asset strings.
+
+---
+
+### `addGroupedAssets(groupedAssets: CustomGroupedAssetDefinitions, translations?, extended?): void`
 
 Adds multiple assets to multiple groups.
 
 - **Parameters**:
   - `groupedAssets`: A mapping of groups to their respective assets.
-  - `descriptions` (optional): Translations for asset names.
+  - `translations` (optional): Translations for asset names.
   - `extended` (optional): Extended asset properties.
+
+---
+
+### `addGroupedAssetsWithConfig(groupedAssets: CustomGroupedAssetDefinitions, translations, groupedLayerNames): void`
+
+Adds multiple assets to multiple groups with detailed configuration.
+
+- **Parameters**:
+  - `groupedAssets`: A mapping of groups to their respective assets.
+  - `translations`: Translations for asset names.
+  - `groupedLayerNames`: Layer names grouped by language.
 
 ---
 
@@ -128,12 +155,12 @@ Modifies a body group's properties.
 
 ---
 
-### `addCustomDialog(dialog: Translation.Dialog): void`
+### `addCustomAssetString(assetStrings: Translation.String): void`
 
-Adds a custom dialog.
+Adds custom asset strings.
 
 - **Parameters**:
-  - `dialog`: The dialog definition.
+  - `assetStrings`: The custom asset strings.
 
 ---
 
@@ -146,28 +173,28 @@ Adds custom image mappings.
 
 ---
 
-### `addGroup(groupDef: CustomGroupDefinition, description?): void`
+### `addGroup(groupDef: CustomGroupDefinition, translation?): void`
 
 Adds a new body group.
 
 - **Parameters**:
   - `groupDef`: The group definition.
-  - `description` (optional): Translated name of the group.
+  - `translation` (optional): Translated name of the group.
 
 ---
 
-### `addCopyGroup(newGroup: CustomGroupName, copyFrom: AssetGroupName, description?): void`
+### `addCopyGroup(newGroup: CustomGroupName, copyFrom: AssetGroupName, translation?): void`
 
 Adds a new body group by copying configuration from an existing group.
 
 - **Parameters**:
   - `newGroup`: The new group name.
   - `copyFrom`: The existing group to copy from.
-  - `description` (optional): Translated name of the new group.
+  - `translation` (optional): Translated name of the new group.
 
 ---
 
-### `addLayerNames(group: CustomGroupName, assetDef: CustomAssetDefinition, entries: Translation.CustomRecord): void`
+### `addLayerNames(group: CustomGroupName, assetDef: CustomAssetDefinition, entries: Translation.String): void`
 
 Adds custom layer names based on the asset definition.
 
@@ -239,8 +266,6 @@ Sets the logger for the asset manager.
 Retypes the `AssetManager` to customize body group names and ensure type safety.
 
 - **Returns**: A retyped `AssetManager` instance.
-
----
 
 ## Detailed Example
 
