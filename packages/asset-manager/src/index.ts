@@ -1,8 +1,8 @@
 import { loadAsset, loadExtendedConfig, modifyAsset, modifyAssetLayers, modifyGroup } from './assetUtils';
 import { loadGroup, mirrorGroup } from './groupUtils';
 import { pushAfterLoad, runSetupLoad } from './loadSchedule';
-import { addCustomDialog, setupCustomDialog } from './dialog';
-import { pickEntry, pickDialogs, setupEntries } from './entries';
+import { addCustomAssetString, setupCustomAssetString } from './dialog';
+import { pickEntry, pickStrings, setupEntries } from './entries';
 import { customAssetGetStrict, enableCustomAssets, getCustomAssets } from './customStash';
 import { addLayerNames, setupLayerNameLoad } from './layerNames';
 import { enableValidation, FromModUserTestFunc } from './validation';
@@ -18,7 +18,7 @@ import type {
 } from '@sugarch/bc-mod-types';
 import { ImageMapping } from '@sugarch/bc-image-mapping';
 import { setLogger } from './logger';
-import { AddAssetConfig, GroupedDialogs, isExtendedAddAssetConfig } from './types';
+import { AddAssetConfig } from './types';
 
 export type {
     CustomAssetDefinition,
@@ -99,7 +99,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * ```ts
      * addAsset(group, assetDef, {
      *   extended: { Archetype: ExtendedArchetype.MODULAR, , ... }, // Extended asset properties
-     *   customDialogs: { EN : { "SelectBase" : "...", "ModuleM1": "...", ...  } }, // Asset custom dialogs translation
+     *   customStrings: { EN : { "SelectBase" : "...", "ModuleM1": "...", ...  } }, // Asset custom asset string translation
      * })
      * ```
      *   Note that typical asset dialog key is like `"ItemTorsoMyAssetOptiona1"`, in the config above, you should use `"Optiona1"` as the key,
@@ -119,11 +119,9 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
             translation: config.translation,
             noMirror: config.noMirror,
             layerNames: config.layerNames,
+            ...(config.extended ? { extendedConfig: { [group]: { [asset.Name]: config.extended } } } : {}),
+            assetStrings: config.assetStrings ?? config.assetDialogs,
         };
-        if (isExtendedAddAssetConfig(config)) {
-            rConfig.extendedConfig = { [group]: { [asset.Name]: config.extended } };
-            rConfig.assetDialogs = config.assetDialogs;
-        }
         loadAsset(group, asset, rConfig);
     }
 
@@ -136,13 +134,13 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     addGroupedAssetsWithConfig (
         groupedAssets: CustomGroupedAssetDefinitions<Custom>,
         translations: Translation.GroupedEntries,
-        groupedLayerNames: GroupedDialogs<Custom>,
+        groupedLayerNames: Translation.GroupedAssetStrings<Custom>,
     ) {
         for (const [group, assets] of Object.entries(groupedAssets)) {
             for (const asset of assets) {
                 const groupName = group as CustomGroupName<Custom>;
                 const translation = pickEntry(groupName, asset.Name, translations);
-                const layerNames = pickDialogs(groupName, asset.Name, groupedLayerNames);
+                const layerNames = pickStrings(groupName, asset.Name, groupedLayerNames);
                 loadAsset(groupName, asset, { translation, layerNames });
             }
         }
@@ -213,11 +211,21 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
+     * Add custom asset strings. If it contains ItemTorso or ItemTorso2, a mirror will be automatically added.
+     * @param dialog
+     */
+    addCustomAssetString (assetStrings: Translation.String) {
+        addCustomAssetString(assetStrings);
+    }
+
+    /**
+     * @deprecated Use `addCustomAssetString` instead
+     * 
      * Add custom dialog. If it contains ItemTorso or ItemTorso2, a mirror will be automatically added.
      * @param dialog
      */
     addCustomDialog (dialog: Translation.Dialog) {
-        addCustomDialog(dialog);
+        addCustomAssetString(dialog);
     }
 
     /**
@@ -263,7 +271,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     addLayerNames (
         group: CustomGroupName<Custom>,
         assetDef: CustomAssetDefinition<Custom>,
-        entries: Translation.Dialog
+        entries: Translation.String
     ) {
         addLayerNames(group, assetDef, { entries });
     }
@@ -306,7 +314,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      */
     init (componentSetup: FuncWork) {
         // Initialize all functions, order doesn't matter much
-        setupCustomDialog();
+        setupCustomAssetString();
         setupEntries();
         setupLayerNameLoad();
 

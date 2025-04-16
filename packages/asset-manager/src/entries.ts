@@ -2,9 +2,8 @@ import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { checkItemCustomed, getCustomAssets, getCustomGroups } from './customStash';
 import { getCustomMirrorGroups, resolvePreimage } from './mirrorGroup';
 import type { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
-import { translateDialog, translateEntry, translateGroupedEntries } from './entryUtils';
+import { translateString, translateEntry, translateGroupedEntries } from './entryUtils';
 import { globalPipeline } from '@sugarch/bc-mod-utility';
-import { GroupedDialogs } from './types';
 
 /**
  * Resolve translation entry by language
@@ -32,12 +31,12 @@ export function solidfyEntry (entryItem: Translation.Entry | undefined, fallback
  * @param asset
  * @param groupedEntry
  */
-export function pickDialogs<Custom extends string = AssetGroupBodyName> (
+export function pickStrings<Custom extends string = AssetGroupBodyName> (
     group: CustomGroupName<Custom>,
     asset: string,
-    groupedLayerNames: GroupedDialogs<Custom>,
-): Translation.Dialog {
-    const ret: Translation.Dialog = {};
+    groupedLayerNames: Translation.GroupedAssetStrings<Custom>,
+): Translation.String {
+    const ret: Translation.String = {};
     for (const [lang, entries] of Object.entries(groupedLayerNames)) {
         if (entries[group]?.[asset]) ret[lang as ServerChatRoomLanguage] = entries[group][asset];
     }
@@ -124,7 +123,7 @@ function assetEntryString<Custom extends string = AssetGroupBodyName> (
  * @param group
  */
 function groupEntryString<Custom extends string = AssetGroupBodyName> (group: CustomGroupName<Custom>): string {
-    return translateDialog(customGroupEntries as Translation.Dialog, group, group.replace(/_.*?Luzi$/, ''));
+    return translateString(customGroupEntries as Translation.String, group, group.replace(/_.*?Luzi$/, ''));
 }
 
 /**

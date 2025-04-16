@@ -1,7 +1,7 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { Translation } from '@sugarch/bc-mod-types';
 import { CustomActivity } from './types';
-import { translateDialog } from './entryUtils';
+import { translateString } from './entryUtils';
 
 // Translation entries for each language
 const entries: Partial<Record<ServerChatRoomLanguage, Record<string, string>>> = {};
@@ -157,7 +157,7 @@ export function addActivityEntry<CustomAct extends string = string, CustomPrereq
  * Set up translation hooks
  */
 export function setupEntry (): void {
-    const resolve = (tag: string): string | undefined => translateDialog(entries, tag);
+    const resolve = (tag: string): string | undefined => translateString(entries, tag);
 
     HookManager.hookFunction('ActivityDictionaryText', 1, (args, next) => resolve(args[0]) || next(args));
 

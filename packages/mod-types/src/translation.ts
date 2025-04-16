@@ -23,9 +23,19 @@ export namespace Translation {
     export type Dialog = I18NRecord<Record<string, string>>;
 
     /**
+     * Custom string entries, same as {@link Dialog}
+     */
+    export type String = Dialog;
+
+    /**
      * Group-categorized description translation entries for multiple items
      */
     export type GroupedEntries<Custom extends string = AssetGroupBodyName> = CustomRecord<CustomGroupName<Custom>, Record<string, string>>;
+
+    /**
+     * Group-categorized, then asset-categoriezed, description translation entries. Used for layer names config.
+     */
+    export type GroupedAssetStrings<Custom extends string = AssetGroupBodyName> = CustomRecord<CustomGroupName<Custom>, Record<string, Record<string, string>>>;
 
     export type ActivityGroupName = AssetGroupItemName | 'ItemPenis' | 'ItemGlans';
     /**

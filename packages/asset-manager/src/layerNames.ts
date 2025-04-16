@@ -59,7 +59,7 @@ function writeColorGroupNames (cache: TextCache) {
  * @param entries
  * @returns A function that resolves layer names
  */
-function createLayerNameResolver (entries?: Translation.Dialog) {
+function createLayerNameResolver (entries?: Translation.String) {
     if (!entries) return (layerName: string) => ({ CN: layerName });
     const resolver: Record<string, Translation.Entry> = {};
     for (const [lang, entry] of Object.entries(entries)) {
@@ -92,7 +92,7 @@ export function addLayerNames<Custom extends string = AssetGroupBodyName> (
         entries,
         noOverride,
     }: {
-        entries?: Translation.Dialog;
+        entries?: Translation.String;
         noOverride?: boolean;
     } = {}
 ) {

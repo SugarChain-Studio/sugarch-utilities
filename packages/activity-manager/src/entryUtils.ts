@@ -38,18 +38,18 @@ export function translateEntry<F extends string | undefined = undefined> (entry:
 }
 
 /**
- * Extract translation from a Translation.Dialog object
- * @param dialogs - Dialog entries object
- * @param key - Dialog key to look up
+ * Extract translation from a {@link Translation.String} object
+ * @param strings - String entries object
+ * @param key - String key to look up
  * @param fallback - Fallback value to return if no translation is found
  * @returns Translated text or fallback value
  */
-export function translateDialog<F extends string | undefined = undefined> (
-    dialogs: Translation.Dialog,
+export function translateString<F extends string | undefined = undefined> (
+    strings: Translation.String,
     key: string,
     fallback?: F
 ) {
-    return _resolveTranslation(lang => dialogs[lang]?.[key], fallback as F);
+    return _resolveTranslation(lang => strings[lang]?.[key], fallback as F);
 }
 
 /**

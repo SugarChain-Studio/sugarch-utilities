@@ -1,29 +1,22 @@
-import { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
+import { Translation } from '@sugarch/bc-mod-types';
 
-export interface BasicAddAssetConfig {
+export type AddAssetConfig = {
     /** Asset name translation (non optional) */
     translation: Translation.Entry;
     /** Asset layer and color groups translation */
-    layerNames: Translation.Dialog;
+    layerNames: Translation.String;
     /** Whether to not add this asset to mirrored groups */
     noMirror?: boolean;
-}
 
-export type ExtendedAddAssetConfig = BasicAddAssetConfig & {
     /** Extended asset properties */
-    extended: AssetArchetypeConfig;
-    /** Asset custom dialogs translation */
-    assetDialogs: Translation.Dialog;
-};
+    extended?: AssetArchetypeConfig;
 
-export type AddAssetConfig = BasicAddAssetConfig | ExtendedAddAssetConfig;
-
-export function isAddAssetConfig (value: AddAssetConfig | AssetArchetypeConfig | undefined): value is AddAssetConfig {
-    return !!value && typeof value === 'object' && 'translation' in value;
+    /** 
+     * @deprecated Use `assetStrings` instead
+     * 
+     * Asset custom dialogs translation 
+     */
+    assetDialogs?: Translation.Dialog;
+    /** Asset custom asset string translation */
+    assetStrings?: Translation.String;
 }
-
-export function isExtendedAddAssetConfig (value: AddAssetConfig): value is ExtendedAddAssetConfig {
-    return 'extended' in value && 'assetDialogs' in value;
-}
-
-export type GroupedDialogs<Custom extends string = AssetGroupBodyName> = Translation.CustomRecord<CustomGroupName<Custom>, Record<string, Record<string, string>>>

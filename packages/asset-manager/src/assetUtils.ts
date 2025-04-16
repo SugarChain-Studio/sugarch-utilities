@@ -1,6 +1,6 @@
 import { AssetConfig, ParsedAsset, resolveStringAsset } from './assetConfigs';
 import { customAssetAdd, customAssetMarkStrict, getCustomAssets } from './customStash';
-import { addCustomDialogWithPrefix } from './dialog';
+import { addCustomAssetStringWithPrefix } from './dialog';
 import { Entries, resolveEntry, solidfyEntry } from './entries';
 import { addLayerNames } from './layerNames';
 import { pushAfterLoad, pushAssetLoadEvent, pushDefsLoad, requireGroup } from './loadSchedule';
@@ -49,15 +49,15 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
         preimage,
         noMirror,
         layerNames,
-        assetDialogs,
+        assetStrings,
     }: {
         translation?: Translation.Entry;
         dynamicName?: CustomGroupName<Custom>;
-        layerNames?: Translation.Dialog;
+        layerNames?: Translation.String;
         preimage?: AssetGroup;
         noMirror?: boolean;
         extendedConfig?: ExtendedItemMainConfig;
-        assetDialogs?: Translation.Dialog;
+        assetStrings?: Translation.String;
     } = {}
 ) {
     pushDefsLoad(groupName, groupObj => {
@@ -109,8 +109,8 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
                 });
             }
             
-            if(assetDialogs) {
-                addCustomDialogWithPrefix(asset.Group.Name, asset.Name, assetDialogs);
+            if(assetStrings) {
+                addCustomAssetStringWithPrefix(asset.Group.Name, asset.Name, assetStrings);
             }
         });
         // Register the name in entry management, if the game gets the name through asynchronous loading, correct it in entry management

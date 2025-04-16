@@ -122,7 +122,7 @@ export interface CustomActivity<CustomAct extends string = string, CustomPrereq 
         acted: Character,
         targetGroup: AssetItemGroup,
         info: ExtItemActivity<CustomAct>
-    ) => Item | undefined;
+    ) => Item | null | undefined;
 
     /** The activity name when used on others */
     readonly label?: Translation.ActivityEntry | Translation.Entry;
