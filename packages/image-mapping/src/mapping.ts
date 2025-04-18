@@ -68,7 +68,6 @@ function setupImgMapping (): void {
     if(GameVersion !== "R114") {
         HookManager.hookFunction('GLDrawLoadTextureAlphaMask', 0, (args, next) => {
             if(Array.isArray(args[5])) {
-                // @ts-expect-error The function here have not been delivered with bc-stub, thus typing would fail.
                 args[5] = args[5].map((mask)=> ({
                     ...mask,
                     Url: storage.mapImgSrc(mask.Url),
