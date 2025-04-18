@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.4.5
+
+### Patch Changes
+
+-   export resolveAssetOverrides from image mapping package
+
 ## 0.4.4
 
 ### Patch Changes
