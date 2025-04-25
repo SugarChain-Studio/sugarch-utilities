@@ -1,6 +1,7 @@
 import { ActivityInfo, ActivityTriggerMode } from '@sugarch/bc-mod-types';
 import { Globals, sleepUntil } from '@sugarch/bc-mod-utility';
 import { version } from './package';
+import { ChatMessageTools } from './tools';
 
 type EventMode = ActivityTriggerMode;
 
@@ -25,30 +26,12 @@ function makeChatRoomMsgHandler (runner: HandlerRunner): ChatRoomMessageHandler 
         Priority: 290, // must be between 210 (arousal processing) and 300 (sensory deprivation)
         // eslint-disable-next-line @typescript-eslint/naming-convention
         Callback: (data, sender, msg, metadata) => {
-            if (data.Type !== 'Activity' || !data.Dictionary || !metadata) return false;
-
-            const { ActivityName, ActivityAsset, CraftingNames, FocusGroup, TargetMemberNumber } = metadata;
-            if (!ActivityName || !FocusGroup || !TargetMemberNumber || !sender.MemberNumber) return false;
-
-            const info: ActivityInfo = {
-                SourceCharacter: sender.MemberNumber,
-                SourceCharacterC: sender,
-                TargetCharacter: TargetMemberNumber,
-                ActivityGroup: FocusGroup,
-                ActivityName: ActivityName,
-                Asset:
-                    ActivityAsset !== undefined
-                        ? {
-                              Asset: ActivityAsset,
-                              CraftName: CraftingNames?.['ActivityAsset'],
-                          }
-                        : undefined,
-                Dictionary: data.Dictionary,
-            };
+            const info = ChatMessageTools.pullActivityInfo(data, sender, msg, metadata); // Pull activity info for later use
+            if(!info) return false; // If no activity info, return false
 
             const mode: EventMode[] = (() => {
-                if (TargetMemberNumber === Player.MemberNumber) {
-                    if (sender.MemberNumber === TargetMemberNumber) return ['SelfOnSelf', 'AnyOnSelf', 'SelfInvolved'];
+                if (info.TargetCharacter === Player.MemberNumber) {
+                    if (sender.MemberNumber === info.TargetCharacter) return ['SelfOnSelf', 'AnyOnSelf', 'SelfInvolved'];
                     return ['OthersOnSelf', 'AnyOnSelf', 'SelfInvolved'];
                 }
                 if (sender.MemberNumber === Player.MemberNumber) return ['SelfOnOthers', 'SelfInvolved'];
@@ -56,9 +39,7 @@ function makeChatRoomMsgHandler (runner: HandlerRunner): ChatRoomMessageHandler 
             })();
 
             if (mode.length === 0) return false;
-
-            runner(mode, ActivityName, sender, Player, info);
-
+            runner(mode, info.ActivityName, sender, Player, info);
             return false;
         },
     };

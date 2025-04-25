@@ -1,5 +1,11 @@
 # @sugarch/bc-event-handler
 
+## 0.6.2
+
+### Patch Changes
+
+-   implement `ChatMessageTools` for info extraction and update activity handler
+
 ## 0.6.1
 
 ### Patch Changes
