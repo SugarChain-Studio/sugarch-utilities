@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.6
+
+### Patch Changes
+
+-   handle `ExtendedItemManualRegister` related extended config
+
 ## 0.5.5
 
 ### Patch Changes

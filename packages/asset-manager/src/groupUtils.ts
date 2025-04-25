@@ -1,15 +1,38 @@
 import { Entries, resolveEntry, solidfyEntry } from './entries';
-import { pushGroupLoad } from './loadSchedule';
+import { pushAfterLoad, pushGroupLoad } from './loadSchedule';
 import { registerMirror } from './mirrorGroup';
 import { customGroupAdd } from './customStash';
 import { loadAsset } from './assetUtils';
 import { resolveStringAsset } from './assetConfigs';
-import type { CustomAssetDefinition, CustomGroupDefinition, CustomGroupName, Translation } from "@sugarch/bc-mod-types";
+import type { CustomAssetDefinition, CustomGroupDefinition, CustomGroupName, Translation } from '@sugarch/bc-mod-types';
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
+
+const manualConfigs: Record<string, ExtendedItemGroupConfig> = {};
+
+/**
+ * some extended item configs are not in the AssetFemale3DCGExtended, we need to pull them out of the ExtendedItemManualRegister
+ */
+pushGroupLoad(() => {
+    let pulling = false;
+    HookManager.hookFunction('AssetBuildExtended', 0, (args, next) => {
+        if (pulling) {
+            const [asset, config] = args;
+            manualConfigs[asset.Group.Name] ??= {};
+            manualConfigs[asset.Group.Name][asset.Name] = config;
+            return null;
+        }
+        return next(args);
+    });
+
+    pulling = true;
+    HookManager.invokeOriginal('ExtendedItemManualRegister');
+    pulling = false;
+});
 
 /**
  * Register a custom group
  * @param groupDef Group definition
- * @param param 
+ * @param param
  * @param param.translation
  * @param param.dynamicName
  * @param param.preimage
@@ -32,15 +55,38 @@ export function loadGroup<Custom extends string = AssetGroupBodyName> (
             grp.Description = resolveEntry(solidDesc);
             if (dynamicName) grp.DynamicGroupName = dynamicName as AssetGroupName;
 
+            const extendedConfig = (() => {
+                if (!preimage) return undefined;
+                const srcConfig = AssetFemale3DCGExtended[preimage.Name as AssetGroupName];
+                if (!srcConfig) return undefined;
+
+                const ret = {} as ExtendedItemGroupConfig;
+                for (const [assetName, config] of Object.entries(srcConfig)) {
+                    ret[assetName] = {
+                        Archetype: config.Archetype,
+                        CopyConfig: { GroupName: preimage.Name, AssetName: assetName },
+                    } as typeof config;
+                }
+                return { [groupDef.Group]: ret };
+            })();
+
             groupDef.Asset.forEach(asset => {
-                loadAsset(
-                    groupDef.Group,
-                    resolveStringAsset(asset as string | AssetDefinition) as CustomAssetDefinition<Custom>,
-                    {
-                        dynamicName,
-                        preimage,
+                const assetDef = resolveStringAsset(asset as string | AssetDefinition) as CustomAssetDefinition<Custom>;
+                if (extendedConfig && preimage) {
+                    const manualConfig = manualConfigs[preimage.Name]?.[assetDef.Name];
+                    if (manualConfig) {
+                        pushAfterLoad(() => {
+                            const asset = AssetGet('Female3DCG', groupDef.Group as AssetGroupName, assetDef.Name);
+                            if (asset) AssetBuildExtended(asset, manualConfig, extendedConfig, null, false);
+                        });
                     }
-                );
+                }
+
+                loadAsset(groupDef.Group, assetDef, {
+                    dynamicName,
+                    preimage,
+                    extendedConfig,
+                });
             });
         });
         // Register the name in entry management, if the game gets the name through asynchronous loading, correct it in entry management

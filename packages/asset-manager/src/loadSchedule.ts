@@ -138,7 +138,7 @@ export function runSetupLoad (
         end: 'Loading completed, time usage: ',
     }
 ): void {
-    const mLoadGroup = () => {
+    const mLoadGroup = async () => {
         Logger.info(loadMessage.start);
 
         const time = Date.now();

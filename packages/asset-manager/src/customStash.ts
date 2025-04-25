@@ -1,6 +1,7 @@
 import { HookManager, HookManagerInterface } from '@sugarch/bc-mod-hook-manager';
 import type { CustomGroupName } from '@sugarch/bc-mod-types';
 import { globalPipeline } from '@sugarch/bc-mod-utility';
+import { SyncPromise } from './syncPromise';
 
 const customGroups: Record<string, AssetGroup> = {};
 
@@ -16,11 +17,11 @@ export const AccessCustomAsset = <Custom extends string = AssetGroupBodyName>(
 /**
  * Add a custom asset group
  */
-export function customGroupAdd (...[family, groupDef]: Parameters<typeof AssetGroupAdd>): Promise<Mutable<AssetGroup>> {
+export function customGroupAdd (...[family, groupDef]: Parameters<typeof AssetGroupAdd>): SyncPromise<Mutable<AssetGroup>> {
     // Prevent the addition process from being disrupted
     const Group = HookManager.invokeOriginal('AssetGroupAdd', family, groupDef);
     customGroups[Group.Name] = Group;
-    return Promise.resolve(Group as Mutable<AssetGroup>);
+    return SyncPromise.resolve(Group as Mutable<AssetGroup>);
 }
 
 /**
@@ -37,7 +38,7 @@ export function customAssetGetStrict (name: string): Asset | undefined {
 /**
  * Add a custom asset
  */
-export function customAssetAdd (...[group, assetDef, config]: Parameters<typeof AssetAdd>): Promise<Mutable<Asset>> {
+export function customAssetAdd (...[group, assetDef, config]: Parameters<typeof AssetAdd>): SyncPromise<Mutable<Asset>> {
     // Prevent the addition process from being disrupted
     HookManager.invokeOriginal('AssetAdd', group, assetDef, config);
     const groupName = group.Name;
@@ -46,11 +47,11 @@ export function customAssetAdd (...[group, assetDef, config]: Parameters<typeof 
     const as = AssetGet('Female3DCG', groupName, assetName);
     if (as) {
         customAssets[groupName][assetName] = as;
-        return Promise.resolve(as as Mutable<Asset>);
+        return SyncPromise.resolve(as as Mutable<Asset>);
     }
 
     // NOTE: This situation should not be possible
-    return Promise.reject(`Asset ${groupName}:${assetName} not found`);
+    return SyncPromise.reject(`Asset ${groupName}:${assetName} not found`);
 }
 
 /**
