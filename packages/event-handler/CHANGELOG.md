@@ -1,5 +1,14 @@
 # @sugarch/bc-event-handler
 
+## 0.6.3
+
+### Patch Changes
+
+-   improve activity handler filtering
+-   Updated dependencies
+    -   @sugarch/bc-mod-types@0.6.2
+    -   @sugarch/bc-mod-hook-manager@0.2.15
+
 ## 0.6.2
 
 ### Patch Changes

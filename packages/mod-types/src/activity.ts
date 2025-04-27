@@ -25,5 +25,6 @@ export interface ActivityInfo {
  * - SelfOnSelf: when the player play the activity on themselves
  * - AnyOnSelf: when the player or others play the activity on the player
  * - SelfInvolved: when the player is involved in the activity
+ * - AnyActivity: when the activity is acted by anyone
  */
-export type ActivityTriggerMode = 'SelfOnOthers' | 'OthersOnSelf' | 'SelfOnSelf' | 'AnyOnSelf' | 'SelfInvolved';
+export type ActivityTriggerMode = 'SelfOnOthers' | 'OthersOnSelf' | 'SelfOnSelf' | 'AnyOnSelf' | 'SelfInvolved' | 'AnyInvolved';

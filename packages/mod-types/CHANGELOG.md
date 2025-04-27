@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-types
 
+## 0.6.2
+
+### Patch Changes
+
+-   improve activity handler filtering
+
 ## 0.6.1
 
 ### Patch Changes

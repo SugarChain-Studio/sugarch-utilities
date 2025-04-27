@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-mod-hook-manager",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "A mod hooks manager base on bcmodsdk",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",

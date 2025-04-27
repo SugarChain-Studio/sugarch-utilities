@@ -9,12 +9,19 @@ type EventArgType = [sender: Character, player: PlayerCharacter, info: ActivityI
 
 type Handler = {
     mode: EventMode;
-    activity: string;
+    activity: string | null;
     listener: (...args: EventArgType) => void;
     once: boolean;
 };
 
-type HandlerRunner = (modes: EventMode[], activityName: string, ...args: EventArgType) => void;
+type HandlerRunner = (modeFilter: Set<EventMode>, activityName: string, ...args: EventArgType) => void;
+
+const modesFilters = {
+    OthersOnSelf: new Set<EventMode>(['OthersOnSelf', 'AnyOnSelf', 'SelfInvolved', 'AnyInvolved']),
+    SelfOnSelf: new Set<EventMode>(['SelfOnSelf', 'AnyOnSelf', 'SelfInvolved', 'AnyInvolved']),
+    SelfOnOthers: new Set<EventMode>(['SelfOnOthers', 'SelfInvolved', 'AnyInvolved']),
+    OthersOnOthers: new Set<EventMode>(['AnyInvolved']),
+} as const;
 
 /**
  * Create a chat room message handler for activity events
@@ -27,18 +34,16 @@ function makeChatRoomMsgHandler (runner: HandlerRunner): ChatRoomMessageHandler 
         // eslint-disable-next-line @typescript-eslint/naming-convention
         Callback: (data, sender, msg, metadata) => {
             const info = ChatMessageTools.pullActivityInfo(data, sender, msg, metadata); // Pull activity info for later use
-            if(!info) return false; // If no activity info, return false
+            if (!info) return false; // If no activity info, return false
 
-            const mode: EventMode[] = (() => {
+            const mode: Set<EventMode> = (() => {
                 if (info.TargetCharacter === Player.MemberNumber) {
-                    if (sender.MemberNumber === info.TargetCharacter) return ['SelfOnSelf', 'AnyOnSelf', 'SelfInvolved'];
-                    return ['OthersOnSelf', 'AnyOnSelf', 'SelfInvolved'];
-                }
-                if (sender.MemberNumber === Player.MemberNumber) return ['SelfOnOthers', 'SelfInvolved'];
-                return [];
+                    if (sender.MemberNumber === info.TargetCharacter) return modesFilters.SelfOnSelf ;
+                    return modesFilters.OthersOnSelf;
+                } else if (info.SourceCharacter === Player.MemberNumber) return modesFilters.SelfOnOthers;
+                else return modesFilters.OthersOnOthers;
             })();
 
-            if (mode.length === 0) return false;
             runner(mode, info.ActivityName, sender, Player, info);
             return false;
         },
@@ -55,12 +60,14 @@ class _ActivityEvents<T extends string = ActivityName> {
         })();
     }
 
-    private emit (modes: EventMode[], activityName: string, ...args: EventArgType) {
+    private emit (modeFilter: Set<EventMode>, activityName: string, ...args: EventArgType) {
         const cpListeners: Handler[] = [...this._handlers];
         const nHandlers: Handler[] = [];
 
         for (const handler of cpListeners) {
-            if (activityName === handler.activity && modes.includes(handler.mode)) {
+            if ((handler.activity === null || activityName === handler.activity) && modeFilter.has(handler.mode)) {    
+                // If activity is null, it matches any activity
+                // Otherwise, it must match the specific activity name
                 try {
                     handler.listener(...args);
                 } catch (e) {
@@ -100,13 +107,31 @@ class _ActivityEvents<T extends string = ActivityName> {
     }
 
     /**
+     * Register an event listener, regardless of specific activity
+     * @param mode - The event mode to listen to
+     * @param listener - The listener function
+     */
+    onAny<U extends EventMode> (mode: U, listener: (...args: EventArgType) => void): void {
+        this._handlers.push({ mode, activity: null, listener, once: false });
+    }
+
+    /**
+     * Register a one-time event listener, regardless of specific activity
+     * @param mode - The event mode to listen to
+     * @param listener - The listener function
+     */
+    onceAny<U extends EventMode> (mode: U, listener: (...args: EventArgType) => void): void {
+        this._handlers.push({ mode, activity: null, listener, once: true });
+    }
+
+    /**
      * Unregister an event listener
      * If the listener is undefined, all handlers for the specified mode and activity will be removed.
      * @param mode - The event mode to stop listening to
-     * @param activity - The activity name to stop listening to
+     * @param activity - The activity name to stop listening to, or `null` to remove the listener that is not specific to any activity
      * @param listener - The listener function (optional)
      */
-    off<U extends EventMode> (mode: U, activity: T, listener?: (...args: EventArgType) => void): void {
+    off<U extends EventMode> (mode: U, activity: T | null, listener?: (...args: EventArgType) => void): void {
         if (!listener) {
             // Remove all handlers for the specified mode and activity
             this._handlers = this._handlers.filter(handler => handler.mode !== mode || handler.activity !== activity);
