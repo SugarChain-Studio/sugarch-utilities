@@ -228,7 +228,9 @@ export function setupEntries (): void {
             ['NextAsset', NextItem],
         ] as const) {
             const customed = checkItemCustomed(item);
-            if (customed) dictionary.text(key, item.Asset.Description);
+            // Add an extra 'text' tag here in order to display the name or custom name of plugin items to clients without the plugin.
+            // Without this tag, or if using the asset tag, the item name will display incorrectly for users without the plugin.
+            if(customed) dictionary.text(key, item.Craft?.Name ?? item.Asset.Description );
         }
     });
 }
