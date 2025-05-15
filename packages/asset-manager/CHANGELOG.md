@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.8
+
+### Patch Changes
+
+-   fix craft name display for used asset
+
 ## 0.5.7
 
 ### Patch Changes
