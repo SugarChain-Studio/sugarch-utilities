@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.9
+
+### Patch Changes
+
+-   make names for items with Craft consistent
+
 ## 0.5.8
 
 ### Patch Changes
