@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.10
+
+### Patch Changes
+
+-   7f55c8d: Support adding layer names without asset definition
+
 ## 0.5.9
 
 ### Patch Changes
