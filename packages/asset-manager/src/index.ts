@@ -4,7 +4,7 @@ import { pushAfterLoad, runSetupLoad } from './loadSchedule';
 import { addCustomAssetString, setupCustomAssetString } from './dialog';
 import { pickEntry, pickStrings, setupEntries } from './entries';
 import { customAssetGetStrict, enableCustomAssets, getCustomAssets } from './customStash';
-import { addLayerNames, setupLayerNameLoad } from './layerNames';
+import { addColorGroupNamesRaw, addLayerNames, addLayerNamesRaw, setupLayerNameLoad } from './layerNames';
 import { enableValidation, FromModUserTestFunc } from './validation';
 import type {
     CustomAssetDefinition,
@@ -263,7 +263,10 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
-     * Add custom layer names. Layer names are obtained from the asset definition.
+     * Add custom layer names (for coloring menu).   
+     * Layer names are obtained from the asset definition.  
+     * Color group names are also obtained from the asset definition, while their translation is obtained from the entry, 
+     * just like layer names. (Thus not support color group with a same name with layer shows as different name with the layer)
      * @param group The body group name
      * @param assetDef The asset definition
      * @param entries Layer-name, grouped by language
@@ -277,9 +280,26 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
-     * @deprecated Use `addLayerNames` instead
+     * Add custom layer names (for coloring menu). Layer names are obtained from the entry.
+     * This function does not add color groups name.
+     * @param group The body group name
+     * @param assetName The asset name
+     * @param entry Layer-Name record, grouped by language
      */
-    addLayerNamesByEntry (_1: CustomGroupName<Custom>, _2: string, _3: Translation.CustomRecord<string, string>) {}
+    addLayerNamesRaw (group: CustomGroupName<Custom>, assetName: string, entry: Translation.CustomRecord<string, string>) {
+        addLayerNamesRaw(group, assetName, entry);
+    }
+
+    /**
+     * Add custom color group names (for coloring menu). Color group names are obtained from the entry.
+     * This function does not add layer names.
+     * @param group The body group name
+     * @param assetName The asset name
+     * @param entry ColorGroupName-Name record, grouped by language
+     */
+    addColorGroupNamesRaw (group: CustomGroupName<Custom>, assetName: string, entry: Translation.CustomRecord<string, string>) {
+        addColorGroupNamesRaw(group, assetName, entry);
+    }
 
     /**
      * Check if an asset is custom, this includes assets created by mirroring groups

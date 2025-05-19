@@ -72,6 +72,56 @@ function createLayerNameResolver (entries?: Translation.String) {
 }
 
 /**
+ * Transfrom Lang-Layer-String to {key:Layer, entry:Lang-String}[]
+ * @param entries Lang-Layer-String entries
+ */
+function createLayerEntryArray(entries:Translation.CustomRecord<string, string>) {
+    const ret : Record<string, Translation.Entry> = {};
+    for (const [lang, entry] of Object.entries(entries)) {
+        for (const [key, value] of Object.entries(entry)) {
+            if (!ret[key]) ret[key] = {};
+            ret[key][lang as ServerChatRoomLanguage] = value;
+        }
+    }
+    return Object.entries(ret).reduce((acc, [key, value]) => {
+        acc.push({key, value});
+        return acc;
+    },[] as {key: string, value: Translation.Entry}[]);
+}
+
+/**
+ * Add layer names
+ * @param group Body group name
+ * @param assetName Asset name
+ * @param entries Layer-name, grouped by language
+ */
+export function addLayerNamesRaw<Custom extends string = AssetGroupBodyName> (
+    group: CustomGroupName<Custom>,
+    assetName: string,
+    entries: Translation.CustomRecord<string, string>
+) {
+    for(const {key, value} of createLayerEntryArray(entries)) {
+        pushLayerName(`${group}${assetName}${key}`, value, key);
+    }
+}
+
+/**
+ * Add color groups names
+ * @param group Body group name
+ * @param assetName Asset name
+ * @param entries ColorGroupName-name, grouped by language
+ */
+export function addColorGroupNamesRaw<Custom extends string = AssetGroupBodyName> (
+    group: CustomGroupName<Custom>,
+    assetName: string,
+    entries: Translation.CustomRecord<string, string>
+) {
+    for(const {key, value} of createLayerEntryArray(entries)) {
+        pushColorGroupName(`${group}${assetName}${key}`, value, key);
+    }
+}
+
+/**
  * Add layer names
  * @param group Body group name
  * @param assetDef Item definition
