@@ -36,11 +36,7 @@ export default [
                 declaration: true,
                 declarationDir: "dist/types",
             }),
-            terser({
-                format: {
-                    comments: /SugarChain|Copyright/i,
-                },
-            }),
+            terser(),
         ],
     },
     {

@@ -10,6 +10,7 @@ export function createBanner(packageName, version) {
  * Copyright (c) ${new Date().getFullYear()} SugarChain Studio
  * License: MIT
  * https://github.com/SugarChain-Studio/sugarch-utilities
+ * @preserve
  */
 `;
   }
