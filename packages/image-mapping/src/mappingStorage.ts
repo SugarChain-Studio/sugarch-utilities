@@ -128,6 +128,9 @@ export class ImageMappingStorage {
         if (src.startsWith('data:image')) return src;
         if (src.startsWith('http')) return src;
 
+        // Ignore mapping for specific cases
+        if (src.startsWith('@nomap/')) return src.substring(7) as T; // Remove '@nomap/' prefix
+
         const test = src.startsWith('./') ? src.slice(2) : src;
         let testReturn = test;
 
@@ -140,7 +143,7 @@ export class ImageMappingStorage {
     }
 
     /**
-     * Map image source and call accept function if mapping occurs.
+     * Map image source and call accept function if mapping occurs. Only used for GUI images (e.g., dialog icons).
      * @param src
      * @param accept
      */

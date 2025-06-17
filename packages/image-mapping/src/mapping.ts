@@ -65,17 +65,15 @@ function setupImgMapping (): void {
         });
     });
 
-    if(GameVersion !== "R114") {
-        HookManager.hookFunction('GLDrawLoadTextureAlphaMask', 0, (args, next) => {
-            if(Array.isArray(args[5])) {
-                args[5] = args[5].map((mask)=> ({
-                    ...mask,
-                    Url: storage.mapImgSrc(mask.Url),
-                }))
-            }
-            return next(args);
-        });
-    }
+    HookManager.hookFunction('GLDrawLoadTextureAlphaMask', 0, (args, next) => {
+        if (Array.isArray(args[5])) {
+            args[5] = args[5].map(mask => ({
+                ...mask,
+                Url: storage.mapImgSrc(mask.Url),
+            }));
+        }
+        return next(args);
+    });
 
     (async () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -102,7 +100,7 @@ function setupImgMapping (): void {
         });
 
         HookManager.hookFunction('ElementButton.Create', 0, (args, next) => {
-            if(args[0]?.startsWith('dialog-inventory')) {
+            if (args[0]?.startsWith('dialog-inventory')) {
                 const options = args[2];
                 if (options?.icons) {
                     options.icons = options.icons.map(icon => {
@@ -125,7 +123,7 @@ function setupImgMapping (): void {
                 }
             }
 
-            if(args[0]?.startsWith('dialog-expression-button-grid-Emoticon')) {
+            if (args[0]?.startsWith('dialog-expression-button-grid-Emoticon')) {
                 const options = args[2];
                 if (options?.image) {
                     options.image = storage.mapImgSrc(options.image);
