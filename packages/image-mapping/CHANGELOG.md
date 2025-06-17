@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 1.2.0
+
+### Minor Changes
+
+-   689a4ed: Add a prefix '@nomap/', which is used to prevent mapping of images URLs.
+
 ## 1.1.2
 
 ### Patch Changes

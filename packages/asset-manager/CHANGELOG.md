@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.11
+
+### Patch Changes
+
+-   689a4ed: Update image mapping dependency.
+
 ## 0.5.10
 
 ### Patch Changes
