@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 1.2.1
+
+### Patch Changes
+
+-   Repack the image mapping and related package
+
 ## 1.2.0
 
 ### Minor Changes

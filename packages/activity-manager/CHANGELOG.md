@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.4.9
+
+### Patch Changes
+
+-   Repack the image mapping and related package
+
 ## 0.4.8
 
 ### Patch Changes

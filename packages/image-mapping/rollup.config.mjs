@@ -5,9 +5,11 @@ import replace from "@rollup/plugin-replace";
 import commonjs from "@rollup/plugin-commonjs";
 import { dts } from "rollup-plugin-dts";
 import del from "rollup-plugin-delete";
+import { createBanner } from "../../utils/create-banner.mjs";
 import fs from "fs";
 
 const pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"));
+const banner = createBanner(pkg.name, pkg.version);
 
 export default [
     {
@@ -17,19 +19,21 @@ export default [
                 file: "dist/index.mjs",
                 format: "es",
                 sourcemap: true,
+                banner,
             },
             {
                 file: "dist/index.cjs",
                 format: "cjs",
                 sourcemap: true,
+                banner,
             },
         ],
-        external: ["bondage-club-mod-sdk", "@sugarch/bc-mod-hook-manager", "semver/functions/lt"],
+        external: ["bondage-club-mod-sdk", "@sugarch/bc-mod-hook-manager", "semver/functions/lt", "@sugarch/bc-mod-utility"],
         plugins: [
             resolve({ browser: true }),
             commonjs(),
             replace({
-                preventAssignment: true, 
+                preventAssignment: true,
                 values: {
                     ROLLUP_VAR_VERSION: JSON.stringify(pkg.version),
                 },

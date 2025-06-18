@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.12
+
+### Patch Changes
+
+-   Repack the image mapping and related package
+
 ## 0.5.11
 
 ### Patch Changes
