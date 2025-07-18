@@ -68,8 +68,8 @@ importers:
         specifier: workspace:*
         version: link:../image-mapping
       bc-stubs:
-        specifier: 117.0.0-Beta.1
-        version: 117.0.0-Beta.1
+        specifier: 118.0.0-Beta.1
+        version: 118.0.0-Beta.1
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -114,8 +114,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 117.0.0-Beta.1
-        version: 117.0.0-Beta.1
+        specifier: 118.0.0-Beta.1
+        version: 118.0.0-Beta.1
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -163,8 +163,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 117.0.0-Beta.1
-        version: 117.0.0-Beta.1
+        specifier: 118.0.0-Beta.1
+        version: 118.0.0-Beta.1
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -218,8 +218,8 @@ importers:
         specifier: ^29.5.14
         version: 29.5.14
       bc-stubs:
-        specifier: 117.0.0-Beta.1
-        version: 117.0.0-Beta.1
+        specifier: 118.0.0-Beta.1
+        version: 118.0.0-Beta.1
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -255,8 +255,8 @@ importers:
         specifier: ^12.1.2
         version: 12.1.2(rollup@4.36.0)(tslib@2.8.1)(typescript@5.8.3)
       bc-stubs:
-        specifier: 117.0.0-Beta.1
-        version: 117.0.0-Beta.1
+        specifier: 118.0.0-Beta.1
+        version: 118.0.0-Beta.1
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -276,8 +276,8 @@ importers:
   packages/mod-types:
     devDependencies:
       bc-stubs:
-        specifier: 117.0.0-Beta.1
-        version: 117.0.0-Beta.1
+        specifier: 118.0.0-Beta.1
+        version: 118.0.0-Beta.1
       rollup:
         specifier: ^4.36.0
         version: 4.36.0
@@ -307,8 +307,8 @@ importers:
         specifier: ^12.1.2
         version: 12.1.2(rollup@4.36.0)(tslib@2.8.1)(typescript@5.8.3)
       bc-stubs:
-        specifier: 117.0.0-Beta.1
-        version: 117.0.0-Beta.1
+        specifier: 118.0.0-Beta.1
+        version: 118.0.0-Beta.1
       rollup:
         specifier: ^4.36.0
         version: 4.36.0
@@ -1206,8 +1206,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  bc-stubs@117.0.0-Beta.1:
-    resolution: {integrity: sha512-sX0fHJY0h6H1a89QAD2oY8uAa2apTkbXaC4xU0LGmUpKcVdlSMjz3V+SO8iH+N9HbM2ev3mhiO5YC2GjTV/cbw==}
+  bc-stubs@118.0.0-Beta.1:
+    resolution: {integrity: sha512-sPdWmf3/sSY3MVhXd5kwlZKWK9PNzsbOBGnJ4qfXwEsKYgIWAea7WNZ9n2DEFN18AqfP8FBquj64wLvroC2zJA==}
 
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
@@ -3651,7 +3651,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  bc-stubs@117.0.0-Beta.1:
+  bc-stubs@118.0.0-Beta.1:
     dependencies:
       socket.io-client: 4.6.1
     transitivePeerDependencies:
