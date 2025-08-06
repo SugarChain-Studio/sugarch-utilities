@@ -32,12 +32,12 @@
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.2",
-    "bc-stubs": "118.0.0-Beta.1",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "bc-stubs": "118.0.0",
     "bondage-club-mod-sdk": "^1.2.0",
-    "rollup": "^4.36.0",
+    "rollup": "^4.46.2",
     "rollup-plugin-delete": "^3.0.1",
-    "rollup-plugin-dts": "^6.2.0",
+    "rollup-plugin-dts": "^6.2.1",
     "tslib": "^2.8.1"
   },
   "peerDependencies": {

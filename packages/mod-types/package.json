@@ -23,8 +23,8 @@
   },
   "packageManager": "pnpm@10.6.2",
   "devDependencies": {
-    "bc-stubs": "118.0.0-Beta.1",
-    "rollup": "^4.36.0",
-    "typescript": "^5.8.2"
+    "bc-stubs": "118.0.0",
+    "rollup": "^4.46.2",
+    "typescript": "^5.9.2"
   }
 }
