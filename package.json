@@ -10,7 +10,7 @@
     "type-check": "pnpm -r type-check",
     "lint": "eslint . --ext .ts,.tsx",
     "ci-lint": "pnpm type-check && pnpm lint && pnpm build",
-    "push-release": "git checkout release && git merge main && git push && git checkout main"
+    "push-release": "git checkout release -q && git merge main -q && git push && git checkout main -q"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
