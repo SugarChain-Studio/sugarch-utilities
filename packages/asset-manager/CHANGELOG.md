@@ -1,5 +1,12 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.13
+
+### Patch Changes
+
+-   Updated dependencies
+    -   @sugarch/bc-mod-hook-manager@0.2.16
+
 ## 0.5.12
 
 ### Patch Changes

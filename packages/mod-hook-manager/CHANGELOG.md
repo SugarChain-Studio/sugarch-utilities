@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-hook-manager
 
+## 0.2.16
+
+### Patch Changes
+
+-   Deprecate `HookManager.init`
+
 ## 0.2.15
 
 ### Patch Changes

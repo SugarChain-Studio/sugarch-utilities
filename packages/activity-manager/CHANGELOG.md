@@ -1,5 +1,13 @@
 # @sugarch/bc-activity-manager
 
+## 0.4.10
+
+### Patch Changes
+
+-   Updated dependencies
+    -   @sugarch/bc-mod-hook-manager@0.2.16
+    -   @sugarch/bc-event-handler@0.6.4
+
 ## 0.4.9
 
 ### Patch Changes

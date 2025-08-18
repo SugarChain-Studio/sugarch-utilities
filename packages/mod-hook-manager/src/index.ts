@@ -35,6 +35,9 @@ class _HookManager {
     }
 
     /**
+     * @deprecated Use {@link initWithMod }  instead. This method causes high coupling between this
+     *  module and bcModSdk, making it difficult to apply asynchronous loading.
+     * 
      * Register mod
      * @param modinfo the mod info to register
      */
@@ -58,7 +61,15 @@ class _HookManager {
     }
 
     /**
-     * Register mod using an already initialized mod
+     * Initialize mod related functions using an already registered mod.
+     * Note that a HookManager can only be used with a single mod at a time.
+     *
+     * @example
+     * // register a mod to mod sdk;
+     * const mod = bcModSdk.registerMod(modinfo);
+     * // run initialize related to the Manager
+     * HookManager.initWithMod(mod);
+     * 
      * @param mod a registered mod
      */
     initWithMod (mod: HookManagerInterface.ModSDKModAPI) {
