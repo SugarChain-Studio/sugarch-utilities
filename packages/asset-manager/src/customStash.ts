@@ -1,6 +1,5 @@
 import { HookManager, HookManagerInterface } from '@sugarch/bc-mod-hook-manager';
 import type { CustomGroupName } from '@sugarch/bc-mod-types';
-import { globalPipeline } from '@sugarch/bc-mod-utility';
 import { SyncPromise } from './syncPromise';
 
 const customGroups: Record<string, AssetGroup> = {};
@@ -17,7 +16,9 @@ export const AccessCustomAsset = <Custom extends string = AssetGroupBodyName>(
 /**
  * Add a custom asset group
  */
-export function customGroupAdd (...[family, groupDef]: Parameters<typeof AssetGroupAdd>): SyncPromise<Mutable<AssetGroup>> {
+export function customGroupAdd (
+    ...[family, groupDef]: Parameters<typeof AssetGroupAdd>
+): SyncPromise<Mutable<AssetGroup>> {
     // Prevent the addition process from being disrupted
     const Group = HookManager.invokeOriginal('AssetGroupAdd', family, groupDef);
     customGroups[Group.Name] = Group;
@@ -93,7 +94,7 @@ export function enableCustomAssets (): void {
     let doInventoryAdd = false;
     HookManager.progressiveHook('DialogInventoryBuild').inject(args => {
         if (args[2]) return;
-        doInventoryAdd = true;
+        doInventoryAdd = DialogMenuMode !== 'permissions';
     });
 
     HookManager.progressiveHook('DialogInventoryAdd')
@@ -110,7 +111,9 @@ export function enableCustomAssets (): void {
                         ([assetName, asset]) =>
                             !asset.NotVisibleOnScreen?.includes('LuziScreen') && !added.has(assetName)
                     )
-                    .forEach(([_, asset]) => DialogInventoryAdd(args[0], { Asset: asset }, false));
+                    .forEach(([_, asset]) =>
+                        HookManager.invokeOriginal('DialogInventoryAdd', args[0], { Asset: asset }, false)
+                    );
             }
         });
 
@@ -118,41 +121,14 @@ export function enableCustomAssets (): void {
         ...[args, next]: Parameters<HookManagerInterface.HookFunction<'InventoryAvailable'>>
     ) => {
         const [_, Name, Group] = args;
-        if (AccessCustomAsset(Group, Name)) return true;
+        if (isInListCustomAsset(Group, Name)) return true;
         return next(args);
     };
 
     HookManager.progressiveHook('InventoryAvailable').inside('CharacterAppearanceValidate').override(overrideAvailable);
     HookManager.progressiveHook('InventoryAvailable').inside('CraftingItemListBuild').override(overrideAvailable);
     HookManager.progressiveHook('InventoryAvailable').inside('WardrobeFastLoad').override(overrideAvailable);
-
-    if (GameVersion === 'R114') {
-        HookManager.progressiveHook('CraftingValidate').inject(args => {
-            const item = args[0]?.Item;
-            if (!item) return;
-            const asset = CraftingAssets[item]?.[0];
-            if (asset && isInListCustomAsset(asset.Group.Name, asset.Name)) args[3] = false;
-        });
-
-        const flatCustomAssets = (custom: typeof customAssets) =>
-            Object.values(custom)
-                .map(x => Object.values(x))
-                .flat()
-                .map(Asset => ({ Asset })) as InventoryItem[];
-
-        globalPipeline(
-            'CraftingInventory',
-            () => Player.Inventory,
-            pipeline =>
-                HookManager.patchFunction('CraftingRun', {
-                    'for (let Item of Player.Inventory) {': `for (let Item of ${pipeline.globalFuncName}()) {`,
-                })
-        ).register(acc => {
-            return [...acc, ...flatCustomAssets(customAssets).flat()];
-        });
-    } else {
-        HookManager.progressiveHook('InventoryAvailable').inside('CraftingValidate').override(overrideAvailable);
-    }
+    HookManager.progressiveHook('InventoryAvailable').inside('CraftingValidate').override(overrideAvailable);
 }
 
 /**
