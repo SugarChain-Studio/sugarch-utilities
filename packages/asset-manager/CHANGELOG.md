@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.14
+
+### Patch Changes
+
+-   13bc9fb: Fix asset being added to dialog for a second time in permission mode.
+
 ## 0.5.13
 
 ### Patch Changes
