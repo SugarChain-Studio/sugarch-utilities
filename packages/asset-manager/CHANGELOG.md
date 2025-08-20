@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.15
+
+### Patch Changes
+
+-   dbbee12: Use value >= 0 as a flag to indicate whether the asset is displayed in dialog
+
 ## 0.5.14
 
 ### Patch Changes

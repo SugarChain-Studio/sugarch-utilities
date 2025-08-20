@@ -84,7 +84,7 @@ export function getCustomAssets<Custom extends string = AssetGroupBodyName> (): 
 export function isInListCustomAsset (group: CustomGroupName, name: string): boolean {
     /** @type {Asset | undefined} */
     const asset = AccessCustomAsset(group, name);
-    return !!asset && !asset.NotVisibleOnScreen?.includes('LuziScreen');
+    return !!asset && asset.Value >= 0;
 }
 
 /**
@@ -109,7 +109,7 @@ export function enableCustomAssets (): void {
                 Object.entries(customAssets[groupName])
                     .filter(
                         ([assetName, asset]) =>
-                            !asset.NotVisibleOnScreen?.includes('LuziScreen') && !added.has(assetName)
+                            asset.Value >= 0 && !added.has(assetName)
                     )
                     .forEach(([_, asset]) =>
                         HookManager.invokeOriginal('DialogInventoryAdd', args[0], { Asset: asset }, false)
