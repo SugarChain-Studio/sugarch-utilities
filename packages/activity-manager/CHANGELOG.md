@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 0.4.11
+
+### Patch Changes
+
+-   Fix possible errors in @nomap processing
+
 ## 0.4.10
 
 ### Patch Changes

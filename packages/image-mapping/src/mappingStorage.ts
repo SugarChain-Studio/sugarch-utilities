@@ -129,7 +129,7 @@ export class ImageMappingStorage {
         if (src.startsWith('http')) return src;
 
         // Ignore mapping for specific cases
-        if (src.startsWith('@nomap/')) return src.substring(7) as T; // Remove '@nomap/' prefix
+        if (src.startsWith('@nomap/')) return src;
 
         const test = src.startsWith('./') ? src.slice(2) : src;
         let testReturn = test;

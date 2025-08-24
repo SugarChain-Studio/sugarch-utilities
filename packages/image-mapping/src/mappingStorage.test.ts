@@ -99,6 +99,6 @@ describe('ImageMappingStorage', () => {
         });
         
         const nomapImage = '@nomap/custom1.png';
-        expect(storage.mapImgSrc(nomapImage)).toBe('custom1.png'); // Should strip @nomap/ prefix
+        expect(storage.mapImgSrc(nomapImage)).toBe('@nomap/custom1.png'); // Should strip @nomap/ prefix
     });
 });

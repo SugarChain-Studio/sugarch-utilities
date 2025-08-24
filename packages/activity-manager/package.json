@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-activity-manager",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": "An activity manager for BC mods, easily add custom activities to the game.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",

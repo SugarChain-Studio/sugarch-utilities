@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.5.16
+
+### Patch Changes
+
+-   Fix possible errors in @nomap processing
+
 ## 0.5.15
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 1.2.3
+
+### Patch Changes
+
+-   Fix possible errors in @nomap processing
+
 ## 1.2.2
 
 ### Patch Changes

@@ -59,9 +59,20 @@ function setupImgMapping (): void {
     });
 
     (['DrawImageEx', 'DrawImageResize', 'GLDrawImage', 'DrawGetImage'] as const).forEach(fn => {
-        HookManager.hookFunction(fn, 0, (args, next) => {
+        HookManager.hookFunction(fn, 10, (args, next) => {
             args[0] = storage.mapImgSrc(args[0]);
             return next(args);
+        });
+    });
+
+    once('ImgMappingOnce.nomap', () => {
+        (['DrawImageEx', 'DrawImageResize', 'GLDrawImage', 'DrawGetImage'] as const).forEach(fn => {
+            HookManager.hookFunction(fn, 0, (args, next) => {
+                if (typeof args[0] === 'string' && args[0].startsWith('@nomap/')) {
+                    args[0] = args[0].substring(7);
+                }
+                return next(args);
+            });
         });
     });
 
