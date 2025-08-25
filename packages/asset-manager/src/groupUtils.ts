@@ -102,11 +102,13 @@ const missingGroup = new Set<CustomGroupName>();
  * @param newGroup
  * @param copyFrom
  * @param translation
+ * @param defOverrides
  */
 export function mirrorGroup<Custom extends string = AssetGroupBodyName> (
     newGroup: CustomGroupName<Custom>,
     copyFrom: CustomGroupName,
-    translation?: Translation.Entry
+    translation?: Translation.Entry,
+    defOverrides?: Partial<CustomGroupDefinition<Custom>>
 ) {
     const wk = () => {
         const fromDef = AssetFemale3DCG.find(def => def.Group === copyFrom);
@@ -133,6 +135,7 @@ export function mirrorGroup<Custom extends string = AssetGroupBodyName> (
         loadGroup(
             {
                 ...fromDef,
+                ...defOverrides,
                 Group: newGroup,
                 Default: false,
                 Random: false,

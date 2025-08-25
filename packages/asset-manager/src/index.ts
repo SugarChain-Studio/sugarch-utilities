@@ -254,12 +254,13 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
 
     /**
      * Add a new body group by copying configuration from an existing group
-     * @param newGroup
-     * @param copyFrom
-     * @param translation
+     * @param newGroup New group name
+     * @param copyFrom Existing group name
+     * @param translation New group display translation
+     * @param defOverrides Overrides some properties of the new group
      */
-    addCopyGroup (newGroup: CustomGroupName<Custom>, copyFrom: AssetGroupName, translation?: Translation.Entry) {
-        mirrorGroup(newGroup, copyFrom, translation);
+    addCopyGroup (newGroup: CustomGroupName<Custom>, copyFrom: AssetGroupName, translation?: Translation.Entry, defOverrides?: Partial<CustomGroupDefinition<Custom>>) {
+        mirrorGroup(newGroup, copyFrom, translation, defOverrides);
     }
 
     /**
