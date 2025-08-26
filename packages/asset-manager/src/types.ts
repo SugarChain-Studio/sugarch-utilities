@@ -11,12 +11,6 @@ export type AddAssetConfig = {
     /** Extended asset properties */
     extended?: AssetArchetypeConfig;
 
-    /** 
-     * @deprecated Use `assetStrings` instead
-     * 
-     * Asset custom dialogs translation 
-     */
-    assetDialogs?: Translation.Dialog;
     /** Asset custom asset string translation */
     assetStrings?: Translation.String;
 }

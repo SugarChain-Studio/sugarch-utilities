@@ -120,7 +120,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
             noMirror: config.noMirror,
             layerNames: config.layerNames,
             ...(config.extended ? { extendedConfig: { [group]: { [asset.Name]: config.extended } } } : {}),
-            assetStrings: config.assetStrings ?? config.assetDialogs,
+            assetStrings: config.assetStrings,
         };
         loadAsset(group, asset, rConfig);
     }
@@ -216,16 +216,6 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      */
     addCustomAssetString (assetStrings: Translation.String) {
         addCustomAssetString(assetStrings);
-    }
-
-    /**
-     * @deprecated Use `addCustomAssetString` instead
-     * 
-     * Add custom dialog. If it contains ItemTorso or ItemTorso2, a mirror will be automatically added.
-     * @param dialog
-     */
-    addCustomDialog (dialog: Translation.Dialog) {
-        addCustomAssetString(dialog);
     }
 
     /**
