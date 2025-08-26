@@ -1,5 +1,15 @@
 # @sugarch/bc-asset-manager
 
+## 0.6.0
+
+### Minor Changes
+
+-   85c69d5: Remove deprecated asset dialogs method and fields.
+
+### Patch Changes
+
+-   1918822: `addCopyGroup` now supports overrides some props to make the copied group different with original one.
+
 ## 0.5.16
 
 ### Patch Changes
