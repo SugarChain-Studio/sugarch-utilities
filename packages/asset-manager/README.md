@@ -20,7 +20,7 @@ npm install @sugarch/bc-asset-manager
 ```
 
 > [!IMPORTANT]
-> This package have a peer dependency setting, if you encounter peer dependencies error, please install the required version of packages manually (add suffix `@x.x.x` to the package name in the install command, for example `@sugarch/bc-mod-hook-manager@0.2.12`)
+> This package has a peer dependency setting. If you encounter peer dependency errors, install the required package versions manually by adding a version suffix (for example `@sugarch/bc-mod-hook-manager@0.2.16`).
 
 ---
 
@@ -84,12 +84,12 @@ Adds an asset with detailed configuration.
 - **Parameters**:
   - `group`: The asset group name.
   - `asset`: The asset definition.
-  - `config`: The asset configuration, including:
-    - `translation`: Translated name of the asset.
-    - `noMirror`: Whether to disable automatic mirroring.
-    - `layerNames`: Custom layer names.
-    - `extended`: Extended asset properties.
-    - `assetStrings`: Custom asset strings.
+  - `config`: The asset configuration. Note: `translation` and `layerNames` are required by the type `AddAssetConfig`.
+    - `translation` (Translation.Entry) — Translated name of the asset. (required)
+    - `layerNames` (Translation.String) — Layer and color-group name translations. (required)
+    - `noMirror` (optional): Whether to disable automatic mirroring.
+    - `extended` (optional): Extended asset properties (AssetArchetypeConfig).
+    - `assetStrings` (optional): Custom asset strings (Translation.String).
 
 ---
 
@@ -124,12 +124,12 @@ Adds grouped configuration for assets.
 
 ---
 
-### `modifyAsset(group: CustomGroupName, asset: string, work: FuncWork): void`
+### `modifyAsset(group: CustomGroupName | CustomGroupName[], asset: string, work: FuncWork): void`
 
-Modifies an asset's properties.
+Modifies an asset's properties. The `group` parameter can be a single group name or an array of group names.
 
 - **Parameters**:
-  - `group`: The asset group name.
+  - `group`: The asset group name, or an array of group names to apply the modification to.
   - `asset`: The asset name.
   - `work`: A function to modify the asset.
 
@@ -173,6 +173,14 @@ Adds custom image mappings.
 
 ---
 
+### `imageMapping` (getter)
+
+Provides access to the internal image mapping helper. The object exposes a `storage` object with `basic`, `customSrc`, `custom` records and helper methods such as `addImgMapping`, `rebuildCustomMapping`, `setBasicImgMapping`, `mapImgSrc` and `mapImg`. It also exposes convenience methods directly on the getter like `addImgMapping` and `setBasicImgMapping`.
+
+Use this when you need finer control over the mapping storage or want to call helper utilities provided by the manager.
+
+---
+
 ### `addGroup(groupDef: CustomGroupDefinition, translation?): void`
 
 Adds a new body group.
@@ -192,6 +200,8 @@ Adds a new body group by copying configuration from an existing group.
   - `copyFrom`: The existing group to copy from.
   - `translation` (optional): Translated name of the new group.
 
+Note: The implementation supports providing optional `defOverrides` to change some properties of the copied group. In the code the full signature is `(newGroup, copyFrom, translation?, defOverrides?)` where `defOverrides` is a partial group definition to override fields on the new group.
+
 ---
 
 ### `addLayerNames(group: CustomGroupName, assetDef: CustomAssetDefinition, entries: Translation.String): void`
@@ -202,6 +212,28 @@ Adds custom layer names based on the asset definition.
   - `group`: The body group name.
   - `assetDef`: The asset definition.
   - `entries`: Layer names grouped by language.
+
+---
+
+### `addLayerNamesRaw(group: CustomGroupName, assetName: string, entry: Translation.CustomRecord<string, string>): void`
+
+Adds custom layer names where the entry already contains full keys (raw). This does not extract names from an asset definition — it's useful when you want to provide layer names directly keyed by layer identifiers.
+
+- **Parameters**:
+  - `group`: The body group name.
+  - `assetName`: The asset name.
+  - `entry`: Layer-name mapping grouped by language.
+
+---
+
+### `addColorGroupNamesRaw(group: CustomGroupName, assetName: string, entry: Translation.CustomRecord<string, string>): void`
+
+Adds custom color group names (raw). This only adds color-group translations and does not add layer names.
+
+- **Parameters**:
+  - `group`: The body group name.
+  - `assetName`: The asset name.
+  - `entry`: Color-group-name mapping grouped by language.
 
 ---
 
