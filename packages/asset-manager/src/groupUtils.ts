@@ -1,7 +1,7 @@
 import { Entries, resolveEntry, solidfyEntry } from './entries';
-import { pushAfterLoad, pushGroupLoad } from './loadSchedule';
+import { pushAfterLoad, pushGroupLoad, pushGroupMirrorLoad } from './loadSchedule';
 import { registerMirror } from './mirrorGroup';
-import { customGroupAdd } from './customStash';
+import { customGroupAdd, getCustomGroups } from './customStash';
 import { loadAsset } from './assetUtils';
 import { resolveStringAsset } from './assetConfigs';
 import type { CustomAssetDefinition, CustomGroupDefinition, CustomGroupName, Translation } from '@sugarch/bc-mod-types';
@@ -95,7 +95,7 @@ export function loadGroup<Custom extends string = AssetGroupBodyName> (
 }
 
 /** Track missing groups to prevent repeated errors */
-const missingGroup = new Set<CustomGroupName>();
+const missingGroup = new Set<string>();
 
 /**
  * Mirror a group configuration to create a new group based on an existing one
@@ -106,14 +106,14 @@ const missingGroup = new Set<CustomGroupName>();
  */
 export function mirrorGroup<Custom extends string = AssetGroupBodyName> (
     newGroup: CustomGroupName<Custom>,
-    copyFrom: CustomGroupName,
+    copyFrom: CustomGroupName<Custom>,
     translation?: Translation.Entry,
     defOverrides?: Partial<CustomGroupDefinition<Custom>>
 ) {
     const wk = () => {
-        const fromDef = AssetFemale3DCG.find(def => def.Group === copyFrom);
+        const fromDef = AssetFemale3DCG.find(def => def.Group === copyFrom) || getCustomGroups<Custom>()[copyFrom];
         const fromGrp = AssetGroupGet('Female3DCG', copyFrom as AssetGroupName);
-        const fromExt = AssetFemale3DCGExtended[copyFrom];
+        const fromExt = AssetFemale3DCGExtended[copyFrom as AssetGroupBodyName];
 
         if (!fromDef || !fromGrp) {
             // If the group can't be found twice, it either doesn't exist or there's a circular dependency
@@ -124,7 +124,7 @@ export function mirrorGroup<Custom extends string = AssetGroupBodyName> (
 
             // If the group doesn't exist, put wk back in the queue
             missingGroup.add(copyFrom);
-            pushGroupLoad(wk);
+            pushGroupMirrorLoad(wk);
             return;
         }
 
@@ -148,5 +148,5 @@ export function mirrorGroup<Custom extends string = AssetGroupBodyName> (
         );
         AssetFemale3DCGExtended[newGroup as AssetGroupBodyName] = fromExt;
     };
-    pushGroupLoad(wk);
+    pushGroupMirrorLoad(wk);
 }

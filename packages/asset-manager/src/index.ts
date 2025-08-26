@@ -249,7 +249,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param translation New group display translation
      * @param defOverrides Overrides some properties of the new group
      */
-    addCopyGroup (newGroup: CustomGroupName<Custom>, copyFrom: AssetGroupName, translation?: Translation.Entry, defOverrides?: Partial<CustomGroupDefinition<Custom>>) {
+    addCopyGroup (newGroup: CustomGroupName<Custom>, copyFrom: CustomGroupName<Custom>, translation?: Translation.Entry, defOverrides?: Partial<CustomGroupDefinition<Custom>>) {
         mirrorGroup(newGroup, copyFrom, translation, defOverrides);
     }
 

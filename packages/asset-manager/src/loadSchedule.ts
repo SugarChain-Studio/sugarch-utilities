@@ -20,6 +20,22 @@ function runGroupLoad (): void {
     while (groupLoadWorks.length > 0) groupLoadWorks.shift()!();
 }
 
+const groupMirrorLoadWorks: FuncWork[] = [];
+
+let isMirrorGroupLoaded = false;
+/**
+ * Push a function to be executed when groups are mirrored
+ * @param work The function to execute
+ */
+export function pushGroupMirrorLoad (work: FuncWork): void {
+    if (isMirrorGroupLoaded) work();
+    else groupMirrorLoadWorks.push(work);
+}
+
+function runGroupMirrorLoad (): void {
+    while (groupMirrorLoadWorks.length > 0) groupMirrorLoadWorks.shift()!();
+}
+
 const assetDefsLoadWorks: Record<string, FuncWork<[AssetGroup]>[]> = {};
 
 /**
@@ -145,6 +161,9 @@ export function runSetupLoad (
         // First execute all direct loading events (generally custom group loading)
         runGroupLoad();
         isGroupLoaded = true;
+        // now it's possible load mirror for custom groups, it should be done after the main group load
+        runGroupMirrorLoad();
+        isMirrorGroupLoaded = true;
         // Load all AssetDefine and ExtenedConfig
         AssetGroup.forEach(group => runAssetDefsLoad(group));
         // Then execute all complete loading events for groups (generally custom item loading added through requireGroup)
