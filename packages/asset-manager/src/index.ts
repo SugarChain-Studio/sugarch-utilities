@@ -111,18 +111,23 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param config The asset configuration
      */
     addAssetWithConfig (
-        group: CustomGroupName<Custom>,
+        group: CustomGroupName<Custom> | CustomGroupName<Custom>[],
         asset: CustomAssetDefinition<Custom>,
         config: AddAssetConfig
     ): void {
+        const grps = Array.isArray(group) ? group : [group];
+        const extItem = { [asset.Name]: config.extended };
         const rConfig: Parameters<typeof loadAsset>[2] = {
             translation: config.translation,
             noMirror: config.noMirror,
             layerNames: config.layerNames,
-            ...(config.extended ? { extendedConfig: { [group]: { [asset.Name]: config.extended } } } : {}),
+            ...(config.extended ? { extendedConfig: Object.fromEntries(grps.map(g => [g, extItem])) } : {}),
             assetStrings: config.assetStrings,
         };
-        loadAsset(group, asset, rConfig);
+
+        for(const group of grps) {
+            loadAsset(group, asset, rConfig);
+        }
     }
 
     /**
