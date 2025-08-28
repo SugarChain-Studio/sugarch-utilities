@@ -1,3 +1,4 @@
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { AssetConfig, ParsedAsset, resolveStringAsset } from './assetConfigs';
 import { customAssetAdd, customAssetMarkStrict, getCustomAssets } from './customStash';
 import { addCustomAssetStringWithPrefix } from './dialog';
@@ -160,6 +161,39 @@ export function modifyAsset<Custom extends string = AssetGroupBodyName> (
 
         pushAssetLoadEvent(groupName, wk);
     }
+}
+
+
+/**
+ * Supply extended config to an existing non-extended asset
+ * @param groupName The body group name
+ * @param assetName The asset name
+ * @param extended The extended asset configuration
+ */
+export function supplyExtended<Custom extends string = AssetGroupBodyName>(
+    groupName: CustomGroupName<Custom> | CustomGroupName<Custom>[],
+    assetName: string,
+    extended: AssetArchetypeConfig,
+    assetStrings: Translation.String
+) {
+    pushAfterLoad(() => {
+        const groupNames = Array.isArray(groupName) ? groupName : [groupName];
+
+        for(const group of groupNames) {
+            const asset = AssetGet('Female3DCG', group as AssetGroupName, assetName);
+            if(!asset) {
+                console.error(`[AssetManager] Asset {${group}:${assetName}} not found`);
+                continue;
+            }
+            if(AssetConfig.value[group]?.[assetName]) {
+                console.warn(`[AssetManager] Asset {${group}:${assetName}} already has extended config!`);
+            } else {
+                AssetConfig.add({ [group]: { [assetName]: extended } });
+                HookManager.invokeOriginal("AssetBuildExtended", asset, extended, AssetConfig.value);
+                addCustomAssetStringWithPrefix(asset.Group.Name, asset.Name, assetStrings);
+            }
+        }
+    });
 }
 
 /**

@@ -1,4 +1,4 @@
-import { loadAsset, loadExtendedConfig, modifyAsset, modifyAssetLayers, modifyGroup } from './assetUtils';
+import { loadAsset, loadExtendedConfig, modifyAsset, modifyAssetLayers, modifyGroup, supplyExtended } from './assetUtils';
 import { loadGroup, mirrorGroup } from './groupUtils';
 import { pushAfterLoad, runSetupLoad } from './loadSchedule';
 import { addCustomAssetString, setupCustomAssetString } from './dialog';
@@ -190,11 +190,26 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param work
      */
     modifyAsset (
-        group: CustomGroupName | CustomGroupName[],
+        group: CustomGroupName<Custom> | CustomGroupName<Custom>[],
         asset: string,
         work: FuncWork<[Mutable<AssetGroup>, Mutable<Asset>]>
     ) {
         modifyAsset(group, asset, work);
+    }
+
+    /**
+     * Supply extended config to an existing non-extended asset
+     * @param group The body group name
+     * @param asset The asset name
+     * @param extended The extended asset configuration
+     */
+    supplyExtended(
+        group: CustomGroupName<Custom> | CustomGroupName<Custom>[],
+        asset: string,
+        extended: AssetArchetypeConfig,
+        assetStrings: Translation.String
+    ) {
+        supplyExtended(group, asset, extended, assetStrings);
     }
 
     /**
