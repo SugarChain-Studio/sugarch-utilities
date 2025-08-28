@@ -13,16 +13,16 @@
     "push-release": "git checkout release -q && git merge main -q && git push && git checkout main -q"
   },
   "devDependencies": {
-    "@eslint/js": "^9.32.0",
-    "@typescript-eslint/eslint-plugin": "^8.39.0",
-    "@typescript-eslint/parser": "^8.39.0",
+    "@eslint/js": "^9.34.0",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
     "changeset": "^0.2.6",
-    "eslint": "^9.32.0",
+    "eslint": "^9.34.0",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.39.0"
+    "typescript-eslint": "^8.41.0"
   },
   "packageManager": "pnpm@10.12.1+sha512.f0dda8580f0ee9481c5c79a1d927b9164f2c478e90992ad268bbb2465a736984391d6333d2c327913578b2804af33474ca554ba29c04a8b13060a717675ae3ac",
   "dependencies": {
-    "@changesets/cli": "^2.29.5"
+    "@changesets/cli": "^2.29.6"
   }
 }
