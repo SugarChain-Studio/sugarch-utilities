@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.7.0
+
+### Minor Changes
+
+-   07299b0: Add supplyExtended function to manage extended asset configurations.
+
 ## 0.6.0
 
 ### Minor Changes
