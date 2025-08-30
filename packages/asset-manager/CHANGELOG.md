@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.7.1
+
+### Patch Changes
+
+-   9001eaa: Fix layer names translation for mutiple assets that shares layer names
+
 ## 0.7.0
 
 ### Minor Changes
