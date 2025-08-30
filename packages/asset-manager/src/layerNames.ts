@@ -15,6 +15,17 @@ const colorGroupNames = new Map<string, LayerNameDetails>();
 let layerCache: (() => TextCache) | undefined = undefined;
 let colorGroupCache: (() => TextCache) | undefined = undefined;
 
+function combineDetail(target: typeof layerNames, key:string, value:LayerNameDetails) {
+    const existing = target.get(key);
+    if (!existing) {
+        target.set(key, value);
+    } else {
+        const nDesc = value.noOverride ? { ...value.desc, ...existing.desc } : { ...existing.desc, ...value.desc };
+        const nFallback = value.noOverride ? existing.fallback : value.fallback;
+        target.set(key, { desc: nDesc, fallback: nFallback, noOverride: value.noOverride });
+    }
+}
+
 /**
  * Push a layer name into the cache or storage
  * @param key
@@ -24,7 +35,7 @@ let colorGroupCache: (() => TextCache) | undefined = undefined;
  */
 export function pushLayerName (key: string, desc: Translation.Entry, fallback: string, noOverride = false) {
     if (noOverride && layerNames.has(key)) return;
-    layerNames.set(key, { desc, fallback, noOverride });
+    combineDetail(layerNames, key, { desc, fallback, noOverride });
 }
 
 function writeLayerNames (cache: TextCache) {
@@ -43,7 +54,7 @@ function writeLayerNames (cache: TextCache) {
  */
 export function pushColorGroupName (key: string, desc: Translation.Entry, fallback: string, noOverride = false) {
     if (noOverride && colorGroupNames.has(key)) return;
-    colorGroupNames.set(key, { desc, fallback, noOverride });
+    combineDetail(colorGroupNames, key, { desc, fallback, noOverride });
 }
 
 function writeColorGroupNames (cache: TextCache) {
@@ -75,8 +86,8 @@ function createLayerNameResolver (entries?: Translation.String) {
  * Transfrom Lang-Layer-String to {key:Layer, entry:Lang-String}[]
  * @param entries Lang-Layer-String entries
  */
-function createLayerEntryArray(entries:Translation.CustomRecord<string, string>) {
-    const ret : Record<string, Translation.Entry> = {};
+function createLayerEntryArray (entries: Translation.CustomRecord<string, string>) {
+    const ret: Record<string, Translation.Entry> = {};
     for (const [lang, entry] of Object.entries(entries)) {
         for (const [key, value] of Object.entries(entry)) {
             if (!ret[key]) ret[key] = {};
@@ -84,9 +95,9 @@ function createLayerEntryArray(entries:Translation.CustomRecord<string, string>)
         }
     }
     return Object.entries(ret).reduce((acc, [key, value]) => {
-        acc.push({key, value});
+        acc.push({ key, value });
         return acc;
-    },[] as {key: string, value: Translation.Entry}[]);
+    }, [] as { key: string; value: Translation.Entry }[]);
 }
 
 /**
@@ -100,7 +111,7 @@ export function addLayerNamesRaw<Custom extends string = AssetGroupBodyName> (
     assetName: string,
     entries: Translation.CustomRecord<string, string>
 ) {
-    for(const {key, value} of createLayerEntryArray(entries)) {
+    for (const { key, value } of createLayerEntryArray(entries)) {
         pushLayerName(`${group}${assetName}${key}`, value, key);
     }
 }
@@ -116,7 +127,7 @@ export function addColorGroupNamesRaw<Custom extends string = AssetGroupBodyName
     assetName: string,
     entries: Translation.CustomRecord<string, string>
 ) {
-    for(const {key, value} of createLayerEntryArray(entries)) {
+    for (const { key, value } of createLayerEntryArray(entries)) {
         pushColorGroupName(`${group}${assetName}${key}`, value, key);
     }
 }
