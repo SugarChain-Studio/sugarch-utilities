@@ -1,6 +1,7 @@
 import { HookManager, HookManagerInterface } from '@sugarch/bc-mod-hook-manager';
 import type { CustomGroupName } from '@sugarch/bc-mod-types';
 import { SyncPromise } from './syncPromise';
+import { queryMirrorPreimage } from './mirrorGroup';
 
 const customGroups: Record<string, AssetGroup> = {};
 
@@ -122,6 +123,7 @@ export function enableCustomAssets (): void {
     ) => {
         const [_, Name, Group] = args;
         if (isInListCustomAsset(Group, Name)) return true;
+        args[2] = queryMirrorPreimage(Group) ?? Group;
         return next(args);
     };
 

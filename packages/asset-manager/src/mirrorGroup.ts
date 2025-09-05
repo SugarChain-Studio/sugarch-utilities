@@ -98,3 +98,14 @@ export function resolvePreimage<Custom extends string = AssetGroupBodyName> (
 ): CustomGroupName<Custom> | undefined {
     return rMirrorPreimage[group] as CustomGroupName<Custom> | undefined;
 }
+
+/**
+ * Query the preimage group for a mirrored group
+ * @param group Group name to find preimage for
+ * @returns Original group name if this is a mirror, otherwise undefined
+ */
+export function queryMirrorPreimage<Custom extends string = AssetGroupBodyName> (
+    group: CustomGroupName<Custom>
+): CustomGroupName<Custom> | undefined {
+    return rMirrorPreimage[group] as CustomGroupName<Custom> | undefined;
+}
