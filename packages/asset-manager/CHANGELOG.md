@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.7.2
+
+### Patch Changes
+
+-   6d405dc: Add a second stage check for item availability.
+
 ## 0.7.1
 
 ### Patch Changes
