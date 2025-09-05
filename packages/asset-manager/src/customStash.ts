@@ -98,6 +98,11 @@ export function enableCustomAssets (): void {
         doInventoryAdd = DialogMenuMode !== 'permissions';
     });
 
+    const preAvailable: typeof globalThis['InventoryAvailable'] = (C, N, G) => {
+        const pre = queryMirrorPreimage(G);
+        return pre ? HookManager.invokeOriginal('InventoryAvailable', C, N, pre) : false;
+    };
+
     HookManager.progressiveHook('DialogInventoryAdd')
         .next()
         .inject(args => {
@@ -108,9 +113,10 @@ export function enableCustomAssets (): void {
 
             if (customAssets[groupName]) {
                 Object.entries(customAssets[groupName])
+                    .filter(([assetName]) => !added.has(assetName))
                     .filter(
                         ([assetName, asset]) =>
-                            asset.Value >= 0 && !added.has(assetName)
+                            asset.Value >= 0 || preAvailable(args[0], assetName, groupName)
                     )
                     .forEach(([_, asset]) =>
                         HookManager.invokeOriginal('DialogInventoryAdd', args[0], { Asset: asset }, false)
@@ -118,19 +124,22 @@ export function enableCustomAssets (): void {
             }
         });
 
+    const insides = [
+        HookManager.insideFlag('CharacterAppearanceValidate'),
+        HookManager.insideFlag('CraftingItemListBuild'),
+        HookManager.insideFlag('WardrobeFastLoad'),
+        HookManager.insideFlag('CraftingValidate'),
+    ];
+
     const overrideAvailable = (
         ...[args, next]: Parameters<HookManagerInterface.HookFunction<'InventoryAvailable'>>
     ) => {
-        const [_, Name, Group] = args;
-        if (isInListCustomAsset(Group, Name)) return true;
-        args[2] = queryMirrorPreimage(Group) ?? Group;
+        if (!insides.some(flag => flag.inside)) return next(args);
+        if (isInListCustomAsset(args[2], args[1]) || preAvailable(...args)) return true;
         return next(args);
     };
 
-    HookManager.progressiveHook('InventoryAvailable').inside('CharacterAppearanceValidate').override(overrideAvailable);
-    HookManager.progressiveHook('InventoryAvailable').inside('CraftingItemListBuild').override(overrideAvailable);
-    HookManager.progressiveHook('InventoryAvailable').inside('WardrobeFastLoad').override(overrideAvailable);
-    HookManager.progressiveHook('InventoryAvailable').inside('CraftingValidate').override(overrideAvailable);
+    HookManager.hookFunction('InventoryAvailable', 0, overrideAvailable);
 }
 
 /**
