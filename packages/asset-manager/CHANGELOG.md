@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.7.3
+
+### Patch Changes
+
+-   4afc5b4: Simplify the InventoryAvailable hook logic to avoid excessive recursive calls.
+
 ## 0.7.2
 
 ### Patch Changes
