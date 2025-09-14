@@ -103,26 +103,23 @@ export function enableCustomAssets (): void {
         return pre ? HookManager.invokeOriginal('InventoryAvailable', C, N, pre) : false;
     };
 
-    HookManager.progressiveHook('DialogInventoryAdd')
-        .next()
-        .inject(args => {
-            if (!doInventoryAdd) return;
-            doInventoryAdd = false;
-            const groupName = args[1].Asset.Group.Name;
-            const added = new Set(DialogInventory.map(item => item.Asset.Name));
+    HookManager.hookFunction('DialogInventoryAdd', 10, (args, next) => {
+        const ret = next(args);
+        if (!doInventoryAdd) return ret;
+        doInventoryAdd = false;
 
-            if (customAssets[groupName]) {
-                Object.entries(customAssets[groupName])
-                    .filter(([assetName]) => !added.has(assetName))
-                    .filter(
-                        ([assetName, asset]) =>
-                            asset.Value >= 0 || preAvailable(args[0], assetName, groupName)
-                    )
-                    .forEach(([_, asset]) =>
-                        HookManager.invokeOriginal('DialogInventoryAdd', args[0], { Asset: asset }, false)
-                    );
-            }
-        });
+        const groupName = args[1].Asset.Group.Name;
+        const added = new Set(DialogInventory.map(item => item.Asset.Name));
+        const content = customAssets[groupName];
+        if (!content) return ret;
+
+        Object.entries(content)
+            .filter(([assetName]) => !added.has(assetName))
+            .filter(([assetName, asset]) => asset.Value >= 0 || preAvailable(args[0], assetName, groupName))
+            .forEach(([_, asset]) => DialogInventoryAdd(args[0], { Asset: asset }, false));
+            
+        return ret;
+    });
 
     const insides = [
         HookManager.insideFlag('CharacterAppearanceValidate'),
