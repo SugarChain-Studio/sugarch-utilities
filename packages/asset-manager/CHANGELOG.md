@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.7.4
+
+### Patch Changes
+
+-   d5962c5: Compatibility with bcx search
+
 ## 0.7.3
 
 ### Patch Changes
