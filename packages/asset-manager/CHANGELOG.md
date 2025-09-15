@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 0.8.0
+
+### Minor Changes
+
+-   Make `layerNames` not mandatory for `addAssetWithConfig`, and enable array input for `addAssetWithConfig`.
+
 ## 0.7.4
 
 ### Patch Changes

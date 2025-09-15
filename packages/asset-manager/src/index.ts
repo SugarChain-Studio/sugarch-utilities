@@ -1,4 +1,11 @@
-import { loadAsset, loadExtendedConfig, modifyAsset, modifyAssetLayers, modifyGroup, supplyExtended } from './assetUtils';
+import {
+    loadAsset,
+    loadExtendedConfig,
+    modifyAsset,
+    modifyAssetLayers,
+    modifyGroup,
+    supplyExtended,
+} from './assetUtils';
 import { loadGroup, mirrorGroup } from './groupUtils';
 import { pushAfterLoad, runSetupLoad } from './loadSchedule';
 import { addCustomAssetString, setupCustomAssetString } from './dialog';
@@ -20,6 +27,17 @@ import { ImageMapping } from '@sugarch/bc-image-mapping';
 import { setLogger } from './logger';
 import { AddAssetConfig } from './types';
 
+type AddAssetWithConfigParams<Custom extends string = AssetGroupBodyName> = [
+    group: CustomGroupName<Custom> | CustomGroupName<Custom>[],
+    asset: CustomAssetDefinition<Custom>,
+    config: AddAssetConfig
+];
+
+type AddAssetWithConfigParamsNoGroup<Custom extends string = AssetGroupBodyName> = [
+    asset: CustomAssetDefinition<Custom>,
+    config: AddAssetConfig
+];
+
 export type {
     CustomAssetDefinition,
     CustomGroupDefinition,
@@ -29,11 +47,19 @@ export type {
     Translation,
     ImageMappingRecord,
     ILogger,
+    AddAssetWithConfigParams,
+    AddAssetWithConfigParamsNoGroup,
 };
 
 export type { CustomAssetDefinitionItem, CustomAssetDefinitionAppearance } from '@sugarch/bc-mod-types';
 
 export { resolveAssetOverrides } from '@sugarch/bc-image-mapping';
+
+function addAssetWithConfigTyping<Custom extends string = AssetGroupBodyName> (
+    arg0: CustomGroupName<Custom> | CustomGroupName<Custom>[] | AddAssetWithConfigParams<Custom>[]
+): arg0 is AddAssetWithConfigParams<Custom>[] {
+    return Array.isArray(arg0) && typeof arg0[0] !== 'string';
+}
 
 class _AssetManager<Custom extends string = AssetGroupBodyName> {
     /**
@@ -80,7 +106,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * ---
      * You should provide `translation` and `layerNames` for the asset, for example:
      *   ```ts
-     *   addAsset(group, assetDef, {
+     *   addAssetWithConfig(group, assetDef, {
      *     translation: { EN: 'Asset Name' },
      *     layerNames: { EN: { 'Layer1': 'Layer1 Name' } },
      *   })
@@ -91,13 +117,13 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * ---
      * If the asset is ItemTorso or ItemTorso2, a mirror will be automatically added. This behaviour can be turned off by
      * ```ts
-     * addAsset(group, assetDef, { noMirror : true })
+     * addAssetWithConfig(group, assetDef, { noMirror : true })
      * ```
      *
      * ---
      * If you want to add ExtendedConfig to the asset, you can do it like this:
      * ```ts
-     * addAsset(group, assetDef, {
+     * addAssetWithConfig(group, assetDef, {
      *   extended: { Archetype: ExtendedArchetype.MODULAR, , ... }, // Extended asset properties
      *   customStrings: { EN : { "SelectBase" : "...", "ModuleM1": "...", ...  } }, // Asset custom asset string translation
      * })
@@ -106,27 +132,81 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      *   the prefix group name `"ItemTorso"` and asset name `"MyAsset"` will be automatically added.
      *
      *
-     * @param group The asset group
+     * @param group The asset group(s)
      * @param asset The asset definition
      * @param config The asset configuration
      */
-    addAssetWithConfig (
+    addAssetWithConfig(...arg0: AddAssetWithConfigParams<Custom>): void;
+
+    /**
+     * Add an asset with detailed configuration, using a tuple array as argument.
+     * ```ts
+     * addAssetWithConfig([[group1, assetDef1, config1], [group2, assetDef2, config2]])
+     * ```
+     * is equivalent to
+     * ```ts
+     * addAssetWithConfig(group1, assetDef1, config1)
+     * addAssetWithConfig(group2, assetDef2, config2)
+     * ```
+     *
+     * @param args The asset groups and asset definition tuple
+     */
+    addAssetWithConfig(args: AddAssetWithConfigParams<Custom>[]): void;
+
+    /**
+     * Add an asset with detailed configuration, using tuple array as argument.
+     * ```ts
+     * addAssetWithConfig(group, [[assetDef1, config1], [assetDef2, config2]])
+     * ```
+     * is equivalent to
+     * ```ts
+     * addAssetWithConfig(group, assetDef1, config1)
+     * addAssetWithConfig(group, assetDef2, config2)
+     * ```
+     *
+     * @param group The asset group(s)
+     * @param args The asset definition tuple
+     */
+    addAssetWithConfig(
         group: CustomGroupName<Custom> | CustomGroupName<Custom>[],
-        asset: CustomAssetDefinition<Custom>,
-        config: AddAssetConfig
+        args: AddAssetWithConfigParamsNoGroup<Custom>[]
+    ): void;
+
+    addAssetWithConfig (
+        arg0: CustomGroupName<Custom> | CustomGroupName<Custom>[] | AddAssetWithConfigParams<Custom>[],
+        arg1?: CustomAssetDefinition<Custom> | AddAssetWithConfigParamsNoGroup<Custom>[],
+        config?: AddAssetConfig
     ): void {
-        const grps = Array.isArray(group) ? group : [group];
-        const extItem = { [asset.Name]: config.extended };
-        const rConfig: Parameters<typeof loadAsset>[2] = {
-            translation: config.translation,
-            noMirror: config.noMirror,
-            layerNames: config.layerNames,
-            ...(config.extended ? { extendedConfig: Object.fromEntries(grps.map(g => [g, extItem])) } : {}),
-            assetStrings: config.assetStrings,
+        const baseFunc = (
+            group: CustomGroupName<Custom> | CustomGroupName<Custom>[],
+            asset: CustomAssetDefinition<Custom>,
+            config: AddAssetConfig
+        ) => {
+            const grps = Array.isArray(group) ? group : [group];
+            const extItem = { [asset.Name]: config.extended };
+            const rConfig: Parameters<typeof loadAsset>[2] = {
+                translation: config.translation,
+                noMirror: config.noMirror,
+                layerNames: config.layerNames,
+                ...(config.extended ? { extendedConfig: Object.fromEntries(grps.map(g => [g, extItem])) } : {}),
+                assetStrings: config.assetStrings,
+            };
+
+            for (const group of grps) {
+                loadAsset(group, asset, rConfig);
+            }
         };
 
-        for(const group of grps) {
-            loadAsset(group, asset, rConfig);
+        if (addAssetWithConfigTyping(arg0)) {
+            for (const [group, assetDef, cfg] of arg0) {
+                baseFunc(group, assetDef, cfg);
+            }
+        } else if (arg1 && Array.isArray(arg1)) {
+            for (const [assetDef, cfg] of arg1) {
+                baseFunc(arg0, assetDef, cfg);
+            }
+        } else if (arg1 && config) {
+            baseFunc(arg0, arg1, config);
         }
     }
 
@@ -139,7 +219,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     addGroupedAssetsWithConfig (
         groupedAssets: CustomGroupedAssetDefinitions<Custom>,
         translations: Translation.GroupedEntries,
-        groupedLayerNames: Translation.GroupedAssetStrings<Custom>,
+        groupedLayerNames: Translation.GroupedAssetStrings<Custom>
     ) {
         for (const [group, assets] of Object.entries(groupedAssets)) {
             for (const asset of assets) {
@@ -203,7 +283,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param asset The asset name
      * @param extended The extended asset configuration
      */
-    supplyExtended(
+    supplyExtended (
         group: CustomGroupName<Custom> | CustomGroupName<Custom>[],
         asset: string,
         extended: AssetArchetypeConfig,
@@ -269,14 +349,19 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param translation New group display translation
      * @param defOverrides Overrides some properties of the new group
      */
-    addCopyGroup (newGroup: CustomGroupName<Custom>, copyFrom: CustomGroupName<Custom>, translation?: Translation.Entry, defOverrides?: Partial<CustomGroupDefinition<Custom>>) {
+    addCopyGroup (
+        newGroup: CustomGroupName<Custom>,
+        copyFrom: CustomGroupName<Custom>,
+        translation?: Translation.Entry,
+        defOverrides?: Partial<CustomGroupDefinition<Custom>>
+    ) {
         mirrorGroup(newGroup, copyFrom, translation, defOverrides);
     }
 
     /**
-     * Add custom layer names (for coloring menu).   
-     * Layer names are obtained from the asset definition.  
-     * Color group names are also obtained from the asset definition, while their translation is obtained from the entry, 
+     * Add custom layer names (for coloring menu).
+     * Layer names are obtained from the asset definition.
+     * Color group names are also obtained from the asset definition, while their translation is obtained from the entry,
      * just like layer names. (Thus not support color group with a same name with layer shows as different name with the layer)
      * @param group The body group name
      * @param assetDef The asset definition
@@ -297,7 +382,11 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param assetName The asset name
      * @param entry Layer-Name record, grouped by language
      */
-    addLayerNamesRaw (group: CustomGroupName<Custom>, assetName: string, entry: Translation.CustomRecord<string, string>) {
+    addLayerNamesRaw (
+        group: CustomGroupName<Custom>,
+        assetName: string,
+        entry: Translation.CustomRecord<string, string>
+    ) {
         addLayerNamesRaw(group, assetName, entry);
     }
 
@@ -308,7 +397,11 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param assetName The asset name
      * @param entry ColorGroupName-Name record, grouped by language
      */
-    addColorGroupNamesRaw (group: CustomGroupName<Custom>, assetName: string, entry: Translation.CustomRecord<string, string>) {
+    addColorGroupNamesRaw (
+        group: CustomGroupName<Custom>,
+        assetName: string,
+        entry: Translation.CustomRecord<string, string>
+    ) {
         addColorGroupNamesRaw(group, assetName, entry);
     }
 

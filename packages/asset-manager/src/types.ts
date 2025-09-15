@@ -4,7 +4,7 @@ export type AddAssetConfig = {
     /** Asset name translation (non optional) */
     translation: Translation.Entry;
     /** Asset layer and color groups translation */
-    layerNames: Translation.String;
+    layerNames?: Translation.String;
     /** Whether to not add this asset to mirrored groups */
     noMirror?: boolean;
 
