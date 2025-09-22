@@ -1,4 +1,3 @@
-import bcModSdk from 'bondage-club-mod-sdk';
 import { ProgressiveHook } from './progressiveHook';
 import { HookManagerInterface } from './types';
 import type { FuncWork, ILogger } from '@sugarch/bc-mod-types';
@@ -35,34 +34,9 @@ class _HookManager {
     }
 
     /**
-     * @deprecated Use {@link initWithMod }  instead. This method causes high coupling between this
-     *  module and bcModSdk, making it difficult to apply asynchronous loading.
-     * 
-     * Register mod
-     * @param modinfo the mod info to register
-     */
-    init (modinfo: HookManagerInterface.ModSDKModInfo) {
-        this.mMod = bcModSdk.registerMod(modinfo);
-        patchList.run();
-        hookList.run();
-
-        const wk = () => waitPlayerHookList.run();
-
-        if (playerLoaded()) {
-            wk();
-        } else {
-            this.mod!.hookFunction('LoginResponse', 0, (args, next) => {
-                next(args);
-                if (playerLoaded()) wk();
-            });
-        }
-
-        afterInitList.run();
-    }
-
-    /**
      * Initialize mod related functions using an already registered mod.
      * Note that a HookManager can only be used with a single mod at a time.
+     * Thus, this method can only be called once per HookManager instance.
      *
      * @example
      * // register a mod to mod sdk;

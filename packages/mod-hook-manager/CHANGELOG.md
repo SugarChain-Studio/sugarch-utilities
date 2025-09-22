@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-hook-manager
 
+## 0.3.0
+
+### Minor Changes
+
+-   Remove deprecated `init` method
+
 ## 0.2.16
 
 ### Patch Changes
