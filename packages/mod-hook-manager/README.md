@@ -26,18 +26,6 @@ To initialize the hook manager, you need to provide the mod information. You can
 ```typescript
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 
-// Initialize the hook manager with a mod information
-HookManager.init({
-  name: 'MyMod',
-  fullName: 'My Mod',
-  version: '1.0.0',
-  repository: 'https://github.com/username/repo',
-});
-```
-
-```typescript
-import { HookManager } from '@sugarch/bc-mod-hook-manager';
-
 const mod = bcModSdk.registerMod({
   name: 'MyMod',
   fullName: 'My Mod',

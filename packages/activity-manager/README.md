@@ -206,8 +206,6 @@ const modInfo = ...;
 
 // Initialize the hook manager, ActivityManager will use it to hook essential functions
 HookManager.initWithMod(bcModSdk.registerMod(modInfo));
-// Or directly initialize the hook manager with modinfo
-// HookManager.init(modInfo);
 
 // Register the whole thing
 ActivityManager.init();
