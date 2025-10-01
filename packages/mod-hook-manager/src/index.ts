@@ -61,6 +61,8 @@ class _HookManager {
                 if (playerLoaded()) wk();
             });
         }
+
+        afterInitList.run();
     }
 
     /**
