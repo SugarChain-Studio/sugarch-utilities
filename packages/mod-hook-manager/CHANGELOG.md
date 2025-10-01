@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-hook-manager
 
+## 0.3.1
+
+### Patch Changes
+
+-   954af75: fix 'afterInit' should run.
+
 ## 0.3.0
 
 ### Minor Changes
