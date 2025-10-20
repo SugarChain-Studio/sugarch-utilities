@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.0.5
+
+### Patch Changes
+
+-   352d364: refine type check in addAssetWithConfigTyping function
+
 ## 1.0.4
 
 ### Patch Changes
