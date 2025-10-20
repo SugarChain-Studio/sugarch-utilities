@@ -32,7 +32,7 @@
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.4",
-    "bc-stubs": "120.0.0",
+    "bc-stubs": "121.0.0",
     "rollup": "^4.46.2",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-delete": "^3.0.1",

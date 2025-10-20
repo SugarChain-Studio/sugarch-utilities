@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-asset-manager",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "An asset manager for Bondage Club mods, easily add custom assets to the game.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
@@ -37,7 +37,7 @@
     "@rollup/plugin-typescript": "^12.1.4",
     "@sugarch/bc-image-mapping": "workspace:*",
     "@sugarch/bc-mod-utility": "workspace:*",
-    "bc-stubs": "120.0.0",
+    "bc-stubs": "121.0.0",
     "bondage-club-mod-sdk": "^1.2.0",
     "rollup": "^4.46.2",
     "rollup-plugin-delete": "^3.0.1",
