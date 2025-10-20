@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.0.4
+
+### Patch Changes
+
+-   5239284: correct type check in addAssetWithConfigTyping function
+
 ## 1.0.2
 
 ### Patch Changes
