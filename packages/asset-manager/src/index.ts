@@ -58,7 +58,7 @@ export { resolveAssetOverrides } from '@sugarch/bc-image-mapping';
 function addAssetWithConfigTyping<Custom extends string = AssetGroupBodyName> (
     arg0: CustomGroupName<Custom> | CustomGroupName<Custom>[] | AddAssetWithConfigParams<Custom>[]
 ): arg0 is AddAssetWithConfigParams<Custom>[] {
-    return Array.isArray(arg0) && arg0.length === 3
+    return Array.isArray(arg0) && (arg0.length === 0 || (Array.isArray(arg0[0]) && arg0[0].length === 3));
 }
 
 class _AssetManager<Custom extends string = AssetGroupBodyName> {
