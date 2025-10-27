@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 2.1.0
+
+### Minor Changes
+
+-   63508f6: add VirtualPath class for managing virtual asset paths and enhance image source validation
+
 ## 2.0.2
 
 ### Patch Changes

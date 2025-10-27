@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 1.0.4
+
+### Patch Changes
+
+-   63508f6: update dependencies
+
 ## 1.0.3
 
 ### Patch Changes
