@@ -125,7 +125,8 @@ export class ImageMappingStorage {
         if (typeof src !== 'string') return src;
         if (!src.endsWith('.png')) return src;
 
-        if (src.startsWith('data:image')) return src;
+        if (src.startsWith('blob:')) return src;
+        if (src.startsWith('data:')) return src;
         if (src.startsWith('http')) return src;
 
         // Ignore mapping for specific cases
