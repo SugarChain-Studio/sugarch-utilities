@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 2.0.2
+
+### Patch Changes
+
+-   32db87c: update image source validation to include blob and data URIs
+
 ## 2.0.1
 
 ### Patch Changes

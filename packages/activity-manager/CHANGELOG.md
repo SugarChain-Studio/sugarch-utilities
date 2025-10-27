@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 1.0.3
+
+### Patch Changes
+
+-   32db87c: update image source validation to include blob and data URIs
+
 ## 1.0.2
 
 ### Patch Changes

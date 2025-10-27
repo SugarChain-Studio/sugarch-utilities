@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.0.6
+
+### Patch Changes
+
+-   32db87c: update image source validation to include blob and data URIs
+
 ## 1.0.5
 
 ### Patch Changes
