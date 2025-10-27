@@ -127,7 +127,8 @@ export class ImageMappingStorage {
 
         if (src.startsWith('blob:')) return src;
         if (src.startsWith('data:')) return src;
-        if (src.startsWith('http')) return src;
+        if (src.startsWith('http:')) return src;
+        if (src.startsWith('https:')) return src;
 
         // Ignore mapping for specific cases
         if (src.startsWith('@nomap/')) return src;

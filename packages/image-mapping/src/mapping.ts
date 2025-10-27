@@ -4,6 +4,7 @@ import { sleepUntil, PathTools } from '@sugarch/bc-mod-utility';
 import { ImageMappingStorage } from './mappingStorage';
 import type { AssetOverrideContainer, ImageMappingRecord } from '@sugarch/bc-mod-types';
 import { version } from './package';
+import { VirtualPath } from './virtualPath';
 
 const storage = new ImageMappingStorage();
 
@@ -168,6 +169,34 @@ class _ImageMapping {
      */
     setBasicImgMapping (mappings: Record<string, string>): void {
         storage.setBasicImgMapping(mappings);
+    }
+
+    /**
+     * Create a virtual path alias that can be used to centrally redirect multiple
+     * asset paths to a single destination.
+     *
+     * Usage pattern:
+     * 1) Call {@link VirtualPath.map | map()} to associate one or more real asset paths with the alias
+     * 2) Call {@link VirtualPath.resolve | resolve()} once to point the alias to a final URL or path
+     *
+     * Example:
+     * ```ts
+     * const v = ImageMapping.createVirtualPath('my://icons/Key');
+     * v
+     *   .map([
+     *     'Assets/Female3DCG/ItemMisc/Key.png',
+     *     'Assets/Female3DCG/ItemMisc/Key2.png',
+     *   ])
+     *   .resolve('https://cdn.example.com/assets/key.png?v=123');
+     * ```
+     *
+     * Tip: Use a unique prefix (e.g. starting with 'your-protocol://') to avoid collisions with real asset paths.
+     *
+     * @param path The virtual alias key.
+     * @returns A chainable {@link VirtualPath} helper bound to the internal storage.
+     */
+    createVirtualPath (path: string): VirtualPath {
+        return new VirtualPath(path, storage);
     }
 }
 
