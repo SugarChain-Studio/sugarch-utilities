@@ -42,7 +42,7 @@ export class _ActivityManager<CustomAct extends string = string, CustomPrereq ex
             const copyAct = { ...activity };
             pushLoad(() => {
                 copyAct.activity.Prerequisite = enlistUnamedPrereq(copyAct.activity.Name, copyAct.activity.Prerequisite);
-                copyAct.activity.ActivityID = -1;
+                copyAct.activity.ActivityID = undefined
     
                 ActivityFemale3DCG.push(copyAct.activity as Activity);
                 ActivityFemale3DCGOrdering.push(copyAct.activity.Name as ActivityName);
