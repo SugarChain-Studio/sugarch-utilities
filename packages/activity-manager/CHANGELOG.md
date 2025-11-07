@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 1.0.5
+
+### Patch Changes
+
+-   a2ade52: custom activities should have undefined ActivityIDs
+
 ## 1.0.4
 
 ### Patch Changes
