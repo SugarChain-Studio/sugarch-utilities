@@ -33,7 +33,7 @@ namespace details {
             CustomGroupName<T>
         >;
         export type Base<T extends string = AssetGroupBodyName> = details.ExtendType<
-            AssetGroupDefinitionBase,
+            AssetDefinitionBase,
             AssetGroupName,
             CustomGroupName<T>
         >;

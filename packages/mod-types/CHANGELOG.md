@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-types
 
+## 0.6.4
+
+### Patch Changes
+
+-   aa850fe: correct type reference from AssetGroupDefinitionBase to AssetDefinitionBase in details namespace
+
 ## 0.6.3
 
 ### Patch Changes

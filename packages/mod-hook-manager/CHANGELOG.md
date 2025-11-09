@@ -1,5 +1,12 @@
 # @sugarch/bc-mod-hook-manager
 
+## 0.3.3
+
+### Patch Changes
+
+-   Updated dependencies [aa850fe]
+    -   @sugarch/bc-mod-types@0.6.4
+
 ## 0.3.2
 
 ### Patch Changes
