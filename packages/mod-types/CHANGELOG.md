@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-types
 
+## 0.6.3
+
+### Patch Changes
+
+-   cc921fb: add Base type for custom asset definitions
+
 ## 0.6.2
 
 ### Patch Changes
