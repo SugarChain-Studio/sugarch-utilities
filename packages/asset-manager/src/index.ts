@@ -17,7 +17,6 @@ import type {
     CustomAssetDefinition,
     CustomGroupDefinition,
     CustomGroupedAssetDefinitions,
-    CustomAssetDefinitionBase,
     CustomGroupName,
     FuncWork,
     Translation,
