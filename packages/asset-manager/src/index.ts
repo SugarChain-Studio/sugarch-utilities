@@ -17,6 +17,7 @@ import type {
     CustomAssetDefinition,
     CustomGroupDefinition,
     CustomGroupedAssetDefinitions,
+    CustomAssetDefinitionBase,
     CustomGroupName,
     FuncWork,
     Translation,
@@ -51,7 +52,7 @@ export type {
     AddAssetWithConfigParamsNoGroup,
 };
 
-export type { CustomAssetDefinitionItem, CustomAssetDefinitionAppearance } from '@sugarch/bc-mod-types';
+export type { CustomAssetDefinitionItem, CustomAssetDefinitionAppearance, CustomAssetDefinitionBase } from '@sugarch/bc-mod-types';
 
 export { resolveAssetOverrides } from '@sugarch/bc-image-mapping';
 

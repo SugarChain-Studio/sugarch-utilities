@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.0.9
+
+### Patch Changes
+
+-   bae42c5: add CustomAssetDefinitionBase to exports in asset-manager
+
 ## 1.0.8
 
 ### Patch Changes
