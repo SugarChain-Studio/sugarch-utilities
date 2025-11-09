@@ -32,6 +32,11 @@ namespace details {
             AssetGroupName,
             CustomGroupName<T>
         >;
+        export type Base<T extends string = AssetGroupBodyName> = details.ExtendType<
+            AssetGroupDefinitionBase,
+            AssetGroupName,
+            CustomGroupName<T>
+        >;
         export type Script<_ extends string = AssetGroupBodyName> = AssetDefinition.Script;
     }
 
@@ -67,6 +72,12 @@ export type CustomAssetDefinitionItem<Custom extends string = AssetGroupBodyName
  */
 export type CustomAssetDefinitionAppearance<Custom extends string = AssetGroupBodyName> =
     details.CAssetDef.Appearance<Custom>;
+
+/**
+ * A basic asset definition that supports items, appearances, and scripts
+ * @template Custom - Custom group name
+ */
+export type CustomAssetDefinitionBase<Custom extends string = AssetGroupBodyName> = details.CAssetDef.Base<Custom>;
 
 /** 
  * Custom asset definition, supports extended body group names 
