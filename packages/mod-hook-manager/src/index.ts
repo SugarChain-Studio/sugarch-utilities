@@ -1,20 +1,20 @@
-import { ProgressiveHook } from './progressiveHook';
-import { HookManagerInterface } from './types';
-import type { FuncWork, ILogger } from '@sugarch/bc-mod-types';
-import { Logger, setLogger } from './logger';
-import { WorkList } from './workList';
-export {HookManagerInterface};
+import { ProgressiveHook } from "./progressiveHook";
+import { HookManagerInterface } from "./types";
+import type { FuncWork, ILogger } from "@sugarch/bc-mod-types";
+import { Logger, setLogger } from "./logger";
+import { WorkList } from "./workList";
+export { HookManagerInterface };
 
 const afterInitList = new WorkList();
 const hookList = new WorkList();
 const waitPlayerHookList = new WorkList();
 const patchList = new WorkList();
 
-function playerLoaded (): boolean {
-    return globalThis['Player'] != undefined && typeof globalThis['Player']['MemberNumber'] === 'number';
+function playerLoaded(): boolean {
+    return globalThis["Player"] != undefined && typeof globalThis["Player"]["MemberNumber"] === "number";
 }
 
-function playerHook (work: FuncWork) {
+function playerHook(work: FuncWork) {
     if (playerLoaded()) {
         waitPlayerHookList.push(work);
     } else {
@@ -25,11 +25,11 @@ function playerHook (work: FuncWork) {
 class _HookManager {
     mMod: HookManagerInterface.ModSDKModAPI | undefined = undefined;
 
-    get mod () {
+    get mod() {
         return this.mMod;
     }
 
-    push (list: WorkList, work: FuncWork) {
+    push(list: WorkList, work: FuncWork) {
         list.push(work);
     }
 
@@ -43,10 +43,10 @@ class _HookManager {
      * const mod = bcModSdk.registerMod(modinfo);
      * // run initialize related to the Manager
      * HookManager.initWithMod(mod);
-     * 
+     *
      * @param mod a registered mod
      */
-    initWithMod (mod: HookManagerInterface.ModSDKModAPI) {
+    initWithMod(mod: HookManagerInterface.ModSDKModAPI) {
         this.mMod = mod;
         patchList.run();
         hookList.run();
@@ -56,7 +56,7 @@ class _HookManager {
         if (playerLoaded()) {
             wk();
         } else {
-            this.mod!.hookFunction('LoginResponse', 0, (args, next) => {
+            this.mod!.hookFunction("LoginResponse", 0, (args, next) => {
                 next(args);
                 if (playerLoaded()) wk();
             });
@@ -70,7 +70,7 @@ class _HookManager {
      * If the mod is already initialized, execute immediately.
      * @param work
      */
-    afterInit (work: FuncWork) {
+    afterInit(work: FuncWork) {
         this.push(afterInitList, work);
     }
 
@@ -79,7 +79,7 @@ class _HookManager {
      * If the player is already logged in, execute immediately.
      * @param work
      */
-    afterPlayerLogin (work: FuncWork) {
+    afterPlayerLogin(work: FuncWork) {
         this.push(waitPlayerHookList, work);
     }
 
@@ -88,7 +88,7 @@ class _HookManager {
      * @param functionName
      * @param patch
      */
-    patchFunction (functionName: string, patch: Record<string, string | null>) {
+    patchFunction(functionName: string, patch: Record<string, string | null>) {
         this.push(patchList, () => this.mod!.patchFunction(functionName, patch));
     }
 
@@ -97,7 +97,7 @@ class _HookManager {
      * @param functionName function name
      * @param args function arguments
      */
-    invokeOriginal<TFunctionName extends string> (
+    invokeOriginal<TFunctionName extends string>(
         functionName: TFunctionName,
         ...args: HookManagerInterface.FunctionArguments<TFunctionName>
     ): HookManagerInterface.FunctionReturnType<TFunctionName> {
@@ -112,7 +112,7 @@ class _HookManager {
      * @param priority hook priority
      * @param hook hook function
      */
-    hookFunction<TFunctionName extends string> (
+    hookFunction<TFunctionName extends string>(
         funcName: TFunctionName,
         priority: number,
         hook: HookManagerInterface.HookFunction<TFunctionName>
@@ -126,7 +126,7 @@ class _HookManager {
      * @param priority hook priority
      * @returns ProgressiveHook instance
      */
-    progressiveHook<TFunctionName extends string> (
+    progressiveHook<TFunctionName extends string>(
         funcName: TFunctionName,
         priority = 1
     ): ProgressiveHook<TFunctionName> {
@@ -142,13 +142,14 @@ class _HookManager {
      * @param priority hook priority
      * @returns inside flag
      */
-    insideFlag<TFunctionName extends string> (
-        funcName: TFunctionName,
-        priority = 1,
-    ){
-        const insideFlag = { inside: false };
+    insideFlag<TFunctionName extends string>(funcName: TFunctionName, priority = 1) {
+        const insideFlag = {
+            inside: false,
+            args: undefined as HookManagerInterface.FunctionArguments<TFunctionName> | undefined,
+        };
         this.hookFunction(funcName, priority, (args, next) => {
             insideFlag.inside = true;
+            insideFlag.args = args;
             const ret = next(args);
             insideFlag.inside = false;
             return ret;
@@ -163,7 +164,7 @@ class _HookManager {
      * @param priority hook priority
      * @param hook hook function
      */
-    hookPlayerFunction<TFunctionName extends string> (
+    hookPlayerFunction<TFunctionName extends string>(
         funcName: TFunctionName,
         priority: number,
         hook: HookManagerInterface.HookFunction<TFunctionName>
@@ -177,9 +178,9 @@ class _HookManager {
      * @param func the function to register
      */
     // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-    globalFunction (funcName: string, func: Function) {
-        if (typeof func != 'function') {
-            Logger.warn('globalFunction: param is not a function');
+    globalFunction(funcName: string, func: Function) {
+        if (typeof func != "function") {
+            Logger.warn("globalFunction: param is not a function");
         }
         /* eslint-disable @typescript-eslint/no-explicit-any */
         if ((globalThis as any)[funcName] == undefined) {
@@ -197,7 +198,7 @@ class _HookManager {
      * @returns randomly generated function name
      */
     /* eslint-disable @typescript-eslint/no-explicit-any */
-    randomGlobalFunction<T extends any[], R> (funcPrefix: string, func: (...args: T) => R): string {
+    randomGlobalFunction<T extends any[], R>(funcPrefix: string, func: (...args: T) => R): string {
         const genName = (prefix: string) => prefix + Math.random().toString(16).substring(2);
         let funcName = genName(funcPrefix);
         while ((globalThis as any)[funcName] != undefined) {
@@ -212,7 +213,7 @@ class _HookManager {
      * Override the default logger
      * @param logger
      */
-    setLogger (logger: ILogger) {
+    setLogger(logger: ILogger) {
         setLogger(logger);
     }
 }
