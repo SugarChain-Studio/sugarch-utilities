@@ -1,5 +1,12 @@
 # @sugarch/bc-image-mapping
 
+## 2.1.3
+
+### Patch Changes
+
+-   Updated dependencies [fe0497e]
+    -   @sugarch/bc-mod-hook-manager@0.3.4
+
 ## 2.1.2
 
 ### Patch Changes

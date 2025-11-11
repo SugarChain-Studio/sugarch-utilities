@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-hook-manager
 
+## 0.3.4
+
+### Patch Changes
+
+-   fe0497e: now inside flag will store the args of flag function
+
 ## 0.3.3
 
 ### Patch Changes

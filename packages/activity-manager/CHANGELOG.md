@@ -1,5 +1,18 @@
 # @sugarch/bc-activity-manager
 
+## 1.1.0
+
+### Minor Changes
+
+-   c4b1a0f: support dictionary processing for activities
+
+### Patch Changes
+
+-   49a6f7b: revert, ActivityID cant be undefined for now
+-   Updated dependencies [fe0497e]
+    -   @sugarch/bc-mod-hook-manager@0.3.4
+    -   @sugarch/bc-event-handler@1.0.4
+
 ## 1.0.7
 
 ### Patch Changes

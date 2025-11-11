@@ -1,5 +1,12 @@
 # @sugarch/bc-event-handler
 
+## 1.0.4
+
+### Patch Changes
+
+-   Updated dependencies [fe0497e]
+    -   @sugarch/bc-mod-hook-manager@0.3.4
+
 ## 1.0.3
 
 ### Patch Changes
