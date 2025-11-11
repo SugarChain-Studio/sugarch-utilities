@@ -1,4 +1,4 @@
-import { ActivityInfo, ActivityTriggerMode, Translation } from '@sugarch/bc-mod-types';
+import { ActivityInfo, ActivityTriggerMode, Translation } from "@sugarch/bc-mod-types";
 
 export type CustomActivityPrerequisite<CustomPrereq extends string = ActivityPrerequisite> =
     | ActivityPrerequisite
@@ -7,8 +7,8 @@ export type CustomActivityPrerequisite<CustomPrereq extends string = ActivityPre
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type PrerequisiteCheckFunction<CustomPrereq extends string = ActivityPrerequisite> = (
     prerequisite: CustomPrereq,
-    ...args: Parameters<typeof globalThis['ActivityCheckPrerequisite']> extends [any, ...infer Rest] ? Rest : never
-) => ReturnType<typeof globalThis['ActivityCheckPrerequisite']>;
+    ...args: Parameters<(typeof globalThis)["ActivityCheckPrerequisite"]> extends [any, ...infer Rest] ? Rest : never
+) => ReturnType<(typeof globalThis)["ActivityCheckPrerequisite"]>;
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 export type ExCustomActivityPrerequisite<CustomPrereq extends string = ActivityPrerequisite> =
@@ -20,7 +20,7 @@ type AnyActivityName = string;
 export type CustomActivityDefinition<
     CustomAct extends string = string,
     CustomPrereq extends string = ActivityPrerequisite
-> = Omit<Activity, 'Name' | 'Prerequisite' | 'ActivityID'> & {
+> = Omit<Activity, "Name" | "Prerequisite" | "ActivityID"> & {
     Name: CustomAct;
     ActivityID?: number;
     Prerequisite: ExCustomActivityPrerequisite<CustomPrereq>[];
@@ -47,11 +47,11 @@ export type ActivityImageSetting =
     | [AssetGroupName, string]
     | ActivityName
     | DynamicActivityImageProvider
-    | `${'http://' | 'https://'}${string}`
+    | `${"http://" | "https://"}${string}`
     | `data:image/${string}`
-    | 'None';
+    | "None";
 
-export type ActivityDialogKey = `Chat${'Other' | 'Self'}-${AssetGroupItemName}-${AnyActivityName}`;
+export type ActivityDialogKey = `Chat${"Other" | "Self"}-${AssetGroupItemName}-${AnyActivityName}`;
 
 /**
  * A custom activity prerequisite, with name and test function
@@ -77,7 +77,7 @@ export interface ActivityExtendedEvent extends Required<ActivityRunnable> {
     readonly name: ActivityName;
 }
 
-export type ExtItemActivity<CustomAct extends string = string> = Omit<ItemActivity, 'Activity'> & {
+export type ExtItemActivity<CustomAct extends string = string> = Omit<ItemActivity, "Activity"> & {
     readonly Activity: CustomAct;
 };
 
@@ -123,6 +123,23 @@ export interface CustomActivity<CustomAct extends string = string, CustomPrereq 
         targetGroup: AssetItemGroup,
         info: ExtItemActivity<CustomAct>
     ) => Item | null | undefined;
+
+    /**
+     * An optional function to process chat message dictionary entries.
+     * @param prev previous dictionary entries
+     * @param actor the actor of the activity, always the player
+     * @param acted the activity target
+     * @param targetGroup the target group of the activity
+     * @param info the activity info, an extended version of {@link ItemActivity}
+     * @returns
+     */
+    readonly dictionary?: (
+        prev: ChatMessageDictionaryEntry[],
+        actor: Character,
+        acted: Character,
+        targetGroup: AssetItemGroup,
+        info: ExtItemActivity<CustomAct>
+    ) => ChatMessageDictionaryEntry[] | undefined;
 
     /** The activity name when used on others */
     readonly label?: Translation.ActivityEntry | Translation.Entry;
