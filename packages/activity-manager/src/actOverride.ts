@@ -1,6 +1,7 @@
 import { HookManager } from "@sugarch/bc-mod-hook-manager";
 import { CustomActivity, ExtItemActivity } from "./types";
 import { Logger } from "./logger";
+import { testCustomActivity } from "./stash";
 
 const overrides: Record<string, Required<CustomActivity<string, string>>["override"]> = {};
 
@@ -60,6 +61,12 @@ export function setupOverride() {
                 args[3].Item = itemUsed;
             }
         }
+        return next(args);
+    });
+
+    HookManager.hookFunction("PreferenceGetActivityFactor", 0, (args, next) => {
+        // always return 2 (liked) for custom activities
+        if (testCustomActivity(args[1])) return 2;
         return next(args);
     });
 

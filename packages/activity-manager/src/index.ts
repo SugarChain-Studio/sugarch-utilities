@@ -45,7 +45,11 @@ export class _ActivityManager<CustomAct extends string = string, CustomPrereq ex
                     copyAct.activity.Name,
                     copyAct.activity.Prerequisite
                 );
-                copyAct.activity.ActivityID = -1;
+                if (GameVersion === "R121") {
+                    copyAct.activity.ActivityID = -1;
+                } else {
+                    copyAct.activity.ActivityID = undefined;
+                }
 
                 ActivityFemale3DCG.push(copyAct.activity as Activity);
                 ActivityFemale3DCGOrdering.push(copyAct.activity.Name as ActivityName);
