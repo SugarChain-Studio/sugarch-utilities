@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.0.12
+
+### Patch Changes
+
+-   c931e20: fix item use message for R122
+
 ## 1.0.11
 
 ### Patch Changes

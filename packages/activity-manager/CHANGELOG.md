@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 1.1.1
+
+### Patch Changes
+
+-   f03cf36: activityID should be undefined for R122
+
 ## 1.1.0
 
 ### Minor Changes
