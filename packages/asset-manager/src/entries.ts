@@ -1,16 +1,16 @@
-import { HookManager } from '@sugarch/bc-mod-hook-manager';
-import { checkItemCustomed, getCustomAssets, getCustomGroups } from './customStash';
-import { getCustomMirrorGroups, resolvePreimage } from './mirrorGroup';
-import type { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
-import { translateString, translateEntry, translateGroupedEntries } from './entryUtils';
-import { globalPipeline } from '@sugarch/bc-mod-utility';
+import { HookManager } from "@sugarch/bc-mod-hook-manager";
+import { checkItemCustomed, getCustomAssets, getCustomGroups } from "./customStash";
+import { getCustomMirrorGroups, resolvePreimage } from "./mirrorGroup";
+import type { CustomGroupName, Translation } from "@sugarch/bc-mod-types";
+import { translateString, translateEntry, translateGroupedEntries } from "./entryUtils";
+import { globalPipeline } from "@sugarch/bc-mod-utility";
 
 /**
  * Resolve translation entry by language
  * @param entryItem
  */
-export function resolveEntry (entryItem: Translation.Entry): string {
-    return translateEntry(entryItem, entryItem['CN']);
+export function resolveEntry(entryItem: Translation.Entry): string {
+    return translateEntry(entryItem, entryItem["CN"]);
 }
 
 /**
@@ -18,23 +18,23 @@ export function resolveEntry (entryItem: Translation.Entry): string {
  * @param entryItem
  * @param fallback
  */
-export function solidfyEntry (entryItem: Translation.Entry | undefined, fallback: string): Translation.SolidEntry {
+export function solidfyEntry(entryItem: Translation.Entry | undefined, fallback: string): Translation.SolidEntry {
     if (!entryItem) return { CN: fallback };
-    if (entryItem['CN']) return entryItem as Translation.SolidEntry;
+    if (entryItem["CN"]) return entryItem as Translation.SolidEntry;
     return { ...entryItem, CN: fallback };
 }
 
 /**
- * Lang-Group-Asset-Layer-String 
+ * Lang-Group-Asset-Layer-String
  * Lang-Layer-String
  * @param group
  * @param asset
  * @param groupedEntry
  */
-export function pickStrings<Custom extends string = AssetGroupBodyName> (
+export function pickStrings<Custom extends string = AssetGroupBodyName>(
     group: CustomGroupName<Custom>,
     asset: string,
-    groupedLayerNames: Translation.GroupedAssetStrings<Custom>,
+    groupedLayerNames: Translation.GroupedAssetStrings<Custom>
 ): Translation.String {
     const ret: Translation.String = {};
     for (const [lang, entries] of Object.entries(groupedLayerNames)) {
@@ -49,7 +49,7 @@ export function pickStrings<Custom extends string = AssetGroupBodyName> (
  * @param asset
  * @param groupedEntry
  */
-export function pickEntry<Custom extends string = AssetGroupBodyName> (
+export function pickEntry<Custom extends string = AssetGroupBodyName>(
     group: CustomGroupName<Custom>,
     asset: string,
     groupedEntry: Translation.GroupedEntries
@@ -71,7 +71,7 @@ export class Entries {
      * @param asset
      * @param entries
      */
-    static setAsset<Custom extends string = AssetGroupBodyName> (
+    static setAsset<Custom extends string = AssetGroupBodyName>(
         group: CustomGroupName<Custom>,
         asset: string,
         entries: Translation.Entry
@@ -89,7 +89,7 @@ export class Entries {
      * @param group
      * @param entries
      */
-    static setGroup<Custom extends string = AssetGroupBodyName> (
+    static setGroup<Custom extends string = AssetGroupBodyName>(
         group: CustomGroupName<Custom>,
         entries: Translation.Entry
     ): void {
@@ -106,7 +106,7 @@ export class Entries {
  * @param group
  * @param asset
  */
-function assetEntryString<Custom extends string = AssetGroupBodyName> (
+function assetEntryString<Custom extends string = AssetGroupBodyName>(
     group: CustomGroupName<Custom>,
     asset: string
 ): string {
@@ -114,7 +114,7 @@ function assetEntryString<Custom extends string = AssetGroupBodyName> (
         customAssetEntries as Translation.GroupedEntries<Custom>,
         group,
         asset,
-        asset.replace(/_.*?Luzi$/, '')
+        asset.replace(/_.*?Luzi$/, "")
     );
 }
 
@@ -122,8 +122,8 @@ function assetEntryString<Custom extends string = AssetGroupBodyName> (
  * Get group entry string for the current language
  * @param group
  */
-function groupEntryString<Custom extends string = AssetGroupBodyName> (group: CustomGroupName<Custom>): string {
-    return translateString(customGroupEntries as Translation.String, group, group.replace(/_.*?Luzi$/, ''));
+function groupEntryString<Custom extends string = AssetGroupBodyName>(group: CustomGroupName<Custom>): string {
+    return translateString(customGroupEntries as Translation.String, group, group.replace(/_.*?Luzi$/, ""));
 }
 
 /**
@@ -131,19 +131,19 @@ function groupEntryString<Custom extends string = AssetGroupBodyName> (group: Cu
  * @param obj
  * @param desc
  */
-function assignDesc (obj: { Description: string }, desc: string): void {
+function assignDesc(obj: { Description: string }, desc: string): void {
     obj.Description = desc;
 }
 
-function loadAssetEntries (): void {
+function loadAssetEntries(): void {
     // Custom group names
-    Object.values(getCustomGroups()).forEach(group => assignDesc(group, groupEntryString(group.Name)));
+    Object.values(getCustomGroups()).forEach((group) => assignDesc(group, groupEntryString(group.Name)));
 
     // Custom item names
     Object.values(getCustomAssets())
-        .map(asset => Object.values(asset))
+        .map((asset) => Object.values(asset))
         .flat()
-        .forEach(asset => assignDesc(asset, assetEntryString(asset.Group.Name, asset.Name)));
+        .forEach((asset) => assignDesc(asset, assetEntryString(asset.Group.Name, asset.Name)));
 
     // Mirror group names
     Object.entries(getCustomAssets())
@@ -155,7 +155,7 @@ function loadAssetEntries (): void {
         .map(({ group, asset }) =>
             Object.entries(asset).map(([assetName, asset]) => ({
                 asset,
-                fromAsset: AssetGet('Female3DCG', group as AssetGroupName, assetName),
+                fromAsset: AssetGet("Female3DCG", group as AssetGroupName, assetName),
             }))
         )
         .flat()
@@ -166,17 +166,17 @@ function loadAssetEntries (): void {
     const loadFunc = (tcache: TextCache) => {
         const cmg = getCustomMirrorGroups();
         const doneSet = new Set<string>();
-        const names = AssetGroup.map(group => group.Name).sort((a, b) => b.length - a.length);
+        const names = AssetGroup.map((group) => group.Name).sort((a, b) => b.length - a.length);
         Object.entries(tcache.cache).forEach(([key, value]) => {
             if (doneSet.has(key)) return;
-            const n = names.find(name => key.startsWith(name));
+            const n = names.find((name) => key.startsWith(name));
             if (!n) return;
             doneSet.add(key);
             const mirrors = cmg[n];
             if (!mirrors) return;
             const tail = key.slice(n.length);
 
-            mirrors.forEach(mirror => {
+            mirrors.forEach((mirror) => {
                 const mirrorKey = mirror + tail;
                 if (!tcache.cache[mirrorKey]) tcache.cache[mirrorKey] = value;
             });
@@ -184,7 +184,7 @@ function loadAssetEntries (): void {
     };
     if (assetStrings) {
         if (!assetStrings.loaded) {
-            assetStrings.rebuildListeners.push(tcache => tcache && loadFunc(tcache));
+            assetStrings.rebuildListeners.push((tcache) => tcache && loadFunc(tcache));
         } else {
             loadFunc(assetStrings);
         }
@@ -192,7 +192,7 @@ function loadAssetEntries (): void {
 }
 
 let entriesLoaded = false;
-export function setupEntries (): void {
+export function setupEntries(): void {
     if (entriesLoaded) return;
     entriesLoaded = true;
 
@@ -204,33 +204,36 @@ export function setupEntries (): void {
 
     const assetCache = TextAllScreenCache.get(AssetStringsPath);
 
-    if (assetCache && assetCache.loaded && (TranslationLanguage === 'EN' || assetCache.get('Bloated') !== 'Bloated')) {
+    if (assetCache && assetCache.loaded && (TranslationLanguage === "EN" || assetCache.get("Bloated") !== "Bloated")) {
         // Already loaded, directly load names
         loadAssetEntries();
     }
-    
+
     // Load CSV descriptions (display names)
-    HookManager.progressiveHook('AssetBuildDescription').next().inject(loadAssetEntries);
+    HookManager.progressiveHook("AssetBuildDescription").next().inject(loadAssetEntries);
     // Translation loading phase
-    HookManager.progressiveHook('TranslationAssetProcess').next().inject(loadAssetEntries);
-    
+    HookManager.progressiveHook("TranslationAssetProcess").next().inject(loadAssetEntries);
 
     globalPipeline<(dictionary: DictionaryBuilder, PrevItem: Item, NextItem: Item) => void>(
-        'CustomDialogInject',
+        "CustomDialogInject",
         () => {},
-        pipeline =>
-            HookManager.patchFunction('ChatRoomPublishAction', {
-                '\t\tdictionary.focusGroup(C.FocusGroup.Name);\n\t}': `\t\tdictionary.focusGroup(C.FocusGroup.Name);\n\t}\n\t${pipeline.globalFuncName}(dictionary, PrevItem, NextItem);\n`,
+        (pipeline) =>
+            HookManager.patchFunction("ChatRoomPublishAction", {
+                "ChatRoomCharacterItemUpdate(": `${pipeline.globalFuncName}(dictionary, PrevItem, NextItem);\nChatRoomCharacterItemUpdate(`,
             })
     ).register((_, dictionary, PrevItem, NextItem) => {
         for (const [key, item] of [
-            ['PrevAsset', PrevItem],
-            ['NextAsset', NextItem],
+            ["PrevAsset", PrevItem],
+            ["NextAsset", NextItem],
         ] as const) {
             const customed = checkItemCustomed(item);
             // Add an extra 'text' tag here in order to display the name or craft name of plugin items to clients without the plugin.
             // Without this tag, or if using the asset tag, the item name will display incorrectly (as 'NextAsset' or 'PrevAsset') for users without the plugin.
-            if(customed) dictionary.text(key, item.Craft ? `${item.Craft.Name} (${item.Asset.Description})` : item.Asset.Description);
+            if (customed)
+                dictionary.text(
+                    key,
+                    item.Craft ? `${item.Craft.Name} (${item.Asset.Description})` : item.Asset.Description
+                );
         }
     });
 }
