@@ -29,6 +29,36 @@ pushGroupLoad(() => {
     pulling = false;
 });
 
+function rebuildExtendedConfigDialogPrefix<Custom extends string = AssetGroupBodyName>(
+    config: AssetArchetypeConfig,
+    group: CustomGroupName<Custom>,
+    asset: string
+): Pick<AssetArchetypeConfig, 'DialogPrefix'> {
+    if (!config.DialogPrefix) {
+        const key = `${group}${asset}`;
+        if (config.Archetype === 'modular')
+            return {
+                DialogPrefix: {
+                    Header: `${key}Select`,
+                    Module: `${key}Module`,
+                    Option: `${key}Option`,
+                    Chat: `${key}Set`,
+                },
+            };
+        else if (config.Archetype === 'typed') {
+            return {
+                DialogPrefix: {
+                    Header: `${key}Select`,
+                    Option: key,
+                    Chat: `${key}Set`,
+                    Npc: key,
+                },
+            };
+        }
+    }
+    return {};
+}
+
 /**
  * Register a custom group
  * @param groupDef Group definition
@@ -37,7 +67,7 @@ pushGroupLoad(() => {
  * @param param.dynamicName
  * @param param.preimage
  */
-export function loadGroup<Custom extends string = AssetGroupBodyName> (
+export function loadGroup<Custom extends string = AssetGroupBodyName>(
     groupDef: CustomGroupDefinition<Custom>,
     {
         translation,
@@ -51,7 +81,7 @@ export function loadGroup<Custom extends string = AssetGroupBodyName> (
 ) {
     pushGroupLoad(() => {
         const solidDesc = solidfyEntry(translation, groupDef.Group.replace(/_.*?Luzi$/, ''));
-        customGroupAdd('Female3DCG', groupDef as AssetGroupDefinition).then(grp => {
+        customGroupAdd('Female3DCG', groupDef as AssetGroupDefinition).then((grp) => {
             grp.Description = resolveEntry(solidDesc);
             if (dynamicName) grp.DynamicGroupName = dynamicName as AssetGroupName;
 
@@ -65,12 +95,13 @@ export function loadGroup<Custom extends string = AssetGroupBodyName> (
                     ret[assetName] = {
                         Archetype: config.Archetype,
                         CopyConfig: { GroupName: preimage.Name, AssetName: assetName },
+                        ...rebuildExtendedConfigDialogPrefix(config, preimage.Name, assetName),
                     } as typeof config;
                 }
                 return { [groupDef.Group]: ret };
             })();
 
-            groupDef.Asset.forEach(asset => {
+            groupDef.Asset.forEach((asset) => {
                 const assetDef = resolveStringAsset(asset as string | AssetDefinition) as CustomAssetDefinition<Custom>;
                 if (extendedConfig && preimage) {
                     const manualConfig = manualConfigs[preimage.Name]?.[assetDef.Name];
@@ -104,14 +135,14 @@ const missingGroup = new Set<string>();
  * @param translation
  * @param defOverrides
  */
-export function mirrorGroup<Custom extends string = AssetGroupBodyName> (
+export function mirrorGroup<Custom extends string = AssetGroupBodyName>(
     newGroup: CustomGroupName<Custom>,
     copyFrom: CustomGroupName<Custom>,
     translation?: Translation.Entry,
     defOverrides?: Partial<CustomGroupDefinition<Custom>>
 ) {
     const wk = () => {
-        const fromDef = AssetFemale3DCG.find(def => def.Group === copyFrom) || getCustomGroups<Custom>()[copyFrom];
+        const fromDef = AssetFemale3DCG.find((def) => def.Group === copyFrom) || getCustomGroups<Custom>()[copyFrom];
         const fromGrp = AssetGroupGet('Female3DCG', copyFrom as AssetGroupName);
         const fromExt = AssetFemale3DCGExtended[copyFrom as AssetGroupBodyName];
 
