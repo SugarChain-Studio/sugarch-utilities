@@ -23,7 +23,7 @@
   },
   "packageManager": "pnpm@10.6.2",
   "devDependencies": {
-    "bc-stubs": "122.0.0",
+    "bc-stubs": "123.0.0-Beta.3",
     "rollup": "^4.46.2",
     "typescript": "^5.9.2"
   }

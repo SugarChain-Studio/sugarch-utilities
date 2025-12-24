@@ -68,8 +68,8 @@ importers:
         specifier: workspace:*
         version: link:../image-mapping
       bc-stubs:
-        specifier: 122.0.0
-        version: 122.0.0
+        specifier: 123.0.0-Beta.3
+        version: 123.0.0-Beta.3
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -114,8 +114,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 122.0.0
-        version: 122.0.0
+        specifier: 123.0.0-Beta.3
+        version: 123.0.0-Beta.3
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -163,8 +163,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 122.0.0
-        version: 122.0.0
+        specifier: 123.0.0-Beta.3
+        version: 123.0.0-Beta.3
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -218,8 +218,8 @@ importers:
         specifier: ^29.5.14
         version: 29.5.14
       bc-stubs:
-        specifier: 122.0.0
-        version: 122.0.0
+        specifier: 123.0.0-Beta.3
+        version: 123.0.0-Beta.3
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -255,8 +255,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.46.2)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 122.0.0
-        version: 122.0.0
+        specifier: 123.0.0-Beta.3
+        version: 123.0.0-Beta.3
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -276,8 +276,8 @@ importers:
   packages/mod-types:
     devDependencies:
       bc-stubs:
-        specifier: 122.0.0
-        version: 122.0.0
+        specifier: 123.0.0-Beta.3
+        version: 123.0.0-Beta.3
       rollup:
         specifier: ^4.46.2
         version: 4.46.2
@@ -307,8 +307,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.46.2)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 122.0.0
-        version: 122.0.0
+        specifier: 123.0.0-Beta.3
+        version: 123.0.0-Beta.3
       rollup:
         specifier: ^4.46.2
         version: 4.46.2
@@ -1110,8 +1110,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  bc-stubs@122.0.0:
-    resolution: {integrity: sha512-at/av8ev09W35w4BVPXTJVZqm2DsP7WUeJ9lFDLDn9zix84dxT+jUTpuPy+abQP1up7wCbhCilrtCH7Org+8gA==}
+  bc-stubs@123.0.0-Beta.3:
+    resolution: {integrity: sha512-RELyHtkCkK4b06YbYwYmVk5IPfZWmzdjQDCaEEjLglxznEf/LXE9444GnUUpQDFJ3wSCWnIUBLNAQUHA/4x/JA==}
 
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
@@ -1234,6 +1234,15 @@ packages:
 
   debug@4.4.1:
     resolution: {integrity: sha512-KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
+  debug@4.4.3:
+    resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
     engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
@@ -2159,8 +2168,8 @@ packages:
     resolution: {integrity: sha512-5UswCV6hpaRsNg5kkEHVcbBIXEYoVbMQaHJBXJCyEQ+CiFPV1NIOY0XOFWG4XR4GZcB8Kn6AsRs/9cy9TbqVMQ==}
     engines: {node: '>=10.0.0'}
 
-  socket.io-parser@4.2.4:
-    resolution: {integrity: sha512-/GbIKmo8ioc+NIWIhwdecY0ge+qVBSMdgxGygevmdHj24bsfgtCmcUUcQ5ZzcylGFHsN3k4HB4Cgkl96KVnuew==}
+  socket.io-parser@4.2.5:
+    resolution: {integrity: sha512-bPMmpy/5WWKHea5Y/jYAP6k74A+hvmRCQaJuJB6I/ML5JZq/KfNieUVo/3Mh7SAqn7TyFdIo6wqYHInG1MU1bQ==}
     engines: {node: '>=10.0.0'}
 
   source-map-support@0.5.13:
@@ -2431,7 +2440,7 @@ snapshots:
       '@babel/traverse': 7.28.0
       '@babel/types': 7.28.2
       convert-source-map: 2.0.0
-      debug: 4.4.1
+      debug: 4.4.3
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -2590,7 +2599,7 @@ snapshots:
       '@babel/parser': 7.28.0
       '@babel/template': 7.27.2
       '@babel/types': 7.28.2
-      debug: 4.4.1
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -3289,7 +3298,7 @@ snapshots:
       '@typescript-eslint/types': 8.41.0
       '@typescript-eslint/typescript-estree': 8.41.0(typescript@5.9.2)
       '@typescript-eslint/utils': 8.41.0(eslint@9.34.0)(typescript@5.9.2)
-      debug: 4.4.1
+      debug: 4.4.3
       eslint: 9.34.0
       ts-api-utils: 2.1.0(typescript@5.9.2)
       typescript: 5.9.2
@@ -3427,7 +3436,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  bc-stubs@122.0.0:
+  bc-stubs@123.0.0-Beta.3:
     dependencies:
       socket.io-client: 4.6.1
     transitivePeerDependencies:
@@ -3549,6 +3558,10 @@ snapshots:
       ms: 2.1.3
 
   debug@4.4.1:
+    dependencies:
+      ms: 2.1.3
+
+  debug@4.4.3:
     dependencies:
       ms: 2.1.3
 
@@ -3957,7 +3970,7 @@ snapshots:
 
   istanbul-lib-source-maps@4.0.1:
     dependencies:
-      debug: 4.4.1
+      debug: 4.4.3
       istanbul-lib-coverage: 3.2.2
       source-map: 0.6.1
     transitivePeerDependencies:
@@ -4621,16 +4634,16 @@ snapshots:
       '@socket.io/component-emitter': 3.1.2
       debug: 4.3.7
       engine.io-client: 6.4.0
-      socket.io-parser: 4.2.4
+      socket.io-parser: 4.2.5
     transitivePeerDependencies:
       - bufferutil
       - supports-color
       - utf-8-validate
 
-  socket.io-parser@4.2.4:
+  socket.io-parser@4.2.5:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.7
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
