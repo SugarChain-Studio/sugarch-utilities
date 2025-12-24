@@ -6,9 +6,22 @@ import { translateString } from './entryUtils';
 // Translation entries for each language
 const entries: Partial<Record<ServerChatRoomLanguage, Record<string, string>>> = {};
 
+// Mapping of alternative asset group names
+const AlterNames: Partial<Record<AssetGroupItemName, string>> = {
+    ItemVulva: 'ItemPenis',
+    ItemVulvaPiercings: 'ItemGlans',
+};
+
 function recordFor<T extends string, U> (record: Partial<Record<T, U>>, callback: (key: T, value: U) => void): void {
     for (const [key, value] of Object.entries(record)) {
         if (value) callback(key as T, value as U);
+        const altKey = AlterNames[key as AssetGroupItemName];
+        if(altKey) {
+            const altValue = record[altKey as T];
+            if (altValue) {
+                callback(altKey as T, altValue as U);
+            }
+        }
     }
 }
 
@@ -49,12 +62,6 @@ function addGroupEntry (
         );
     });
 }
-
-// Mapping of alternative asset group names
-const AlterNames: Partial<Record<AssetGroupItemName, string>> = {
-    ItemVulva: 'ItemPenis',
-    ItemVulvaPiercings: 'ItemGlans',
-};
 
 /**
  * Add simple activity translation entries
