@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 1.1.2
+
+### Patch Changes
+
+-   9b0de6f: fix: some activity labels is ignored
+
 ## 1.1.1
 
 ### Patch Changes
