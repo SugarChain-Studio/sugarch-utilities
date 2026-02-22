@@ -68,8 +68,8 @@ importers:
         specifier: workspace:*
         version: link:../image-mapping
       bc-stubs:
-        specifier: 123.0.0-Beta.3
-        version: 123.0.0-Beta.3
+        specifier: 125.0.0
+        version: 125.0.0
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -114,8 +114,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 123.0.0-Beta.3
-        version: 123.0.0-Beta.3
+        specifier: 125.0.0
+        version: 125.0.0
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -163,8 +163,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 123.0.0-Beta.3
-        version: 123.0.0-Beta.3
+        specifier: 125.0.0
+        version: 125.0.0
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -218,8 +218,8 @@ importers:
         specifier: ^29.5.14
         version: 29.5.14
       bc-stubs:
-        specifier: 123.0.0-Beta.3
-        version: 123.0.0-Beta.3
+        specifier: 125.0.0
+        version: 125.0.0
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -255,8 +255,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.46.2)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 123.0.0-Beta.3
-        version: 123.0.0-Beta.3
+        specifier: 125.0.0
+        version: 125.0.0
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -276,8 +276,8 @@ importers:
   packages/mod-types:
     devDependencies:
       bc-stubs:
-        specifier: 123.0.0-Beta.3
-        version: 123.0.0-Beta.3
+        specifier: 125.0.0
+        version: 125.0.0
       rollup:
         specifier: ^4.46.2
         version: 4.46.2
@@ -307,8 +307,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.46.2)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 123.0.0-Beta.3
-        version: 123.0.0-Beta.3
+        specifier: 125.0.0
+        version: 125.0.0
       rollup:
         specifier: ^4.46.2
         version: 4.46.2
@@ -1110,8 +1110,8 @@ packages:
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
-  bc-stubs@123.0.0-Beta.3:
-    resolution: {integrity: sha512-RELyHtkCkK4b06YbYwYmVk5IPfZWmzdjQDCaEEjLglxznEf/LXE9444GnUUpQDFJ3wSCWnIUBLNAQUHA/4x/JA==}
+  bc-stubs@125.0.0:
+    resolution: {integrity: sha512-l6kCNUSTNr/c57nFYh+zg0cP076sq/MkW9/C8k6yGUoybvHZYEzZAYhIj2MLmt0LvV3zh57V8eVUemMiMOFA5Q==}
 
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
@@ -3436,7 +3436,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  bc-stubs@123.0.0-Beta.3:
+  bc-stubs@125.0.0:
     dependencies:
       socket.io-client: 4.6.1
     transitivePeerDependencies:
