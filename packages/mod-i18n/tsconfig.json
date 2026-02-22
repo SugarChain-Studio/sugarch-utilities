@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "module": "ESNext",
+    "allowJs": false,
+    "strict": true,
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["**/__tests__", "**/*.test.ts"],
+  "include": ["./src/*.ts", "node_modules/bc-stubs/bc/**/*.d.ts"]
+}
