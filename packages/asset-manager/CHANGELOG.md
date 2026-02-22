@@ -1,5 +1,13 @@
 # @sugarch/bc-asset-manager
 
+## 1.0.14
+
+### Patch Changes
+
+-   3008ec1: Use i18n utility to translate strings
+-   Updated dependencies [9efa50c]
+    -   @sugarch/bc-mod-i18n@0.0.2
+
 ## 1.0.13
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-mod-i18n",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "I18n utility for BC mods.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
