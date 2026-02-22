@@ -1,7 +1,7 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { Translation } from '@sugarch/bc-mod-types';
 import { CustomActivity } from './types';
-import { translateString } from './entryUtils';
+import { TranslationUtility } from '@sugarch/bc-mod-i18n';
 
 // Translation entries for each language
 const entries: Partial<Record<ServerChatRoomLanguage, Record<string, string>>> = {};
@@ -12,11 +12,11 @@ const AlterNames: Partial<Record<AssetGroupItemName, string>> = {
     ItemVulvaPiercings: 'ItemGlans',
 };
 
-function recordFor<T extends string, U> (record: Partial<Record<T, U>>, callback: (key: T, value: U) => void): void {
+function recordFor<T extends string, U>(record: Partial<Record<T, U>>, callback: (key: T, value: U) => void): void {
     for (const [key, value] of Object.entries(record)) {
         if (value) callback(key as T, value as U);
         const altKey = AlterNames[key as AssetGroupItemName];
-        if(altKey) {
+        if (altKey) {
             const altValue = record[altKey as T];
             if (altValue) {
                 callback(altKey as T, altValue as U);
@@ -25,7 +25,7 @@ function recordFor<T extends string, U> (record: Partial<Record<T, U>>, callback
     }
 }
 
-function recordMap<T extends string, U, V, K extends string = T> (
+function recordMap<T extends string, U, V, K extends string = T>(
     record: Partial<Record<T, U>>,
     callback: (key: T, value: U) => { key: K; value: V },
     initial: Record<K, V> = {} as Record<K, V>
@@ -45,7 +45,7 @@ function recordMap<T extends string, U, V, K extends string = T> (
  * @param selfOther - Whether the action is on self or other
  * @param activityName - Name of the activity
  */
-function addGroupEntry (
+function addGroupEntry(
     prefix: 'Label-' | '',
     src: Translation.ActivityEntry,
     selfOther: 'Self' | 'Other',
@@ -71,7 +71,7 @@ function addGroupEntry (
  * @param activityName - Name of the activity
  * @param groups - Target asset groups
  */
-function addSimpleEntry (
+function addSimpleEntry(
     prefix: 'Label-' | '',
     src: Translation.Entry,
     selfOther: 'Self' | 'Other',
@@ -99,7 +99,7 @@ function addSimpleEntry (
  * @param activityName - Name of the activity
  * @param groups - Target asset groups
  */
-function addEntryBranch (
+function addEntryBranch(
     prefix: 'Label-' | '',
     src: Translation.ActivityEntry | Translation.Entry,
     selfOther: 'Self' | 'Other',
@@ -118,14 +118,14 @@ function addEntryBranch (
  * @param src - Source translation data
  * @returns True if it's a simple translation entry
  */
-function isTranslationEntry (src: Translation.ActivityEntry | Translation.Entry): src is Translation.Entry {
-    return Object.values(src).some(v => typeof v === 'string');
+function isTranslationEntry(src: Translation.ActivityEntry | Translation.Entry): src is Translation.Entry {
+    return Object.values(src).some((v) => typeof v === 'string');
 }
 /**
  * Add activity translation entries
  * @param src - Custom activity definition
  */
-export function addActivityEntry<CustomAct extends string = string, CustomPrereq extends string = ActivityPrerequisite> (
+export function addActivityEntry<CustomAct extends string = string, CustomPrereq extends string = ActivityPrerequisite>(
     src: CustomActivity<CustomAct, CustomPrereq>
 ): void {
     const { activity, label, labelSelf, dialog, dialogSelf } = src;
@@ -163,14 +163,14 @@ export function addActivityEntry<CustomAct extends string = string, CustomPrereq
 /**
  * Set up translation hooks
  */
-export function setupEntry (): void {
-    const resolve = (tag: string): string | undefined => translateString(entries, tag);
+export function setupEntry(): void {
+    const resolve = (tag: string): string | undefined => TranslationUtility.translateString(entries, tag);
 
     HookManager.hookFunction('ActivityDictionaryText', 1, (args, next) => resolve(args[0]) || next(args));
 
     HookManager.progressiveHook('ServerSend', 1)
         .inside('ActivityRun')
-        .inject(args => {
+        .inject((args) => {
             const { Content, Dictionary, Type } = args[1] as Parameters<ClientToServerEvents['ChatRoomChat']>[0];
             if (Type !== 'Activity' || !Dictionary) return;
             const Text = resolve(Content);

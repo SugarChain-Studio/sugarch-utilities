@@ -1,6 +1,6 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import type { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
-import { translateEntry } from './entryUtils';
+import { TranslationUtility } from '@sugarch/bc-mod-i18n';
 import { globalPipeline } from '@sugarch/bc-mod-utility';
 
 interface LayerNameDetails {
@@ -15,7 +15,7 @@ const colorGroupNames = new Map<string, LayerNameDetails>();
 let layerCache: (() => TextCache) | undefined = undefined;
 let colorGroupCache: (() => TextCache) | undefined = undefined;
 
-function combineDetail(target: typeof layerNames, key:string, value:LayerNameDetails) {
+function combineDetail(target: typeof layerNames, key: string, value: LayerNameDetails) {
     const existing = target.get(key);
     if (!existing) {
         target.set(key, value);
@@ -33,15 +33,15 @@ function combineDetail(target: typeof layerNames, key:string, value:LayerNameDet
  * @param fallback
  * @param noOverride Whether to override existing names
  */
-export function pushLayerName (key: string, desc: Translation.Entry, fallback: string, noOverride = false) {
+export function pushLayerName(key: string, desc: Translation.Entry, fallback: string, noOverride = false) {
     if (noOverride && layerNames.has(key)) return;
     combineDetail(layerNames, key, { desc, fallback, noOverride });
 }
 
-function writeLayerNames (cache: TextCache) {
+function writeLayerNames(cache: TextCache) {
     layerNames.forEach((value, ckeys) => {
         if (cache.cache[ckeys] && value.noOverride) return;
-        cache.cache[ckeys] = translateEntry(value.desc, value.fallback);
+        cache.cache[ckeys] = TranslationUtility.translateEntry(value.desc, value.fallback);
     });
 }
 
@@ -52,15 +52,15 @@ function writeLayerNames (cache: TextCache) {
  * @param fallback
  * @param noOverride Whether to override existing names
  */
-export function pushColorGroupName (key: string, desc: Translation.Entry, fallback: string, noOverride = false) {
+export function pushColorGroupName(key: string, desc: Translation.Entry, fallback: string, noOverride = false) {
     if (noOverride && colorGroupNames.has(key)) return;
     combineDetail(colorGroupNames, key, { desc, fallback, noOverride });
 }
 
-function writeColorGroupNames (cache: TextCache) {
+function writeColorGroupNames(cache: TextCache) {
     colorGroupNames.forEach((value, ckeys) => {
         if (cache.cache[ckeys] && value.noOverride) return;
-        cache.cache[ckeys] = translateEntry(value.desc, value.fallback);
+        cache.cache[ckeys] = TranslationUtility.translateEntry(value.desc, value.fallback);
     });
 }
 
@@ -70,7 +70,7 @@ function writeColorGroupNames (cache: TextCache) {
  * @param entries
  * @returns A function that resolves layer names
  */
-function createLayerNameResolver (entries?: Translation.String) {
+function createLayerNameResolver(entries?: Translation.String) {
     if (!entries) return (layerName: string) => ({ CN: layerName });
     const resolver: Record<string, Translation.Entry> = {};
     for (const [lang, entry] of Object.entries(entries)) {
@@ -86,7 +86,7 @@ function createLayerNameResolver (entries?: Translation.String) {
  * Transfrom Lang-Layer-String to {key:Layer, entry:Lang-String}[]
  * @param entries Lang-Layer-String entries
  */
-function createLayerEntryArray (entries: Translation.CustomRecord<string, string>) {
+function createLayerEntryArray(entries: Translation.CustomRecord<string, string>) {
     const ret: Record<string, Translation.Entry> = {};
     for (const [lang, entry] of Object.entries(entries)) {
         for (const [key, value] of Object.entries(entry)) {
@@ -94,10 +94,13 @@ function createLayerEntryArray (entries: Translation.CustomRecord<string, string
             ret[key][lang as ServerChatRoomLanguage] = value;
         }
     }
-    return Object.entries(ret).reduce((acc, [key, value]) => {
-        acc.push({ key, value });
-        return acc;
-    }, [] as { key: string; value: Translation.Entry }[]);
+    return Object.entries(ret).reduce(
+        (acc, [key, value]) => {
+            acc.push({ key, value });
+            return acc;
+        },
+        [] as { key: string; value: Translation.Entry }[]
+    );
 }
 
 /**
@@ -106,7 +109,7 @@ function createLayerEntryArray (entries: Translation.CustomRecord<string, string
  * @param assetName Asset name
  * @param entries Layer-name, grouped by language
  */
-export function addLayerNamesRaw<Custom extends string = AssetGroupBodyName> (
+export function addLayerNamesRaw<Custom extends string = AssetGroupBodyName>(
     group: CustomGroupName<Custom>,
     assetName: string,
     entries: Translation.CustomRecord<string, string>
@@ -122,7 +125,7 @@ export function addLayerNamesRaw<Custom extends string = AssetGroupBodyName> (
  * @param assetName Asset name
  * @param entries ColorGroupName-name, grouped by language
  */
-export function addColorGroupNamesRaw<Custom extends string = AssetGroupBodyName> (
+export function addColorGroupNamesRaw<Custom extends string = AssetGroupBodyName>(
     group: CustomGroupName<Custom>,
     assetName: string,
     entries: Translation.CustomRecord<string, string>
@@ -140,7 +143,7 @@ export function addColorGroupNamesRaw<Custom extends string = AssetGroupBodyName
  * @param config.entries Layer-name, grouped by language
  * @param config.noOverride Whether to override existing layer names
  */
-export function addLayerNames<Custom extends string = AssetGroupBodyName> (
+export function addLayerNames<Custom extends string = AssetGroupBodyName>(
     group: CustomGroupName<Custom>,
     assetDef: {
         Name: string;
@@ -162,7 +165,7 @@ export function addLayerNames<Custom extends string = AssetGroupBodyName> (
     const colorGroupNames = new Set<string>();
 
     assetDef.Layer?.filter(
-        layer => !layer.CopyLayerColor && (layer.AllowColorize ?? true) && !layer.HideColoring
+        (layer) => !layer.CopyLayerColor && (layer.AllowColorize ?? true) && !layer.HideColoring
     ).forEach(({ Name, ColorGroup }) => {
         if (!Name) {
             pushLayerName(
@@ -176,17 +179,17 @@ export function addLayerNames<Custom extends string = AssetGroupBodyName> (
         if (ColorGroup) colorGroupNames.add(ColorGroup);
     });
 
-    colorGroupNames.forEach(colorGroup =>
+    colorGroupNames.forEach((colorGroup) =>
         pushColorGroupName(`${group}${assetDef.Name}${colorGroup}`, resolve(colorGroup), colorGroup, !!noOverride)
     );
 }
 
 // Create an async task that waits for ItemColorLayerNames to load and then writes cached layer names to ItemColorLayerNames
-export function setupLayerNameLoad () {
+export function setupLayerNameLoad() {
     globalPipeline<(layerNames: () => TextCache, groupNames: () => TextCache) => void>(
         'LayerNameInject',
         () => {},
-        pipeline =>
+        (pipeline) =>
             HookManager.patchFunction('ItemColorLoad', {
                 'ItemColorGroupNames = new TextCache(`Assets/${c.AssetFamily}/ColorGroups.csv`);': `ItemColorGroupNames = new TextCache(\`Assets/\${c.AssetFamily}/ColorGroups.csv\`);${pipeline.globalFuncName}(()=>ItemColorLayerNames, ()=>ItemColorGroupNames);`,
             })

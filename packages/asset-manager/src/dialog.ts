@@ -1,6 +1,6 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import type { Translation } from '@sugarch/bc-mod-types';
-import { translateString } from './entryUtils';
+import { TranslationUtility } from '@sugarch/bc-mod-i18n';
 
 /** Custom dialog translations */
 const customAssetString: Translation.String = {};
@@ -11,7 +11,7 @@ const customAssetString: Translation.String = {};
  * @param assetName prefix asset name
  * @param dialog translation dialogs
  */
-export function addCustomAssetStringWithPrefix (groupName: string, assetName: string, dialog: Translation.String): void {
+export function addCustomAssetStringWithPrefix(groupName: string, assetName: string, dialog: Translation.String): void {
     for (const [key, value] of Object.entries(dialog) as [ServerChatRoomLanguage, Record<string, string>][]) {
         if (!customAssetString[key]) {
             customAssetString[key] = {};
@@ -26,7 +26,7 @@ export function addCustomAssetStringWithPrefix (groupName: string, assetName: st
  * Add custom dialog translations. If it contains ItemTorso or ItemTorso2, automatically add the mirrored version
  * @param dialog The dialog translations to add
  */
-export function addCustomAssetString (dialog: Translation.String): void {
+export function addCustomAssetString(dialog: Translation.String): void {
     for (const [key, value] of Object.entries(dialog) as [ServerChatRoomLanguage, Record<string, string>][]) {
         if (!customAssetString[key]) {
             customAssetString[key] = {};
@@ -47,16 +47,16 @@ let customAssetStringLoaded = false;
 /**
  * Set up custom dialog hooks
  */
-export function setupCustomAssetString (): void {
+export function setupCustomAssetString(): void {
     if (customAssetStringLoaded) return;
     customAssetStringLoaded = true;
 
-    const translate = (msg: string) => translateString(customAssetString, msg);
+    const translate = (msg: string) => TranslationUtility.translateString(customAssetString, msg);
 
     HookManager.progressiveHook('AssetTextGet').override((args, next) => translate(args[0]) || next(args));
 
     HookManager.progressiveHook('ChatRoomPublishCustomAction')
-        .inject(args => {
+        .inject((args) => {
             const [msg, _, Dictionary] = args;
             const tDialog = translate(msg);
             if (tDialog) Dictionary.push({ Tag: `MISSING TEXT IN "Interface.csv": ${msg}`, Text: tDialog });

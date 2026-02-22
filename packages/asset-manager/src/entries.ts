@@ -1,16 +1,16 @@
-import { HookManager } from "@sugarch/bc-mod-hook-manager";
-import { checkItemCustomed, getCustomAssets, getCustomGroups } from "./customStash";
-import { getCustomMirrorGroups, resolvePreimage } from "./mirrorGroup";
-import type { CustomGroupName, Translation } from "@sugarch/bc-mod-types";
-import { translateString, translateEntry, translateGroupedEntries } from "./entryUtils";
-import { globalPipeline } from "@sugarch/bc-mod-utility";
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
+import { checkItemCustomed, getCustomAssets, getCustomGroups } from './customStash';
+import { getCustomMirrorGroups, resolvePreimage } from './mirrorGroup';
+import type { CustomGroupName, Translation } from '@sugarch/bc-mod-types';
+import { TranslationUtility } from '@sugarch/bc-mod-i18n';
+import { globalPipeline } from '@sugarch/bc-mod-utility';
 
 /**
  * Resolve translation entry by language
  * @param entryItem
  */
 export function resolveEntry(entryItem: Translation.Entry): string {
-    return translateEntry(entryItem, entryItem["CN"]);
+    return TranslationUtility.translateEntry(entryItem, entryItem['CN']);
 }
 
 /**
@@ -20,7 +20,7 @@ export function resolveEntry(entryItem: Translation.Entry): string {
  */
 export function solidfyEntry(entryItem: Translation.Entry | undefined, fallback: string): Translation.SolidEntry {
     if (!entryItem) return { CN: fallback };
-    if (entryItem["CN"]) return entryItem as Translation.SolidEntry;
+    if (entryItem['CN']) return entryItem as Translation.SolidEntry;
     return { ...entryItem, CN: fallback };
 }
 
@@ -110,11 +110,11 @@ function assetEntryString<Custom extends string = AssetGroupBodyName>(
     group: CustomGroupName<Custom>,
     asset: string
 ): string {
-    return translateGroupedEntries(
+    return TranslationUtility.translateGroupedEntries(
         customAssetEntries as Translation.GroupedEntries<Custom>,
         group,
         asset,
-        asset.replace(/_.*?Luzi$/, "")
+        asset.replace(/_.*?Luzi$/, '')
     );
 }
 
@@ -123,7 +123,11 @@ function assetEntryString<Custom extends string = AssetGroupBodyName>(
  * @param group
  */
 function groupEntryString<Custom extends string = AssetGroupBodyName>(group: CustomGroupName<Custom>): string {
-    return translateString(customGroupEntries as Translation.String, group, group.replace(/_.*?Luzi$/, ""));
+    return TranslationUtility.translateString(
+        customGroupEntries as Translation.String,
+        group,
+        group.replace(/_.*?Luzi$/, '')
+    );
 }
 
 /**
@@ -155,7 +159,7 @@ function loadAssetEntries(): void {
         .map(({ group, asset }) =>
             Object.entries(asset).map(([assetName, asset]) => ({
                 asset,
-                fromAsset: AssetGet("Female3DCG", group as AssetGroupName, assetName),
+                fromAsset: AssetGet('Female3DCG', group as AssetGroupName, assetName),
             }))
         )
         .flat()
@@ -204,27 +208,27 @@ export function setupEntries(): void {
 
     const assetCache = TextAllScreenCache.get(AssetStringsPath);
 
-    if (assetCache && assetCache.loaded && (TranslationLanguage === "EN" || assetCache.get("Bloated") !== "Bloated")) {
+    if (assetCache && assetCache.loaded && (TranslationLanguage === 'EN' || assetCache.get('Bloated') !== 'Bloated')) {
         // Already loaded, directly load names
         loadAssetEntries();
     }
 
     // Load CSV descriptions (display names)
-    HookManager.progressiveHook("AssetBuildDescription").next().inject(loadAssetEntries);
+    HookManager.progressiveHook('AssetBuildDescription').next().inject(loadAssetEntries);
     // Translation loading phase
-    HookManager.progressiveHook("TranslationAssetProcess").next().inject(loadAssetEntries);
+    HookManager.progressiveHook('TranslationAssetProcess').next().inject(loadAssetEntries);
 
     globalPipeline<(dictionary: DictionaryBuilder, PrevItem: Item, NextItem: Item) => void>(
-        "CustomDialogInject",
+        'CustomDialogInject',
         () => {},
         (pipeline) =>
-            HookManager.patchFunction("ChatRoomPublishAction", {
-                "ChatRoomCharacterItemUpdate(": `${pipeline.globalFuncName}(dictionary, PrevItem, NextItem);\nChatRoomCharacterItemUpdate(`,
+            HookManager.patchFunction('ChatRoomPublishAction', {
+                'ChatRoomCharacterItemUpdate(': `${pipeline.globalFuncName}(dictionary, PrevItem, NextItem);\nChatRoomCharacterItemUpdate(`,
             })
     ).register((_, dictionary, PrevItem, NextItem) => {
         for (const [key, item] of [
-            ["PrevAsset", PrevItem],
-            ["NextAsset", NextItem],
+            ['PrevAsset', PrevItem],
+            ['NextAsset', NextItem],
         ] as const) {
             const customed = checkItemCustomed(item);
             // Add an extra 'text' tag here in order to display the name or craft name of plugin items to clients without the plugin.

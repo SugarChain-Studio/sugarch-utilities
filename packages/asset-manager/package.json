@@ -28,7 +28,8 @@
   },
   "packageManager": "pnpm@10.6.2",
   "dependencies": {
-    "@sugarch/bc-mod-types": "workspace:*"
+    "@sugarch/bc-mod-types": "workspace:*",
+    "@sugarch/bc-mod-i18n": "workspace:*"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
