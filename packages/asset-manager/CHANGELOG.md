@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.1.0
+
+### Minor Changes
+
+-   ff14e86: remove unused resolveAssetOverrides function
+
 ## 1.0.14
 
 ### Patch Changes

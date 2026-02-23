@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 1.2.0
+
+### Minor Changes
+
+-   ff14e86: remove unused resolveAssetOverrides function
+
 ## 1.1.3
 
 ### Patch Changes

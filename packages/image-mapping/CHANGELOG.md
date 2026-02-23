@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 2.2.0
+
+### Minor Changes
+
+-   ff14e86: remove unused resolveAssetOverrides function
+
 ## 2.1.3
 
 ### Patch Changes
