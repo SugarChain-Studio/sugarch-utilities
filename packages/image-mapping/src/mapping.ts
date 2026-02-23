@@ -2,54 +2,10 @@ import { Globals, once } from '@sugarch/bc-mod-utility';
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { sleepUntil, PathTools } from '@sugarch/bc-mod-utility';
 import { ImageMappingStorage } from './mappingStorage';
-import type { AssetOverrideContainer, ImageMappingRecord } from '@sugarch/bc-mod-types';
 import { version } from './package';
 import { VirtualPath } from './virtualPath';
 
 const storage = new ImageMappingStorage();
-
-/**
- * Resolve compressed asset overrides, returning a mapping of asset paths to URLs
- * The `overrides` object should be a nested object where the keys are asset paths and the values are version strings, e.g.
- * ```jsonc
- * {
- *   "Assets": {
- *     "Female3DCG": {
- *       "ItemMisc": {
- *         // use semver as version string
- *         "Key.png": "1.0.0",
- *         // use git hash as version string
- *         "Key2.png": "acbd18db"
- *       }
- *     }
- *   }
- * }
- * ```
- * @param baseURL The base URL to prepend to all asset paths
- * @param overrides The compressed asset overrides
- * @returns A mapping of asset paths to URLs
- */
-export async function resolveAssetOverrides (
-    baseURL: string,
-    overrides: AssetOverrideContainer
-): Promise<ImageMappingRecord> {
-    const basicImgMapping: ImageMappingRecord = {};
-
-    const processList: { container: AssetOverrideContainer; path: string }[] = [{ container: overrides, path: '' }];
-
-    while (processList.length > 0) {
-        const current = processList.pop()!;
-        Object.entries(current.container).forEach(([key, value]) => {
-            const assetPath = `${current.path}${key}`;
-            if (typeof value !== 'object') {
-                basicImgMapping[assetPath] = `${baseURL}${assetPath}?v=${value}`;
-            } else {
-                processList.push({ container: value as AssetOverrideContainer, path: `${assetPath}/` });
-            }
-        });
-    }
-    return basicImgMapping;
-}
 
 function setupImgMapping (): void {
     once('ImgMappingOnce.GLDrawLoadImage.crossOrigin', () => {
