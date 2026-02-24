@@ -12,7 +12,6 @@ import { addOverrideIfEligible, setupOverride } from "./actOverride";
 
 export * from "./types";
 export { CustomActivity };
-export { resolveAssetOverrides } from "@sugarch/bc-image-mapping";
 
 export class _ActivityManager<CustomAct extends string = string, CustomPrereq extends string = ActivityPrerequisite> {
     /**

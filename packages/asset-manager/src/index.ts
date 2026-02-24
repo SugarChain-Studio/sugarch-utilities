@@ -53,8 +53,6 @@ export type {
 
 export type { CustomAssetDefinitionItem, CustomAssetDefinitionAppearance, CustomAssetDefinitionBase } from '@sugarch/bc-mod-types';
 
-export { resolveAssetOverrides } from '@sugarch/bc-image-mapping';
-
 function addAssetWithConfigTyping<Custom extends string = AssetGroupBodyName> (
     arg0: CustomGroupName<Custom> | CustomGroupName<Custom>[] | AddAssetWithConfigParams<Custom>[]
 ): arg0 is AddAssetWithConfigParams<Custom>[] {
