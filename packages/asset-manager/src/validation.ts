@@ -46,7 +46,7 @@ function runHook () {
 
     // Set fromModUser property based on the test function
     HookManager.hookFunction('ValidationResolveAppearanceDiff', 1, (args, next) => {
-        if (tester) (args[3] as AUParametersExt).fromModUser = tester(args[3]);
+        if (tester && args[3].C.IsPlayer()) (args[3] as AUParametersExt).fromModUser = tester(args[3]);
         return next(args);
     });
 }
