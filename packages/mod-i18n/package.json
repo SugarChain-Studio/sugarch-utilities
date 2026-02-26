@@ -26,6 +26,9 @@
     "type": "git",
     "url": "git+https://github.com/SugarChain-Studio/sugarch-utilities.git"
   },
+  "dependencies": {
+    "@sugarch/bc-mod-types": "0.6.4"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
@@ -37,8 +40,5 @@
     "rollup-plugin-delete": "^3.0.1",
     "rollup-plugin-dts": "^6.2.1",
     "tslib": "^2.8.1"
-  },
-  "dependencies": {
-    "@sugarch/bc-mod-types": "workspace:*"
   }
 }
