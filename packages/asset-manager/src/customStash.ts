@@ -89,13 +89,29 @@ export function isInListCustomAsset (group: CustomGroupName, name: string): bool
 }
 
 /**
+ * Set if target user should not show the custom asset
+ * @param target The target user to whom the item is used on
+ * @returns {boolean} Whether the custom assets should be shown
+ */
+export type UseValidator = (target: Character) => boolean;
+
+let useValidator: UseValidator | undefined = undefined;
+
+/**
  * Enable custom assets in the game
  */
 export function enableCustomAssets (): void {
     let doInventoryAdd = false;
-    HookManager.progressiveHook('DialogInventoryBuild').inject(args => {
-        if (args[2]) return;
-        doInventoryAdd = DialogMenuMode !== 'permissions';
+
+    HookManager.hookFunction('DialogInventoryBuild', 0, (args, next) => {
+        if (!args[2]) {
+            doInventoryAdd = DialogMenuMode !== 'permissions';
+        }
+        const ret = next(args);
+        if ((DialogMenuMode === "items" || DialogMenuMode === null) && useValidator && !args[0].IsPlayer() && !useValidator(args[0]))  {
+            DialogInventory = DialogInventory.filter(item => !checkItemCustomed(item));
+        }
+        return ret;
     });
 
     const preAvailable: typeof globalThis['InventoryAvailable'] = (C, N, G) => {
@@ -145,4 +161,13 @@ export function enableCustomAssets (): void {
  */
 export function checkItemCustomed (item: { Asset?: Asset } | null): boolean {
     return !!(item && item.Asset && AccessCustomAsset(item.Asset.Group.Name, item.Asset.Name));
+}
+
+
+/**
+ * Set the asset use validator, if it calculates false, the custom asset will not be shown on the inventory and cannot be used by the target user
+ * @param validator The validator function to determine if the custom asset should be shown to the target user
+ */
+export function setCustomAssetUseValidator (validator: UseValidator) {
+    useValidator = validator;
 }

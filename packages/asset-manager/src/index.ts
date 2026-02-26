@@ -10,7 +10,7 @@ import { loadGroup, mirrorGroup } from './groupUtils';
 import { pushAfterLoad, runSetupLoad } from './loadSchedule';
 import { addCustomAssetString, setupCustomAssetString } from './dialog';
 import { pickEntry, pickStrings, setupEntries } from './entries';
-import { customAssetGetStrict, enableCustomAssets, getCustomAssets } from './customStash';
+import { customAssetGetStrict, enableCustomAssets, getCustomAssets, setCustomAssetUseValidator, type UseValidator } from './customStash';
 import { addColorGroupNamesRaw, addLayerNames, addLayerNamesRaw, setupLayerNameLoad } from './layerNames';
 import { enableValidation, FromModUserTestFunc } from './validation';
 import type {
@@ -452,6 +452,14 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      */
     enableValidation (fromModUserTest: FromModUserTestFunc) {
         enableValidation(fromModUserTest);
+    }
+
+    /**
+     * Enable custom asset use validation
+     * @param validator Function to determine if the custom asset should be shown to the target user
+     */
+    enableCustomAssetUseValidation (validator: UseValidator) {
+        setCustomAssetUseValidator(validator);
     }
 
     /**
