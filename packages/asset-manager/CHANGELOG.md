@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.2.5
+
+### Patch Changes
+
+-   6d2dd46: mod validation should only works on player character
+
 ## 1.2.4
 
 ### Patch Changes
