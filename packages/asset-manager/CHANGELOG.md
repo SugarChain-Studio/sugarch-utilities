@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.2.1
+
+### Patch Changes
+
+-   clean ci build
+
 ## 1.2.0
 
 ### Minor Changes
