@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-i18n
 
+## 0.0.4
+
+### Patch Changes
+
+-   struggling with pnpm cannot find package
+
 ## 0.0.3
 
 ### Patch Changes

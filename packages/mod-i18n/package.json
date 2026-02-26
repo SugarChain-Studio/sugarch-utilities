@@ -1,6 +1,6 @@
 {
   "name": "@sugarch/bc-mod-i18n",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "I18n utility for BC mods.",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
@@ -27,7 +27,7 @@
     "url": "git+https://github.com/SugarChain-Studio/sugarch-utilities.git"
   },
   "dependencies": {
-    "@sugarch/bc-mod-types": "0.6.4"
+    "@sugarch/bc-mod-types": "workspace:*"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",

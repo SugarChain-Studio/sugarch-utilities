@@ -1,5 +1,13 @@
 # @sugarch/bc-asset-manager
 
+## 1.2.4
+
+### Patch Changes
+
+-   struggling with pnpm cannot find package
+-   Updated dependencies
+    -   @sugarch/bc-mod-i18n@0.0.4
+
 ## 1.2.3
 
 ### Patch Changes
