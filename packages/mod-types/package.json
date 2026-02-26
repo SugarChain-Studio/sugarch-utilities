@@ -21,7 +21,6 @@
     "type": "git",
     "url": "git+https://github.com/SugarChain-Studio/sugarch-utilities.git"
   },
-  "packageManager": "pnpm@10.6.2",
   "devDependencies": {
     "bc-stubs": "125.0.0",
     "rollup": "^4.46.2",

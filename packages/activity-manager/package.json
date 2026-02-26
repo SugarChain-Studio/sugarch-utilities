@@ -26,7 +26,6 @@
     "type": "git",
     "url": "git+https://github.com/SugarChain-Studio/sugarch-utilities.git"
   },
-  "packageManager": "pnpm@10.6.2",
   "dependencies": {
     "@sugarch/bc-mod-types": "workspace:*",
     "@sugarch/bc-mod-utility": "workspace:*",
