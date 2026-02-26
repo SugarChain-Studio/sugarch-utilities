@@ -43,8 +43,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-hook-manager
       '@sugarch/bc-mod-i18n':
-        specifier: 0.0.2
-        version: 0.0.2
+        specifier: workspace:*
+        version: link:../mod-i18n
       '@sugarch/bc-mod-types':
         specifier: workspace:*
         version: link:../mod-types
@@ -95,8 +95,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-hook-manager
       '@sugarch/bc-mod-i18n':
-        specifier: 0.0.2
-        version: 0.0.2
+        specifier: workspace:*
+        version: link:../mod-i18n
       '@sugarch/bc-mod-types':
         specifier: workspace:*
         version: link:../mod-types
@@ -282,8 +282,8 @@ importers:
   packages/mod-i18n:
     dependencies:
       '@sugarch/bc-mod-types':
-        specifier: workspace:*
-        version: link:../mod-types
+        specifier: 0.6.4
+        version: 0.6.4
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^28.0.6
@@ -966,8 +966,8 @@ packages:
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
-  '@sugarch/bc-mod-i18n@0.0.2':
-    resolution: {integrity: sha512-Ta5GBRK3wuXDQTJQx61GfKiObqMVBxFlIkggLLtBxJFdGfqTfHCNBToV54zlFsBIXDBeoNBVSFl7JI2KLuYoBw==}
+  '@sugarch/bc-mod-types@0.6.4':
+    resolution: {integrity: sha512-NKRM++hvpiDV+s/WG6BE/i6nutaBigGmbteRxN083/hgbi2RW2Tysq7LJYSrZJz8iN3zwxPOdeqjHdUbMeARhw==}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -3228,9 +3228,7 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
-  '@sugarch/bc-mod-i18n@0.0.2':
-    dependencies:
-      '@sugarch/bc-mod-types': link:packages/mod-types
+  '@sugarch/bc-mod-types@0.6.4': {}
 
   '@types/babel__core@7.20.5':
     dependencies:

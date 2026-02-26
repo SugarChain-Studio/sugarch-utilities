@@ -1,5 +1,13 @@
 # @sugarch/bc-activity-manager
 
+## 1.2.3
+
+### Patch Changes
+
+-   682bd8b: update @sugarch/bc-mod-i18n dependency
+-   Updated dependencies [682bd8b]
+    -   @sugarch/bc-mod-i18n@0.0.3
+
 ## 1.2.2
 
 ### Patch Changes

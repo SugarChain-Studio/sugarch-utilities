@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-i18n
 
+## 0.0.3
+
+### Patch Changes
+
+-   682bd8b: update @sugarch/bc-mod-i18n dependency
+
 ## 0.0.2
 
 ### Patch Changes
