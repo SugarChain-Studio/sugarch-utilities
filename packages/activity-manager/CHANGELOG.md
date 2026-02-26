@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 1.2.2
+
+### Patch Changes
+
+-   8a84a5e: update @sugarch/bc-mod-i18n dependency version to 0.0.2
+
 ## 1.2.1
 
 ### Patch Changes
