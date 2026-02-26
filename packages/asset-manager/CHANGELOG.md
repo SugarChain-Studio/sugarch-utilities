@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.2.0
+
+### Minor Changes
+
+-   d712636: add custom asset use validation functionality
+
 ## 1.1.0
 
 ### Minor Changes
