@@ -275,12 +275,21 @@ Initializes the asset manager and adds custom components.
 
 ---
 
-### `enableValidation(fromModUserTest: FromModUserTestFunc): void`
+### `enableFromModUserValidation(fromModUserTest: FromModUserTestFunc): void`
 
-Enables validation for non-mod removal.
+Enables validation to prevent custom assets from being removed or swapped by non-mod users. Only affects custom assets, and only validates actions performed on the current player.
 
 - **Parameters**:
   - `fromModUserTest`: A function to determine if the user is from a mod.
+
+---
+
+### `enableCustomAssetUseValidation(validator: UseValidator): void`
+
+Enables validation to control the usage of custom assets. If the validator function returns `false`, the custom asset will not be shown to the target user.
+
+- **Parameters**:
+  - `validator`: A function to determine if the custom asset can be used.
 
 ---
 

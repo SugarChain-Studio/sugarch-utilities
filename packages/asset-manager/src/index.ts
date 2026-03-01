@@ -10,9 +10,15 @@ import { loadGroup, mirrorGroup } from './groupUtils';
 import { pushAfterLoad, runSetupLoad } from './loadSchedule';
 import { addCustomAssetString, setupCustomAssetString } from './dialog';
 import { pickEntry, pickStrings, setupEntries } from './entries';
-import { customAssetGetStrict, enableCustomAssets, getCustomAssets, setCustomAssetUseValidator, type UseValidator } from './customStash';
+import {
+    customAssetGetStrict,
+    enableCustomAssets,
+    getCustomAssets,
+    setCustomAssetUseValidator,
+    type UseValidator,
+} from './customStash';
 import { addColorGroupNamesRaw, addLayerNames, addLayerNamesRaw, setupLayerNameLoad } from './layerNames';
-import { enableValidation, FromModUserTestFunc } from './validation';
+import { enableFromModUserValidation, FromModUserTestFunc } from './validation';
 import type {
     CustomAssetDefinition,
     CustomGroupDefinition,
@@ -30,12 +36,12 @@ import { AddAssetConfig } from './types';
 type AddAssetWithConfigParams<Custom extends string = AssetGroupBodyName> = [
     group: CustomGroupName<Custom> | CustomGroupName<Custom>[],
     asset: CustomAssetDefinition<Custom>,
-    config: AddAssetConfig
+    config: AddAssetConfig,
 ];
 
 type AddAssetWithConfigParamsNoGroup<Custom extends string = AssetGroupBodyName> = [
     asset: CustomAssetDefinition<Custom>,
-    config: AddAssetConfig
+    config: AddAssetConfig,
 ];
 
 export type {
@@ -51,9 +57,13 @@ export type {
     AddAssetWithConfigParamsNoGroup,
 };
 
-export type { CustomAssetDefinitionItem, CustomAssetDefinitionAppearance, CustomAssetDefinitionBase } from '@sugarch/bc-mod-types';
+export type {
+    CustomAssetDefinitionItem,
+    CustomAssetDefinitionAppearance,
+    CustomAssetDefinitionBase,
+} from '@sugarch/bc-mod-types';
 
-function addAssetWithConfigTyping<Custom extends string = AssetGroupBodyName> (
+function addAssetWithConfigTyping<Custom extends string = AssetGroupBodyName>(
     arg0: CustomGroupName<Custom> | CustomGroupName<Custom>[] | AddAssetWithConfigParams<Custom>[]
 ): arg0 is AddAssetWithConfigParams<Custom>[] {
     return Array.isArray(arg0) && (arg0.length === 0 || (Array.isArray(arg0[0]) && arg0[0].length === 3));
@@ -83,7 +93,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
         noMirror?: boolean
     ): void;
 
-    addAsset (
+    addAsset(
         group: CustomGroupName<Custom>,
         asset: CustomAssetDefinition<Custom>,
         extended?: AssetArchetypeConfig,
@@ -170,7 +180,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
         args: AddAssetWithConfigParamsNoGroup<Custom>[]
     ): void;
 
-    addAssetWithConfig (
+    addAssetWithConfig(
         arg0: CustomGroupName<Custom> | CustomGroupName<Custom>[] | AddAssetWithConfigParams<Custom>[],
         arg1?: CustomAssetDefinition<Custom> | AddAssetWithConfigParamsNoGroup<Custom>[],
         config?: AddAssetConfig
@@ -186,7 +196,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
                 translation: config.translation,
                 noMirror: config.noMirror,
                 layerNames: config.layerNames,
-                ...(config.extended ? { extendedConfig: Object.fromEntries(grps.map(g => [g, extItem])) } : {}),
+                ...(config.extended ? { extendedConfig: Object.fromEntries(grps.map((g) => [g, extItem])) } : {}),
                 assetStrings: config.assetStrings,
             };
 
@@ -214,7 +224,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param translations Asset name translations, organized by group
      * @param groupedLayerNames Layer names, organized by group
      */
-    addGroupedAssetsWithConfig (
+    addGroupedAssetsWithConfig(
         groupedAssets: CustomGroupedAssetDefinitions<Custom>,
         translations: Translation.GroupedEntries,
         groupedLayerNames: Translation.GroupedAssetStrings<Custom>
@@ -235,7 +245,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param translations Many asset name translations!
      * @param extended Optional extended asset properties
      */
-    addGroupedAssets (
+    addGroupedAssets(
         groupedAssets: CustomGroupedAssetDefinitions<Custom>,
         translations?: Translation.GroupedEntries,
         extended?: ExtendedItemMainConfig
@@ -257,7 +267,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * Add grouped configuration
      * @param extendedConfig
      */
-    addGroupedConfig (extendedConfig: ExtendedItemMainConfig) {
+    addGroupedConfig(extendedConfig: ExtendedItemMainConfig) {
         loadExtendedConfig(extendedConfig);
     }
 
@@ -267,7 +277,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param asset The asset name
      * @param work
      */
-    modifyAsset (
+    modifyAsset(
         group: CustomGroupName<Custom> | CustomGroupName<Custom>[],
         asset: string,
         work: FuncWork<[Mutable<AssetGroup>, Mutable<Asset>]>
@@ -281,7 +291,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param asset The asset name
      * @param extended The extended asset configuration
      */
-    supplyExtended (
+    supplyExtended(
         group: CustomGroupName<Custom> | CustomGroupName<Custom>[],
         asset: string,
         extended: AssetArchetypeConfig,
@@ -295,7 +305,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param filter Asset filter
      * @param work
      */
-    modifyAssetLayers (filter: (asset: Asset) => boolean, work: FuncWork<[Mutable<Asset>, Mutable<AssetLayer>]>) {
+    modifyAssetLayers(filter: (asset: Asset) => boolean, work: FuncWork<[Mutable<Asset>, Mutable<AssetLayer>]>) {
         modifyAssetLayers(filter, work);
     }
 
@@ -304,7 +314,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param group
      * @param work
      */
-    modifyGroup (group: CustomGroupName<Custom>, work: FuncWork<[Mutable<AssetGroup>]>) {
+    modifyGroup(group: CustomGroupName<Custom>, work: FuncWork<[Mutable<AssetGroup>]>) {
         modifyGroup(group, work);
     }
 
@@ -312,7 +322,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * Add custom asset strings. If it contains ItemTorso or ItemTorso2, a mirror will be automatically added.
      * @param dialog
      */
-    addCustomAssetString (assetStrings: Translation.String) {
+    addCustomAssetString(assetStrings: Translation.String) {
         addCustomAssetString(assetStrings);
     }
 
@@ -320,14 +330,14 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * Add custom image mappings
      * @param mappings
      */
-    addImageMapping (mappings: ImageMappingRecord) {
+    addImageMapping(mappings: ImageMappingRecord) {
         ImageMapping.addImgMapping(mappings);
     }
 
     /**
      * Forwarding ImageMapping interface
      */
-    get imageMapping () {
+    get imageMapping() {
         return ImageMapping;
     }
 
@@ -336,7 +346,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param groupDef
      * @param translation
      */
-    addGroup (groupDef: CustomGroupDefinition<Custom>, translation?: Translation.Entry) {
+    addGroup(groupDef: CustomGroupDefinition<Custom>, translation?: Translation.Entry) {
         loadGroup(groupDef, { translation });
     }
 
@@ -347,7 +357,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param translation New group display translation
      * @param defOverrides Overrides some properties of the new group
      */
-    addCopyGroup (
+    addCopyGroup(
         newGroup: CustomGroupName<Custom>,
         copyFrom: CustomGroupName<Custom>,
         translation?: Translation.Entry,
@@ -365,7 +375,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param assetDef The asset definition
      * @param entries Layer-name, grouped by language
      */
-    addLayerNames (
+    addLayerNames(
         group: CustomGroupName<Custom>,
         assetDef: CustomAssetDefinition<Custom>,
         entries: Translation.String
@@ -380,7 +390,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param assetName The asset name
      * @param entry Layer-Name record, grouped by language
      */
-    addLayerNamesRaw (
+    addLayerNamesRaw(
         group: CustomGroupName<Custom>,
         assetName: string,
         entry: Translation.CustomRecord<string, string>
@@ -395,7 +405,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param assetName The asset name
      * @param entry ColorGroupName-Name record, grouped by language
      */
-    addColorGroupNamesRaw (
+    addColorGroupNamesRaw(
         group: CustomGroupName<Custom>,
         assetName: string,
         entry: Translation.CustomRecord<string, string>
@@ -408,7 +418,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * @param asset The asset
      * @returns True if the asset is custom
      */
-    assetIsCustomed (asset: Asset): boolean {
+    assetIsCustomed(asset: Asset): boolean {
         return getCustomAssets()[asset.Group.Name]?.[asset.Name] !== undefined;
     }
 
@@ -416,7 +426,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * Check if a name of an asset is custom, this **does not** include assets created by mirroring groups
      * @param assetName The name of the asset
      */
-    assetNameIsStrictCustomed (assetName: string): boolean {
+    assetNameIsStrictCustomed(assetName: string): boolean {
         return customAssetGetStrict(assetName) !== undefined;
     }
 
@@ -424,7 +434,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * Add an event after loading is complete
      * @param wk
      */
-    afterLoad (wk: () => void) {
+    afterLoad(wk: () => void) {
         pushAfterLoad(wk);
     }
 
@@ -434,7 +444,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * *Note: This function should be called **only once**.*
      * @param componentSetup Component setup function, all custom components should be initialized inside this function
      */
-    init (componentSetup: FuncWork) {
+    init(componentSetup: FuncWork) {
         // Initialize all functions, order doesn't matter much
         setupCustomAssetString();
         setupEntries();
@@ -447,18 +457,28 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
+     * @deprecated
      * Enable non-mod removal validation
      * @param fromModUserTest Function to determine if the user is from a mod
      */
-    enableValidation (fromModUserTest: FromModUserTestFunc) {
-        enableValidation(fromModUserTest);
+    enableValidation(fromModUserTest: FromModUserTestFunc) {
+        enableFromModUserValidation(fromModUserTest);
     }
 
     /**
-     * Enable custom asset use validation
+     * Enable validation to prevent custom assets from being removed or swapped by non-mod users
+     * Only affects custom assets, and only validates actions performed on the current player
+     * @param fromModUserTest Function to determine if the user is from a mod
+     */
+    enableFromModUserValidation(fromModUserTest: FromModUserTestFunc) {
+        enableFromModUserValidation(fromModUserTest);
+    }
+
+    /**
+     * Enable custom asset use validation, if it evaluates to false, the custom asset will not be shown to the target user
      * @param validator Function to determine if the custom asset should be shown to the target user
      */
-    enableCustomAssetUseValidation (validator: UseValidator) {
+    enableCustomAssetUseValidation(validator: UseValidator) {
         setCustomAssetUseValidator(validator);
     }
 
@@ -466,7 +486,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * Set the logger for the asset manager
      * @param logger
      */
-    setLogger (logger: ILogger) {
+    setLogger(logger: ILogger) {
         setLogger(logger);
     }
 
@@ -475,7 +495,7 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
      * type safety, use this method to get a re-typed version
      * @returns retyped AssetManager
      */
-    typeBodyGroupNames<T extends string> () {
+    typeBodyGroupNames<T extends string>() {
         return this as _AssetManager<T>;
     }
 }

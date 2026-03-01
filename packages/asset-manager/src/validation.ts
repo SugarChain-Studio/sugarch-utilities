@@ -57,7 +57,7 @@ function runHook() {
  * Enable validation to prevent custom assets from being removed or swapped by non-mod users
  * @param fromModUserTest Function to test if the parameters are from a mod user
  */
-export function enableValidation(fromModUserTest: FromModUserTestFunc): void {
+export function enableFromModUserValidation(fromModUserTest: FromModUserTestFunc): void {
     isFromModUser = fromModUserTest;
     runHook();
 }
