@@ -17,7 +17,7 @@ export const AccessCustomAsset = <Custom extends string = AssetGroupBodyName>(
 /**
  * Add a custom asset group
  */
-export function customGroupAdd (
+export function customGroupAdd(
     ...[family, groupDef]: Parameters<typeof AssetGroupAdd>
 ): SyncPromise<Mutable<AssetGroup>> {
     // Prevent the addition process from being disrupted
@@ -29,18 +29,18 @@ export function customGroupAdd (
 /**
  * Mark a custom asset that is not created by mirroring groups
  */
-export function customAssetMarkStrict (name: string, asset: Asset) {
+export function customAssetMarkStrict(name: string, asset: Asset) {
     strictCustomAssets.push({ name, asset });
 }
 
-export function customAssetGetStrict (name: string): Asset | undefined {
-    return strictCustomAssets.find(x => x.name === name)?.asset;
+export function customAssetGetStrict(name: string): Asset | undefined {
+    return strictCustomAssets.find((x) => x.name === name)?.asset;
 }
 
 /**
  * Add a custom asset
  */
-export function customAssetAdd (...[group, assetDef, config]: Parameters<typeof AssetAdd>): SyncPromise<Mutable<Asset>> {
+export function customAssetAdd(...[group, assetDef, config]: Parameters<typeof AssetAdd>): SyncPromise<Mutable<Asset>> {
     // Prevent the addition process from being disrupted
     HookManager.invokeOriginal('AssetAdd', group, assetDef, config);
     const groupName = group.Name;
@@ -59,7 +59,7 @@ export function customAssetAdd (...[group, assetDef, config]: Parameters<typeof 
 /**
  * Get all custom groups
  */
-export function getCustomGroups<Custom extends string = AssetGroupBodyName> (): Record<
+export function getCustomGroups<Custom extends string = AssetGroupBodyName>(): Record<
     CustomGroupName<Custom>,
     AssetGroup
 > {
@@ -69,7 +69,7 @@ export function getCustomGroups<Custom extends string = AssetGroupBodyName> (): 
 /**
  * Get all custom assets
  */
-export function getCustomAssets<Custom extends string = AssetGroupBodyName> (): Record<
+export function getCustomAssets<Custom extends string = AssetGroupBodyName>(): Record<
     CustomGroupName<Custom>,
     Record<string, Asset>
 > {
@@ -82,7 +82,7 @@ export function getCustomAssets<Custom extends string = AssetGroupBodyName> (): 
  * @param {string} name
  * @returns {boolean}
  */
-export function isInListCustomAsset (group: CustomGroupName, name: string): boolean {
+export function isInListCustomAsset(group: CustomGroupName, name: string): boolean {
     /** @type {Asset | undefined} */
     const asset = AccessCustomAsset(group, name);
     return !!asset && asset.Value >= 0;
@@ -100,7 +100,7 @@ let useValidator: UseValidator | undefined = undefined;
 /**
  * Enable custom assets in the game
  */
-export function enableCustomAssets (): void {
+export function enableCustomAssets(): void {
     let doInventoryAdd = false;
 
     HookManager.hookFunction('DialogInventoryBuild', 0, (args, next) => {
@@ -108,13 +108,18 @@ export function enableCustomAssets (): void {
             doInventoryAdd = DialogMenuMode !== 'permissions';
         }
         const ret = next(args);
-        if ((DialogMenuMode === "items" || DialogMenuMode === null) && useValidator && !args[0].IsPlayer() && !useValidator(args[0]))  {
-            DialogInventory = DialogInventory.filter(item => !checkItemCustomed(item));
+        if (
+            (DialogMenuMode === 'items' || DialogMenuMode === null) &&
+            useValidator &&
+            !args[0].IsPlayer() &&
+            !useValidator(args[0])
+        ) {
+            DialogInventory = DialogInventory.filter((item) => !checkItemCustomed(item));
         }
         return ret;
     });
 
-    const preAvailable: typeof globalThis['InventoryAvailable'] = (C, N, G) => {
+    const preAvailable: (typeof globalThis)['InventoryAvailable'] = (C, N, G) => {
         const pre = queryMirrorPreimage(G);
         return pre ? HookManager.invokeOriginal('InventoryAvailable', C, N, pre) : false;
     };
@@ -125,7 +130,7 @@ export function enableCustomAssets (): void {
         doInventoryAdd = false;
 
         const groupName = args[1].Asset.Group.Name;
-        const added = new Set(DialogInventory.map(item => item.Asset.Name));
+        const added = new Set(DialogInventory.map((item) => item.Asset.Name));
         const content = customAssets[groupName];
         if (!content) return ret;
 
@@ -133,7 +138,7 @@ export function enableCustomAssets (): void {
             .filter(([assetName]) => !added.has(assetName))
             .filter(([assetName, asset]) => asset.Value >= 0 || preAvailable(args[0], assetName, groupName))
             .forEach(([_, asset]) => DialogInventoryAdd(args[0], { Asset: asset }, false));
-            
+
         return ret;
     });
 
@@ -147,7 +152,7 @@ export function enableCustomAssets (): void {
     const overrideAvailable = (
         ...[args, next]: Parameters<HookManagerInterface.HookFunction<'InventoryAvailable'>>
     ) => {
-        if (!insides.some(flag => flag.inside)) return next(args);
+        if (!insides.some((flag) => flag.inside)) return next(args);
         if (isInListCustomAsset(args[2], args[1]) || preAvailable(...args)) return true;
         return next(args);
     };
@@ -159,15 +164,14 @@ export function enableCustomAssets (): void {
  * Check if an item is custom
  * @param {Item | null} item
  */
-export function checkItemCustomed (item: { Asset?: Asset } | null): boolean {
+export function checkItemCustomed(item: { Asset?: Asset } | null): boolean {
     return !!(item && item.Asset && AccessCustomAsset(item.Asset.Group.Name, item.Asset.Name));
 }
 
-
 /**
- * Set the asset use validator, if it calculates false, the custom asset will not be shown on the inventory and cannot be used by the target user
+ * Set the asset use validator, if it calculates false, the custom asset will not be shown on the inventory and cannot be used on the target user
  * @param validator The validator function to determine if the custom asset should be shown to the target user
  */
-export function setCustomAssetUseValidator (validator: UseValidator) {
+export function setCustomAssetUseValidator(validator: UseValidator) {
     useValidator = validator;
 }
