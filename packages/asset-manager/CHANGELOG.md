@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.3.0
+
+### Minor Changes
+
+-   d894a28: rename validation functions for clarity and improve documentation
+
 ## 1.2.5
 
 ### Patch Changes
