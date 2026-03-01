@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "bc-stubs": "125.0.0",
-    "rollup": "^4.46.2",
+    "rollup": "^4.59.0",
     "typescript": "^5.9.2"
   }
 }
