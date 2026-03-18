@@ -71,8 +71,8 @@ importers:
         specifier: workspace:*
         version: link:../image-mapping
       bc-stubs:
-        specifier: 125.0.0
-        version: 125.0.0
+        specifier: 126.0.0
+        version: 126.0.0
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -120,8 +120,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 125.0.0
-        version: 125.0.0
+        specifier: 126.0.0
+        version: 126.0.0
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -169,8 +169,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 125.0.0
-        version: 125.0.0
+        specifier: 126.0.0
+        version: 126.0.0
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -224,8 +224,8 @@ importers:
         specifier: ^29.5.14
         version: 29.5.14
       bc-stubs:
-        specifier: 125.0.0
-        version: 125.0.0
+        specifier: 126.0.0
+        version: 126.0.0
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -261,8 +261,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 125.0.0
-        version: 125.0.0
+        specifier: 126.0.0
+        version: 126.0.0
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -298,8 +298,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 125.0.0
-        version: 125.0.0
+        specifier: 126.0.0
+        version: 126.0.0
       rollup:
         specifier: ^4.59.0
         version: 4.59.0
@@ -319,8 +319,8 @@ importers:
   packages/mod-types:
     devDependencies:
       bc-stubs:
-        specifier: 125.0.0
-        version: 125.0.0
+        specifier: 126.0.0
+        version: 126.0.0
       rollup:
         specifier: ^4.59.0
         version: 4.59.0
@@ -350,8 +350,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 125.0.0
-        version: 125.0.0
+        specifier: 126.0.0
+        version: 126.0.0
       rollup:
         specifier: ^4.59.0
         version: 4.59.0
@@ -1192,8 +1192,8 @@ packages:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
     engines: {node: 18 || 20 || >=22}
 
-  bc-stubs@125.0.0:
-    resolution: {integrity: sha512-l6kCNUSTNr/c57nFYh+zg0cP076sq/MkW9/C8k6yGUoybvHZYEzZAYhIj2MLmt0LvV3zh57V8eVUemMiMOFA5Q==}
+  bc-stubs@126.0.0:
+    resolution: {integrity: sha512-391/Y2F/b5Fwh02QCu+M4pcuwtXbhWypO/VaNp7ItKucj5C9paWX9NA4mTQ3oBI5a6DGrXkv8Xer5tF4EfVxbA==}
 
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
@@ -2230,8 +2230,8 @@ packages:
     resolution: {integrity: sha512-5UswCV6hpaRsNg5kkEHVcbBIXEYoVbMQaHJBXJCyEQ+CiFPV1NIOY0XOFWG4XR4GZcB8Kn6AsRs/9cy9TbqVMQ==}
     engines: {node: '>=10.0.0'}
 
-  socket.io-parser@4.2.5:
-    resolution: {integrity: sha512-bPMmpy/5WWKHea5Y/jYAP6k74A+hvmRCQaJuJB6I/ML5JZq/KfNieUVo/3Mh7SAqn7TyFdIo6wqYHInG1MU1bQ==}
+  socket.io-parser@4.2.6:
+    resolution: {integrity: sha512-asJqbVBDsBCJx0pTqw3WfesSY0iRX+2xzWEWzrpcH7L6fLzrhyF8WPI8UaeM4YCuDfpwA/cgsdugMsmtz8EJeg==}
     engines: {node: '>=10.0.0'}
 
   source-map-support@0.5.13:
@@ -3505,7 +3505,7 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  bc-stubs@125.0.0:
+  bc-stubs@126.0.0:
     dependencies:
       socket.io-client: 4.6.1
     transitivePeerDependencies:
@@ -4686,13 +4686,13 @@ snapshots:
       '@socket.io/component-emitter': 3.1.2
       debug: 4.3.7
       engine.io-client: 6.4.0
-      socket.io-parser: 4.2.5
+      socket.io-parser: 4.2.6
     transitivePeerDependencies:
       - bufferutil
       - supports-color
       - utf-8-validate
 
-  socket.io-parser@4.2.5:
+  socket.io-parser@4.2.6:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
       debug: 4.4.3
