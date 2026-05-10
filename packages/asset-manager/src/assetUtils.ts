@@ -1,11 +1,11 @@
 import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import { AssetConfig, ParsedAsset, resolveStringAsset } from './assetConfigs';
-import { customAssetAdd, customAssetMarkStrict, getCustomAssets } from './customStash';
+import { customAssetAdd, customAssetMarkStrict, getCustomAssets, getCustomGroupDefs } from './customStash';
 import { addCustomAssetStringWithPrefix } from './dialog';
 import { Entries, resolveEntry, solidfyEntry } from './entries';
 import { addLayerNames } from './layerNames';
 import { pushAfterLoad, pushAssetLoadEvent, pushDefsLoad, requireGroup } from './loadSchedule';
-import type { CustomAssetDefinition, CustomGroupName, FuncWork, Translation } from '@sugarch/bc-mod-types';
+import type { CustomAssetDefinition, CustomGroupDefinition, CustomGroupName, FuncWork, Translation } from '@sugarch/bc-mod-types';
 
 /**
  * Mirror a global function between asset groups
@@ -73,6 +73,14 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
         // Note that this function is called once for each mirrored body group, so we can't use the outer groupName
         // Using const shadowing to avoid this problem
         const groupName = groupObj.Name;
+
+        let groupDef = AssetFemale3DCG.find(g => g.Group === groupName);
+        if (!groupDef) groupDef = getCustomGroupDefs<AssetGroupName>()[groupName];
+        if (!groupDef) {
+            console.error(`missing group definition for "${groupName}"`);
+            return;
+        }
+
         const assetDef = resolveStringAsset(asset as AssetDefinition);
 
         const assetDefRes = AssetResolveCopyConfig.AssetDefinition(assetDef, groupName, ParsedAsset.value);
@@ -85,7 +93,7 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
         }
 
         // First set the display name here
-        customAssetAdd(groupObj, assetDefRes, AssetConfig.value).then(asset => {
+        customAssetAdd(groupObj, assetDefRes, AssetConfig.value, groupDef).then(asset => {
             if (asset.DynamicGroupName === asset.Group.Name) {
                 if (dynamicName) asset.DynamicGroupName = dynamicName as AssetGroupName;
                 else asset.DynamicGroupName = srcGroupName as AssetGroupName;

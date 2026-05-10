@@ -1,9 +1,10 @@
 import { HookManager, HookManagerInterface } from '@sugarch/bc-mod-hook-manager';
-import type { CustomGroupName } from '@sugarch/bc-mod-types';
+import type { CustomGroupDefinition, CustomGroupName } from '@sugarch/bc-mod-types';
 import { SyncPromise } from './syncPromise';
 import { queryMirrorPreimage } from './mirrorGroup';
 
 const customGroups: Record<string, AssetGroup> = {};
+const customGroupDefs: Record<string, AssetGroupDefinition> = {};
 
 const customAssets: Record<string, Record<string, Asset>> = {};
 
@@ -22,6 +23,8 @@ export function customGroupAdd(
 ): SyncPromise<Mutable<AssetGroup>> {
     // Prevent the addition process from being disrupted
     const Group = HookManager.invokeOriginal('AssetGroupAdd', family, groupDef);
+    console.log("customGroupAdd:", family, groupDef);
+    customGroupDefs[groupDef.Group] = groupDef;
     customGroups[Group.Name] = Group;
     return SyncPromise.resolve(Group as Mutable<AssetGroup>);
 }
@@ -40,9 +43,9 @@ export function customAssetGetStrict(name: string): Asset | undefined {
 /**
  * Add a custom asset
  */
-export function customAssetAdd(...[group, assetDef, config]: Parameters<typeof AssetAdd>): SyncPromise<Mutable<Asset>> {
+export function customAssetAdd(...[group, assetDef, config, groupDef]: Parameters<typeof AssetAdd>): SyncPromise<Mutable<Asset>> {
     // Prevent the addition process from being disrupted
-    HookManager.invokeOriginal('AssetAdd', group, assetDef, config);
+    HookManager.invokeOriginal('AssetAdd', group, assetDef, config, groupDef);
     const groupName = group.Name;
     const assetName = assetDef.Name;
     if (!customAssets[groupName]) customAssets[groupName] = {};
@@ -54,6 +57,16 @@ export function customAssetAdd(...[group, assetDef, config]: Parameters<typeof A
 
     // NOTE: This situation should not be possible
     return SyncPromise.reject(`Asset ${groupName}:${assetName} not found`);
+}
+
+/**
+ * Get all custom groups
+ */
+export function getCustomGroupDefs<Custom extends string = AssetGroupBodyName>(): Record<
+    CustomGroupName<Custom>,
+    AssetGroupDefinition
+> {
+    return customGroupDefs as Record<CustomGroupName<Custom>, AssetGroupDefinition>;
 }
 
 /**
