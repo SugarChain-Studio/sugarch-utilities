@@ -69,7 +69,7 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
 
     const srcGroupName = groupName;
 
-    requireGroup(groupName, !!noMirror, groupObj => {
+    requireGroup(groupName, !!noMirror, (groupObj, groupDef) => {
         // Note that this function is called once for each mirrored body group, so we can't use the outer groupName
         // Using const shadowing to avoid this problem
         const groupName = groupObj.Name;
@@ -85,7 +85,7 @@ export function loadAsset<Custom extends string = AssetGroupBodyName> (
         }
 
         // First set the display name here
-        customAssetAdd(groupObj, assetDefRes, AssetConfig.value).then(asset => {
+        customAssetAdd(groupObj, assetDefRes, AssetConfig.value, groupDef).then(asset => {
             if (asset.DynamicGroupName === asset.Group.Name) {
                 if (dynamicName) asset.DynamicGroupName = dynamicName as AssetGroupName;
                 else asset.DynamicGroupName = srcGroupName as AssetGroupName;

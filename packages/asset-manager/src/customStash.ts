@@ -1,11 +1,12 @@
-import { HookManager, HookManagerInterface } from '@sugarch/bc-mod-hook-manager';
+import { HookManager } from '@sugarch/bc-mod-hook-manager';
 import type { CustomGroupName } from '@sugarch/bc-mod-types';
 import { SyncPromise } from './syncPromise';
-import { queryMirrorPreimage } from './mirrorGroup';
 
 const customGroups: Record<string, AssetGroup> = {};
 
 const customAssets: Record<string, Record<string, Asset>> = {};
+
+const customGroupDefs: Record<string, AssetGroupDefinition> = {};
 
 const strictCustomAssets: { name: string; asset: Asset }[] = [];
 
@@ -23,6 +24,7 @@ export function customGroupAdd(
     // Prevent the addition process from being disrupted
     const Group = HookManager.invokeOriginal('AssetGroupAdd', family, groupDef);
     customGroups[Group.Name] = Group;
+    customGroupDefs[Group.Name] = groupDef;
     return SyncPromise.resolve(Group as Mutable<AssetGroup>);
 }
 
@@ -40,9 +42,12 @@ export function customAssetGetStrict(name: string): Asset | undefined {
 /**
  * Add a custom asset
  */
-export function customAssetAdd(...[group, assetDef, config]: Parameters<typeof AssetAdd>): SyncPromise<Mutable<Asset>> {
+export function customAssetAdd(...[group, assetDef, config, groupDef]: Parameters<typeof AssetAdd>): SyncPromise<Mutable<Asset>> {
     // Prevent the addition process from being disrupted
-    HookManager.invokeOriginal('AssetAdd', group, assetDef, config);
+    // NOTE: 2026-05-11, R128-Alpha an addtional parameter `groupDef` is added, it should work with older version of `AssetAdd` since the 
+    // additional parameter should be ignored by the original function.
+    // Tested with R127, and it works as expected.
+    HookManager.invokeOriginal('AssetAdd', group, assetDef, config, groupDef);
     const groupName = group.Name;
     const assetName = assetDef.Name;
     if (!customAssets[groupName]) customAssets[groupName] = {};
@@ -54,6 +59,16 @@ export function customAssetAdd(...[group, assetDef, config]: Parameters<typeof A
 
     // NOTE: This situation should not be possible
     return SyncPromise.reject(`Asset ${groupName}:${assetName} not found`);
+}
+
+/**
+ * Get all custom group definitions
+ */
+export function getCustomGroupDefs<Custom extends string = AssetGroupBodyName>(): Record<
+    CustomGroupName<Custom>,
+    AssetGroupDefinition
+> {
+    return customGroupDefs as Record<CustomGroupName<Custom>, AssetGroupDefinition>;
 }
 
 /**
@@ -95,70 +110,7 @@ export function isInListCustomAsset(group: CustomGroupName, name: string): boole
  */
 export type UseValidator = (target: Character) => boolean;
 
-let useValidator: UseValidator | undefined = undefined;
-
-/**
- * Enable custom assets in the game
- */
-export function enableCustomAssets(): void {
-    let doInventoryAdd = false;
-
-    HookManager.hookFunction('DialogInventoryBuild', 0, (args, next) => {
-        if (!args[2]) {
-            doInventoryAdd = DialogMenuMode !== 'permissions';
-        }
-        const ret = next(args);
-        if (
-            (DialogMenuMode === 'items' || DialogMenuMode === null) &&
-            useValidator &&
-            !args[0].IsPlayer() &&
-            !useValidator(args[0])
-        ) {
-            DialogInventory = DialogInventory.filter((item) => !checkItemCustomed(item));
-        }
-        return ret;
-    });
-
-    const preAvailable: (typeof globalThis)['InventoryAvailable'] = (C, N, G) => {
-        const pre = queryMirrorPreimage(G);
-        return pre ? HookManager.invokeOriginal('InventoryAvailable', C, N, pre) : false;
-    };
-
-    HookManager.hookFunction('DialogInventoryAdd', 10, (args, next) => {
-        const ret = next(args);
-        if (!doInventoryAdd) return ret;
-        doInventoryAdd = false;
-
-        const groupName = args[1].Asset.Group.Name;
-        const added = new Set(DialogInventory.map((item) => item.Asset.Name));
-        const content = customAssets[groupName];
-        if (!content) return ret;
-
-        Object.entries(content)
-            .filter(([assetName]) => !added.has(assetName))
-            .filter(([assetName, asset]) => asset.Value >= 0 || preAvailable(args[0], assetName, groupName))
-            .forEach(([_, asset]) => DialogInventoryAdd(args[0], { Asset: asset }, false));
-
-        return ret;
-    });
-
-    const insides = [
-        HookManager.insideFlag('CharacterAppearanceValidate'),
-        HookManager.insideFlag('CraftingItemListBuild'),
-        HookManager.insideFlag('WardrobeFastLoad'),
-        HookManager.insideFlag('CraftingValidate'),
-    ];
-
-    const overrideAvailable = (
-        ...[args, next]: Parameters<HookManagerInterface.HookFunction<'InventoryAvailable'>>
-    ) => {
-        if (!insides.some((flag) => flag.inside)) return next(args);
-        if (isInListCustomAsset(args[2], args[1]) || preAvailable(...args)) return true;
-        return next(args);
-    };
-
-    HookManager.hookFunction('InventoryAvailable', 0, overrideAvailable);
-}
+export let useValidator: UseValidator | undefined = undefined;
 
 /**
  * Check if an item is custom

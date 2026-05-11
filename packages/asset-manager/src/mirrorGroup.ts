@@ -1,4 +1,5 @@
 import type { CustomGroupName } from "@sugarch/bc-mod-types";
+import { getCustomGroupDefs } from "./customStash";
 
 const TorsoMirror: Set<string> = new Set<string>(['ItemTorso', 'ItemTorso2']);
 const mMirrorGroups: Record<string, Set<string>> = {
@@ -49,10 +50,10 @@ export function getCustomMirrorGroups<Custom extends string = AssetGroupBodyName
  */
 export function resolveMirror<Custom extends string = AssetGroupBodyName> (
     group: CustomGroupName<Custom>
-): Array<{ name: CustomGroupName<Custom>; group: AssetGroup }> {
+): Array<{ name: CustomGroupName<Custom>; group: AssetGroup; groupDef: AssetGroupDefinition }> {
     return ((mMirrorGroups[group] && Array.from(mMirrorGroups[group]!)) || [group]).map(gname =>
-        resolveSingle(gname)
-    ) as Array<{ name: CustomGroupName<Custom>; group: AssetGroup }>;
+        resolveSingle<Custom>(gname as CustomGroupName<Custom>)
+    );
 }
 
 /**
@@ -61,10 +62,11 @@ export function resolveMirror<Custom extends string = AssetGroupBodyName> (
  */
 export function resolveSingle<Custom extends string = AssetGroupBodyName> (
     group: CustomGroupName<Custom>
-): { name: CustomGroupName<Custom>; group: AssetGroup } {
+): { name: CustomGroupName<Custom>; group: AssetGroup; groupDef: AssetGroupDefinition } {
     return {
         name: group,
         group: AssetGroupGet('Female3DCG', group as AssetGroupName) as AssetGroup,
+        groupDef: AssetFemale3DCG.find(def => def.Group === group) || getCustomGroupDefs<Custom>()[group] as AssetGroupDefinition,
     };
 }
 

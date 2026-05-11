@@ -12,11 +12,11 @@ import { addCustomAssetString, setupCustomAssetString } from './dialog';
 import { pickEntry, pickStrings, setupEntries } from './entries';
 import {
     customAssetGetStrict,
-    enableCustomAssets,
     getCustomAssets,
     setCustomAssetUseValidator,
     type UseValidator,
 } from './customStash';
+import { enableCustomAssets } from './enableCustomAssets';
 import { addColorGroupNamesRaw, addLayerNames, addLayerNamesRaw, setupLayerNameLoad } from './layerNames';
 import { enableFromModUserValidation, FromModUserTestFunc } from './validation';
 import type {
