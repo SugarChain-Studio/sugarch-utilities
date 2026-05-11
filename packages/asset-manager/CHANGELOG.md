@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.4.0
+
+### Minor Changes
+
+-   R128 support
+
 ## 1.3.0
 
 ### Minor Changes
