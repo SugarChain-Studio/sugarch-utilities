@@ -71,8 +71,8 @@ importers:
         specifier: workspace:*
         version: link:../image-mapping
       bc-stubs:
-        specifier: 126.0.0
-        version: 126.0.0
+        specifier: 128.0.0-Alpha.1
+        version: 128.0.0-Alpha.1
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -120,8 +120,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 126.0.0
-        version: 126.0.0
+        specifier: 128.0.0-Alpha.1
+        version: 128.0.0-Alpha.1
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -169,8 +169,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 126.0.0
-        version: 126.0.0
+        specifier: 128.0.0-Alpha.1
+        version: 128.0.0-Alpha.1
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -224,8 +224,8 @@ importers:
         specifier: ^29.5.14
         version: 29.5.14
       bc-stubs:
-        specifier: 126.0.0
-        version: 126.0.0
+        specifier: 128.0.0-Alpha.1
+        version: 128.0.0-Alpha.1
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -261,8 +261,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 126.0.0
-        version: 126.0.0
+        specifier: 128.0.0-Alpha.1
+        version: 128.0.0-Alpha.1
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -298,8 +298,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 126.0.0
-        version: 126.0.0
+        specifier: 128.0.0-Alpha.1
+        version: 128.0.0-Alpha.1
       rollup:
         specifier: ^4.59.0
         version: 4.59.0
@@ -319,8 +319,8 @@ importers:
   packages/mod-types:
     devDependencies:
       bc-stubs:
-        specifier: 126.0.0
-        version: 126.0.0
+        specifier: 128.0.0-Alpha.1
+        version: 128.0.0-Alpha.1
       rollup:
         specifier: ^4.59.0
         version: 4.59.0
@@ -350,8 +350,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 126.0.0
-        version: 126.0.0
+        specifier: 128.0.0-Alpha.1
+        version: 128.0.0-Alpha.1
       rollup:
         specifier: ^4.59.0
         version: 4.59.0
@@ -985,6 +985,9 @@ packages:
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
+  '@total-typescript/ts-reset@0.6.1':
+    resolution: {integrity: sha512-cka47fVSo6lfQDIATYqb/vO1nvFfbPw7uWLayIXIhGETj0wcOOlrlkobOMDNQOFr9QOafegUPq13V2+6vtD7yg==}
+
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
 
@@ -1192,8 +1195,8 @@ packages:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
     engines: {node: 18 || 20 || >=22}
 
-  bc-stubs@126.0.0:
-    resolution: {integrity: sha512-391/Y2F/b5Fwh02QCu+M4pcuwtXbhWypO/VaNp7ItKucj5C9paWX9NA4mTQ3oBI5a6DGrXkv8Xer5tF4EfVxbA==}
+  bc-stubs@128.0.0-Alpha.1:
+    resolution: {integrity: sha512-B84YIfwJc9mvSW3BXHq6ZLQApfWdm0Ozzvi/FLG+eCHXOWaa9pMACCgXoweL55oHfEYQC37UXUfGpx21hpp7TA==}
 
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
@@ -3238,6 +3241,8 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
+  '@total-typescript/ts-reset@0.6.1': {}
+
   '@types/babel__core@7.20.5':
     dependencies:
       '@babel/parser': 7.28.0
@@ -3505,8 +3510,9 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  bc-stubs@126.0.0:
+  bc-stubs@128.0.0-Alpha.1:
     dependencies:
+      '@total-typescript/ts-reset': 0.6.1
       socket.io-client: 4.6.1
     transitivePeerDependencies:
       - bufferutil
