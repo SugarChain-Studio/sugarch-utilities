@@ -174,6 +174,6 @@ export function setupEntry(): void {
             const { Content, Dictionary, Type } = args[1] as Parameters<ClientToServerEvents['ChatRoomChat']>[0];
             if (Type !== 'Activity' || !Dictionary) return;
             const Text = resolve(Content);
-            if (Text) Dictionary.push({ Tag: `MISSING ACTIVITY DESCRIPTION FOR KEYWORD ${Content}`, Text });
+            if (Text) Dictionary.push({ Tag: `MISSING TEXT IN "ActivityDictionary.csv": ${Content}`, Text });
         });
 }
