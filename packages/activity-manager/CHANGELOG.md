@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 1.2.5
+
+### Patch Changes
+
+-   fix missing activity description in R130
+
 ## 1.2.4
 
 ### Patch Changes
