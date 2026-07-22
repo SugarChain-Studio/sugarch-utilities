@@ -22,7 +22,7 @@
     "url": "git+https://github.com/SugarChain-Studio/sugarch-utilities.git"
   },
   "devDependencies": {
-    "bc-stubs": "128.0.0-Alpha.1",
+    "bc-stubs": "130.0.0",
     "rollup": "^4.59.0",
     "typescript": "^5.9.2"
   }
