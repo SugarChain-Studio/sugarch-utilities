@@ -11,7 +11,8 @@ function setupImgMapping (): void {
     once('ImgMappingOnce.GLDrawLoadImage.crossOrigin', () => {
         // Cross-origin image loading
         HookManager.patchFunction('GLDrawLoadImage', {
-            'Img.src = url;': 'Img.crossOrigin = "Anonymous";\n\t\tImg.src = url;',
+            '\tImg.src = url;': '\tImg.crossOrigin = "Anonymous";\n\t\t\tImg.src = url;',
+            '\ttmpImg.src = url;': '\ttmpImg.crossOrigin = "Anonymous";\n\t\t\ttmpImg.src = url;',
         });
     });
 

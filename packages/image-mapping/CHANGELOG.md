@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 2.2.1
+
+### Patch Changes
+
+-   R132 `GLDrawLoadImage` changes
+
 ## 2.2.0
 
 ### Minor Changes

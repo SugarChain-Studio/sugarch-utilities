@@ -1,5 +1,11 @@
 # @sugarch/bc-activity-manager
 
+## 1.2.6
+
+### Patch Changes
+
+-   R132 `GLDrawLoadImage` changes
+
 ## 1.2.5
 
 ### Patch Changes

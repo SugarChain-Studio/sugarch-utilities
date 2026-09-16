@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.4.1
+
+### Patch Changes
+
+-   R132 `GLDrawLoadImage` changes
+
 ## 1.4.0
 
 ### Minor Changes
