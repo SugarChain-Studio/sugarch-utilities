@@ -1,7 +1,7 @@
 {
   "name": "@sugarch/bc-mod-types",
   "description": "Types for sugarchain utilities.",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "types": "dist/index.d.ts",
   "files": [
     "dist"

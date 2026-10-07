@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-utility
 
+## 0.2.12
+
+### Patch Changes
+
+-   510f133: Update bc-stubs to R132
+
 ## 0.2.11
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @sugarch/bc-mod-types
 
+## 0.6.5
+
+### Patch Changes
+
+-   510f133: Update bc-stubs to R132
+
 ## 0.6.4
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @sugarch/bc-image-mapping
 
+## 2.2.2
+
+### Patch Changes
+
+-   510f133: Update bc-stubs to R132
+-   Updated dependencies [510f133]
+    -   @sugarch/bc-mod-hook-manager@0.3.5
+    -   @sugarch/bc-mod-utility@0.2.12
+    -   @sugarch/bc-mod-types@0.6.5
+
 ## 2.2.1
 
 ### Patch Changes

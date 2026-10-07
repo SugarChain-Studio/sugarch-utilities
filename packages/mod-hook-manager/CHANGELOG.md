@@ -1,5 +1,13 @@
 # @sugarch/bc-mod-hook-manager
 
+## 0.3.5
+
+### Patch Changes
+
+-   510f133: Update bc-stubs to R132
+-   Updated dependencies [510f133]
+    -   @sugarch/bc-mod-types@0.6.5
+
 ## 0.3.4
 
 ### Patch Changes
