@@ -92,6 +92,7 @@ export function loadGroup<Custom extends string = AssetGroupBodyName>(
 
                 const ret = {} as ExtendedItemGroupConfig;
                 for (const [assetName, config] of Object.entries(srcConfig)) {
+                    if(config === undefined) continue;
                     ret[assetName] = {
                         Archetype: config.Archetype,
                         CopyConfig: { GroupName: preimage.Name, AssetName: assetName },

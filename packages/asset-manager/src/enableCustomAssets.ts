@@ -42,7 +42,7 @@ export function enableCustomAssets(): void {
         Object.entries(content)
             .filter(([assetName]) => !added.has(assetName))
             .filter(([assetName, asset]) => asset.Value >= 0 || preAvailable(args[0], assetName, groupName))
-            .forEach(([_, asset]) => DialogInventoryAdd(args[0], { Asset: asset }, false));
+            .forEach(([_, asset]) => DialogInventoryAdd(args[0], AppearanceItem.fromAsset(asset), false));
 
         return ret;
     });
