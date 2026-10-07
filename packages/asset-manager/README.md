@@ -202,6 +202,8 @@ Adds a new body group by copying configuration from an existing group.
 
 Note: The implementation supports providing optional `defOverrides` to change some properties of the copied group. In the code the full signature is `(newGroup, copyFrom, translation?, defOverrides?)` where `defOverrides` is a partial group definition to override fields on the new group.
 
+Note: The items of the copied group are free, they get `Value: 0` (which makes them always available, and keeps them out of the shop). The item definitions are cloned while doing so, the source group is left untouched. To give the copied items a price, pass the full item definitions via `defOverrides.Asset`, those values are used as is.
+
 ---
 
 ### `addLayerNames(group: CustomGroupName, assetDef: CustomAssetDefinition, entries: Translation.String): void`

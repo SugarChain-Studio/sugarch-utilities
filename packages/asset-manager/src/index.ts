@@ -351,7 +351,10 @@ class _AssetManager<Custom extends string = AssetGroupBodyName> {
     }
 
     /**
-     * Add a new body group by copying configuration from an existing group
+     * Add a new body group by copying configuration from an existing group.
+     *
+     * The copied items are free (their `Value` is set to 0). To give them a price,
+     * provide the full item definitions through `defOverrides.Asset`.
      * @param newGroup New group name
      * @param copyFrom Existing group name
      * @param translation New group display translation

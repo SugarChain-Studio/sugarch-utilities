@@ -130,7 +130,24 @@ export function loadGroup<Custom extends string = AssetGroupBodyName>(
 const missingGroup = new Set<string>();
 
 /**
- * Mirror a group configuration to create a new group based on an existing one
+ * Make free copies of the asset definitions of the source group.
+ *
+ * The asset definitions of a group are shared with the group it is copied from, so they must be cloned,
+ * otherwise giving them a value of 0 would make the items of the source group free as well.
+ * @param defs Asset definitions of the source group
+ */
+function makeFreeAssetDefs(defs: readonly unknown[]): unknown[] {
+    return defs.map(def => ({
+        ...resolveStringAsset(def as string | AssetDefinition),
+        Value: 0,
+    }));
+}
+
+/**
+ * Mirror a group configuration to create a new group based on an existing one.
+ *
+ * Copied items are free (their `Value` is 0). To give them a price, provide the full asset definitions
+ * through `defOverrides.Asset`.
  * @param newGroup
  * @param copyFrom
  * @param translation
@@ -168,6 +185,8 @@ export function mirrorGroup<Custom extends string = AssetGroupBodyName>(
             {
                 ...fromDef,
                 ...defOverrides,
+                // Definitions explicitly provided by the caller are used as is
+                Asset: defOverrides?.Asset ?? makeFreeAssetDefs(fromDef.Asset as readonly unknown[]),
                 Group: newGroup,
                 Default: false,
                 Random: false,
