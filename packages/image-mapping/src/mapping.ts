@@ -34,6 +34,24 @@ function setupImgMapping (): void {
         });
     });
 
+    // R133+: the game keeps the images of shown characters cached by re-touching the URLs
+    // in C.DrawnAssets, but records them before the hooks above remap them. A remapped
+    // image is then never touched, gets purged while still worn, and the next rebuild of
+    // that character draws without it. Record the remapped URL as well.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (typeof (globalThis as any)['CommonDrawMarkDrawnAsset'] === 'function') {
+        HookManager.hookFunction('CommonDrawMarkDrawnAsset', 0, (args, next) => {
+            const ret = next(args);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const [C, src] = args as unknown as [any, unknown];
+            if (typeof src === 'string' && C?.DrawnAssets instanceof Set) {
+                const drawn = storage.mapImgSrc(src.startsWith('@nomap/') ? src.substring(7) : src);
+                if (drawn !== src) C.DrawnAssets.add(drawn);
+            }
+            return ret;
+        });
+    }
+
     HookManager.hookFunction('GLDrawLoadTextureAlphaMask', 0, (args, next) => {
         if (Array.isArray(args[5])) {
             args[5] = args[5].map(mask => ({
