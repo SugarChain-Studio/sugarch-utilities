@@ -107,12 +107,45 @@ function setupCrossOriginFetch (): void {
     });
 }
 
+/** Prefix that opts an image out of mapping; it is removed before the path is loaded. */
+const NO_MAP_PREFIX = '@nomap/';
+
+/** Remove the {@link NO_MAP_PREFIX} prefix, if present. */
+function stripNoMap (src: string): string {
+    return src.startsWith(NO_MAP_PREFIX) ? src.substring(NO_MAP_PREFIX.length) : src;
+}
+
+/**
+ * Keep remapped images cached while they are still drawn.
+ *
+ * R133's image caches purge entries that went unused for half an hour, and
+ * `CommonDrawWarmDrawnAssets` protects what is on screen by re-touching every URL
+ * in the `C.DrawnAssets` of each drawn character. `GLDrawAppearanceBuild` records
+ * those URLs through `CommonDrawMarkDrawnAsset`, before `GLDrawImage` gets a chance
+ * to remap them, so a remapped image is never touched, is purged while still worn,
+ * and the next rebuild of that character draws without it.
+ *
+ * Recording the URL that is actually loaded fixes that: `C.DrawnAssets` is rebuilt
+ * on every character draw, so it stays a list of real cache keys.
+ */
+function setupDrawnAssetWarming (): void {
+    if (typeof (globalThis as Record<string, unknown>)['CommonDrawMarkDrawnAsset'] !== 'function') return;
+
+    HookManager.hookFunction('CommonDrawMarkDrawnAsset', 0, (args, next) => {
+        // Not in the R132 type stubs, hence the cast.
+        const params = args as unknown as [Character, string | HTMLImageElement | HTMLCanvasElement];
+        if (typeof params[1] === 'string') params[1] = stripNoMap(storage.mapImgSrc((params[1])));
+        return next(args);
+    });
+}
+
 function setupImgMapping (): void {
     // Cross-origin image loading used to require patching GLDrawLoadImage to set
     // crossOrigin on the <img> elements it created. R133 dropped those elements in
     // favour of the fetch()-based ImageCache, so the requirement is now expressed
     // on the request itself, in setupCrossOriginFetch.
     setupCrossOriginFetch();
+    setupDrawnAssetWarming();
 
     (['DrawImageEx', 'DrawImageResize', 'GLDrawImage', 'DrawGetImage'] as const).forEach(fn => {
         HookManager.hookFunction(fn, 10, (args, next) => {
@@ -124,9 +157,7 @@ function setupImgMapping (): void {
     once('ImgMappingOnce.nomap', () => {
         (['DrawImageEx', 'DrawImageResize', 'GLDrawImage', 'DrawGetImage'] as const).forEach(fn => {
             HookManager.hookFunction(fn, 0, (args, next) => {
-                if (typeof args[0] === 'string' && args[0].startsWith('@nomap/')) {
-                    args[0] = args[0].substring(7);
-                }
+                if (typeof args[0] === 'string') args[0] = stripNoMap(args[0]);
                 return next(args);
             });
         });
