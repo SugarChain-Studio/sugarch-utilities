@@ -38,14 +38,21 @@ function setupImgMapping (): void {
     // in C.DrawnAssets, but records them before the hooks above remap them. A remapped
     // image is then never touched, gets purged while still worn, and the next rebuild of
     // that character draws without it. Record the remapped URL as well.
+    // "@nomap/" only tells the draw hooks above not to remap, so record the plain path
+    // instead; otherwise the cache fetches "@nomap/Assets/..." from the server and 404s.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (typeof (globalThis as any)['CommonDrawMarkDrawnAsset'] === 'function') {
         HookManager.hookFunction('CommonDrawMarkDrawnAsset', 0, (args, next) => {
-            const ret = next(args);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const [C, src] = args as unknown as [any, unknown];
+            if (typeof src === 'string' && src.startsWith('@nomap/')) {
+                (args as unknown as unknown[])[1] = src.substring(7);
+                return next(args);
+            }
+            const ret = next(args);
             if (typeof src === 'string' && C?.DrawnAssets instanceof Set) {
-                const drawn = storage.mapImgSrc(src.startsWith('@nomap/') ? src.substring(7) : src);
+                let drawn = storage.mapImgSrc(src);
+                if (drawn.startsWith('@nomap/')) drawn = drawn.substring(7);
                 if (drawn !== src) C.DrawnAssets.add(drawn);
             }
             return ret;
