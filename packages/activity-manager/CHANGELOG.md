@@ -1,5 +1,14 @@
 # @sugarch/bc-activity-manager
 
+## 1.2.10
+
+### Patch Changes
+
+-   1d635fe: R133 moved the activity icons from `Assets/Female3DCG/Activity/` to `Icons/Activity/`; `PathTools.activityPreviewIconPath` and the activity button image fallback now build the new path. `@sugarch/bc-asset-manager` and `@sugarch/bc-activity-manager` bundle both packages, so they are bumped explicitly.
+-   Updated dependencies [1d635fe]
+    -   @sugarch/bc-mod-utility@0.2.13
+    -   @sugarch/bc-event-handler@1.0.5
+
 ## 1.2.9
 
 ### Patch Changes
