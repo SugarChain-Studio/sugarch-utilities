@@ -23,7 +23,7 @@ class PathTools {
      */
     static activityPreviewIconPath(activity: Activity | ItemActivity): string {
         const stripActivity = "Activity" in activity ? activity.Activity : activity;
-        return `Assets/Female3DCG/Activity/${stripActivity.Name}.png`;
+        return `Icons/Activity/${stripActivity.Name}.png`;
     }
 }
 

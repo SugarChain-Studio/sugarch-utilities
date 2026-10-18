@@ -159,7 +159,7 @@ function setupImgMapping (): void {
                 args[4]?.image ??
                 (activity.Item
                     ? PathTools.assetPreviewIconPath(activity.Item.Asset)
-                    : `Assets/Female3DCG/Activity/${activity.Activity.Name}.png`);
+                    : `Icons/Activity/${activity.Activity.Name}.png`);
             storage.mapImg(srcImage, (image: string) => {
                 args[4] = { ...args[4], image };
             });
