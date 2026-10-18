@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 2.2.6
+
+### Patch Changes
+
+-   0f27d05: Record the remapped URL as a drawn asset on R133, so `CommonDrawWarmDrawnAssets` keeps the image that is actually loaded in the cache instead of the original path, which let it be purged while still worn. `@sugarch/bc-asset-manager` and `@sugarch/bc-activity-manager` bundle this package, so they are bumped explicitly.
+
 ## 2.2.5
 
 ### Patch Changes
