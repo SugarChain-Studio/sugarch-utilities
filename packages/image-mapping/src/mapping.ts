@@ -8,13 +8,10 @@ import { VirtualPath } from './virtualPath';
 const storage = new ImageMappingStorage();
 
 function setupImgMapping (): void {
-    once('ImgMappingOnce.GLDrawLoadImage.crossOrigin', () => {
-        // Cross-origin image loading
-        HookManager.patchFunction('GLDrawLoadImage', {
-            '\tImg.src = url;': '\tImg.crossOrigin = "Anonymous";\n\t\t\tImg.src = url;',
-            '\ttmpImg.src = url;': '\ttmpImg.crossOrigin = "Anonymous";\n\t\t\ttmpImg.src = url;',
-        });
-    });
+    // Cross-origin image loading used to require patching GLDrawLoadImage to set
+    // crossOrigin on its <img> elements. R133's fetch-based ImageCache requests
+    // images in CORS mode and decodes blobs, so cross-origin mod images work
+    // without help and the patch is obsolete.
 
     (['DrawImageEx', 'DrawImageResize', 'GLDrawImage', 'DrawGetImage'] as const).forEach(fn => {
         HookManager.hookFunction(fn, 10, (args, next) => {
