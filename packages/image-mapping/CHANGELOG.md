@@ -1,5 +1,11 @@
 # @sugarch/bc-image-mapping
 
+## 2.2.4
+
+### Patch Changes
+
+-   42a3de7: Request cross-origin images explicitly in CORS mode. R133 loads images through the fetch()-based `ImageCache`, so `CommonFetch` calls for other origins now use `mode: "cors"` and `credentials: "omit"`, with conditional headers removed since they would fail the preflight. Same-origin requests are untouched.
+
 ## 2.2.3
 
 ### Patch Changes
