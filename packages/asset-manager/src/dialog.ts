@@ -53,13 +53,14 @@ export function setupCustomAssetString(): void {
 
     const translate = (msg: string) => TranslationUtility.translateString(customAssetString, msg);
 
-    HookManager.progressiveHook('AssetTextGet').override((args, next) => translate(args[0]) || next(args));
+    HookManager.hookFunction('AssetTextGet', 0, (args, next) => translate(args[0]) || next(args));
+    HookManager.hookFunction('TextQueryMultiple', 0, (args, next) => translate(args[0]) || next(args));
 
-    HookManager.progressiveHook('ChatRoomPublishCustomAction')
-        .inject((args) => {
-            const [msg, _, Dictionary] = args;
-            const tDialog = translate(msg);
-            if (tDialog) Dictionary.push({ Tag: `MISSING TEXT IN "Interface.csv": ${msg}`, Text: tDialog });
-        })
-        .next();
+
+    HookManager.hookFunction('ChatRoomPublishCustomAction', 0, (args, next) => {
+        const [msg, _, Dictionary] = args;
+        const tDialog = translate(msg);
+        if (tDialog) Dictionary.push({ Tag: `MISSING TEXT IN "Interface.csv": ${msg}`, Text: tDialog });
+        return next(args);
+    });
 }

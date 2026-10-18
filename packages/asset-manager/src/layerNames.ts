@@ -191,7 +191,7 @@ export function setupLayerNameLoad() {
         () => {},
         (pipeline) =>
             HookManager.patchFunction('ItemColorLoad', {
-                'ItemColorGroupNames = new TextCache(`Assets/${c.AssetFamily}/ColorGroups.csv`);': `ItemColorGroupNames = new TextCache(\`Assets/\${c.AssetFamily}/ColorGroups.csv\`);${pipeline.globalFuncName}(()=>ItemColorLayerNames, ()=>ItemColorGroupNames);`,
+                'ItemColorGroupNames = new TextCache(`Assets/ColorGroups.csv`);': `ItemColorGroupNames = new TextCache(\`Assets/ColorGroups.csv\`);${pipeline.globalFuncName}(()=>ItemColorLayerNames, ()=>ItemColorGroupNames);`,
             })
     ).register((_, layerNames, groupNames) => {
         layerCache = layerNames;
