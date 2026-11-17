@@ -23,12 +23,12 @@ const storage = new ImageMappingStorage();
 const CONDITIONAL_HEADERS = ['if-match', 'if-none-match', 'if-modified-since', 'if-unmodified-since', 'if-range'];
 
 /**
- * Copy a request's headers, minus the conditional ones.
+ * Copy headers, minus the conditional ones.
  *
  * Only called for cross-origin requests; see {@link CONDITIONAL_HEADERS}.
  */
-function withoutConditionalHeaders (request: Request): Headers {
-    const headers = new Headers(request.headers);
+function withoutConditionalHeaders (init: HeadersInit | undefined): Headers {
+    const headers = new Headers(init);
     for (const name of CONDITIONAL_HEADERS) headers.delete(name);
     return headers;
 }
@@ -44,12 +44,15 @@ function withoutConditionalHeaders (request: Request): Headers {
  * always downloads the image again instead of getting a 304; keeping the cached
  * copy fresh matters more than the bandwidth.
  *
+ * R134 passes an `options` argument beside a URL; its headers are copied in the same
+ * way, so the caller's `accept` survives the swap.
+ *
  * Returns undefined when the input must be left completely untouched:
  * - same-origin requests, which keep their conditional headers and the 304 path;
  * - non-http URLs;
  * - requests that deliberately opt out of CORS or ask for credentials.
  */
-function toCorsRequest (input: string | URL | Request): Request | undefined {
+function toCorsRequest (input: string | URL | Request, options?: { headers?: HeadersInit }): Request | undefined {
     const isRequest = input instanceof Request;
 
     let url: URL;
@@ -70,7 +73,7 @@ function toCorsRequest (input: string | URL | Request): Request | undefined {
         return new Request(isRequest ? input : url.href, {
             mode: 'cors',
             credentials: 'omit',
-            headers: isRequest ? withoutConditionalHeaders(input) : undefined,
+            headers: withoutConditionalHeaders(isRequest ? input.headers : options?.headers),
         });
     } catch {
         // Unusable request, e.g. its body was already consumed; leave it untouched.
@@ -89,20 +92,26 @@ function toCorsRequest (input: string | URL | Request): Request | undefined {
  *
  * Only cross-origin requests are rewritten. Same-origin requests are passed through
  * untouched, conditional headers included, so the game keeps its 304 revalidation.
+ *
+ * R134's `CommonFetch` throws "can't use options and pass a request object" when it
+ * gets both, so a rewritten call passes the request alone.
  */
 function setupCrossOriginFetch (): void {
     if (typeof CommonFetch !== 'function') return;
 
     once('ImgMappingOnce.CommonFetch.cors', () => {
         HookManager.hookFunction('CommonFetch', 0, (args, next) => {
-            const [input] = args;
+            // R134 gave `CommonFetch` a second `options` argument; it is not in the R132 type stubs, hence the cast.
+            const [input, options] = args as unknown as [string | URL | Request, { headers?: HeadersInit }?];
             if (typeof input !== 'string' && !(input instanceof URL) && !(input instanceof Request)) {
                 return next(args);
             }
 
-            const request = toCorsRequest(input);
-            if (request) args[0] = request;
-            return next(args);
+            const request = toCorsRequest(input, options);
+            if (!request) return next(args);
+
+            // R134 throws on a request object plus options, and the caller's headers are in the request now.
+            return next([request]);
         });
     });
 }
