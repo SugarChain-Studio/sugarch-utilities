@@ -225,6 +225,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
+      '@socket.io/component-emitter':
+        specifier: ^3.1.2
+        version: 3.1.2
       '@sugarch/bc-image-mapping':
         specifier: workspace:*
         version: link:../image-mapping
@@ -271,6 +274,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
+      '@socket.io/component-emitter':
+        specifier: ^3.1.2
+        version: 3.1.2
       '@sugarch/bc-image-mapping':
         specifier: workspace:*
         version: link:../image-mapping
@@ -323,6 +329,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
+      '@socket.io/component-emitter':
+        specifier: ^3.1.2
+        version: 3.1.2
       '@sugarch/bc-mod-utility':
         specifier: workspace:*
         version: link:../mod-utility
@@ -375,6 +384,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
+      '@socket.io/component-emitter':
+        specifier: ^3.1.2
+        version: 3.1.2
       '@sugarch/bc-mod-hook-manager':
         specifier: workspace:*
         version: link:../mod-hook-manager
@@ -418,6 +430,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
+      '@socket.io/component-emitter':
+        specifier: ^3.1.2
+        version: 3.1.2
       bc-stubs:
         specifier: 134.0.0-Beta.2
         version: 134.0.0-Beta.2(supports-color@8.1.1)
@@ -455,6 +470,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
+      '@socket.io/component-emitter':
+        specifier: ^3.1.2
+        version: 3.1.2
       bc-stubs:
         specifier: 134.0.0-Beta.2
         version: 134.0.0-Beta.2(supports-color@8.1.1)
@@ -476,6 +494,9 @@ importers:
 
   packages/mod-types:
     devDependencies:
+      '@socket.io/component-emitter':
+        specifier: ^3.1.2
+        version: 3.1.2
       bc-stubs:
         specifier: 134.0.0-Beta.2
         version: 134.0.0-Beta.2(supports-color@8.1.1)
@@ -507,6 +528,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
+      '@socket.io/component-emitter':
+        specifier: ^3.1.2
+        version: 3.1.2
       bc-stubs:
         specifier: 134.0.0-Beta.2
         version: 134.0.0-Beta.2(supports-color@8.1.1)
