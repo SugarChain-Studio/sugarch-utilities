@@ -49,7 +49,7 @@ function withoutConditionalHeaders (request: Request): Headers {
  * - non-http URLs;
  * - requests that deliberately opt out of CORS or ask for credentials.
  */
-function toCorsRequest (input: string | URL | Request): Request | undefined {
+function toCorsRequest (input: string | URL | Request, options?: {headers?: HeadersInit}): Request | undefined {
     const isRequest = input instanceof Request;
 
     let url: URL;
@@ -70,7 +70,7 @@ function toCorsRequest (input: string | URL | Request): Request | undefined {
         return new Request(isRequest ? input : url.href, {
             mode: 'cors',
             credentials: 'omit',
-            headers: isRequest ? withoutConditionalHeaders(input) : undefined,
+            headers: isRequest ? withoutConditionalHeaders(input) : options?.headers,
         });
     } catch {
         // Unusable request, e.g. its body was already consumed; leave it untouched.
@@ -100,8 +100,10 @@ function setupCrossOriginFetch (): void {
                 return next(args);
             }
 
-            const request = toCorsRequest(input);
-            if (request) args[0] = request;
+            const request = toCorsRequest(input, {headers: input instanceof Request ? undefined : args[1]?.headers});
+            if (request) {
+                return next([request]);
+            }
             return next(args);
         });
     });

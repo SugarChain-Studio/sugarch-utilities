@@ -121,7 +121,7 @@ export class ImageMappingStorage {
      *
      * Custom mapping must result in either a basic mapped image or a non-mapped image.
      */
-    mapImgSrc<T extends string | HTMLImageElement | HTMLCanvasElement> (src: T): T {
+    mapImgSrc<T extends string | ImageBitmap |  HTMLImageElement | HTMLCanvasElement> (src: T): T {
         if (typeof src !== 'string') return src;
         if (!src.endsWith('.png')) return src;
 
