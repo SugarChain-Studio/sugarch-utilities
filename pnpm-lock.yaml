@@ -229,8 +229,8 @@ importers:
         specifier: workspace:*
         version: link:../image-mapping
       bc-stubs:
-        specifier: 132.0.0
-        version: 132.0.0(supports-color@8.1.1)
+        specifier: 134.0.0-Beta.2
+        version: 134.0.0-Beta.2(supports-color@8.1.1)
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -278,8 +278,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 132.0.0
-        version: 132.0.0(supports-color@8.1.1)
+        specifier: 134.0.0-Beta.2
+        version: 134.0.0-Beta.2(supports-color@8.1.1)
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -327,8 +327,8 @@ importers:
         specifier: workspace:*
         version: link:../mod-utility
       bc-stubs:
-        specifier: 132.0.0
-        version: 132.0.0(supports-color@8.1.1)
+        specifier: 134.0.0-Beta.2
+        version: 134.0.0-Beta.2(supports-color@8.1.1)
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.1
@@ -382,8 +382,8 @@ importers:
         specifier: ^29.5.14
         version: 29.5.14
       bc-stubs:
-        specifier: 132.0.0
-        version: 132.0.0(supports-color@8.1.1)
+        specifier: 134.0.0-Beta.2
+        version: 134.0.0-Beta.2(supports-color@8.1.1)
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -419,8 +419,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 132.0.0
-        version: 132.0.0(supports-color@8.1.1)
+        specifier: 134.0.0-Beta.2
+        version: 134.0.0-Beta.2(supports-color@8.1.1)
       bondage-club-mod-sdk:
         specifier: ^1.2.0
         version: 1.2.0
@@ -456,8 +456,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 132.0.0
-        version: 132.0.0(supports-color@8.1.1)
+        specifier: 134.0.0-Beta.2
+        version: 134.0.0-Beta.2(supports-color@8.1.1)
       rollup:
         specifier: ^4.59.0
         version: 4.59.0
@@ -477,8 +477,8 @@ importers:
   packages/mod-types:
     devDependencies:
       bc-stubs:
-        specifier: 132.0.0
-        version: 132.0.0(supports-color@8.1.1)
+        specifier: 134.0.0-Beta.2
+        version: 134.0.0-Beta.2(supports-color@8.1.1)
       rollup:
         specifier: ^4.59.0
         version: 4.59.0
@@ -508,8 +508,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.59.0)(tslib@2.8.1)(typescript@5.9.2)
       bc-stubs:
-        specifier: 132.0.0
-        version: 132.0.0(supports-color@8.1.1)
+        specifier: 134.0.0-Beta.2
+        version: 134.0.0-Beta.2(supports-color@8.1.1)
       rollup:
         specifier: ^4.59.0
         version: 4.59.0
@@ -1353,8 +1353,8 @@ packages:
     resolution: {integrity: sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA==}
     engines: {node: 18 || 20 || >=22}
 
-  bc-stubs@132.0.0:
-    resolution: {integrity: sha512-mYQx/aBFyZ+Ma4wQ1Sr8hJuxR16czg5Bo2F/w0Ynx6iEMmOMHSwyAXKe5hTCUNirruJTzTQWlMi0vYTFHpQ2GQ==}
+  bc-stubs@134.0.0-Beta.2:
+    resolution: {integrity: sha512-I55Jp7Ti8hjGNPnKfIm1nV9iWdFO3wDmYW45Jt+nJghi8k71pltK2MW1kDoZ61TRiWfcHfqm+pMSD+2TD3zKfQ==}
 
   better-path-resolve@1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
@@ -3668,7 +3668,7 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  bc-stubs@132.0.0(supports-color@8.1.1):
+  bc-stubs@134.0.0-Beta.2(supports-color@8.1.1):
     dependencies:
       '@total-typescript/ts-reset': 0.6.1
       socket.io-client: 4.6.1(supports-color@8.1.1)
