@@ -1,5 +1,11 @@
 # @sugarch/bc-event-handler
 
+## 1.0.6
+
+### Patch Changes
+
+-   79b95a7: Improve `ServerSend` modifier typing by replacing the temporary `any` cast with event-specific generic types.
+
 ## 1.0.5
 
 ### Patch Changes

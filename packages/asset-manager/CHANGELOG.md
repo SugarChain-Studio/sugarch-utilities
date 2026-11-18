@@ -1,5 +1,11 @@
 # @sugarch/bc-asset-manager
 
+## 1.4.9
+
+### Patch Changes
+
+-   0c63446: Pass rewritten cross-origin requests using the canonical single-`Request` argument form expected by `CommonFetch`, avoiding its `Request`/options validation error.
+
 ## 1.4.8
 
 ### Patch Changes

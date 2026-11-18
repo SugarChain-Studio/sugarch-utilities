@@ -1,5 +1,13 @@
 # @sugarch/bc-activity-manager
 
+## 1.2.12
+
+### Patch Changes
+
+-   0c63446: Pass rewritten cross-origin requests using the canonical single-`Request` argument form expected by `CommonFetch`, avoiding its `Request`/options validation error.
+-   Updated dependencies [79b95a7]
+    -   @sugarch/bc-event-handler@1.0.6
+
 ## 1.2.11
 
 ### Patch Changes
