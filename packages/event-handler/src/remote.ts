@@ -36,7 +36,7 @@ function sendEvent (event: string, arg: object, target?: number) {
         Type: 'Hidden',
         ...(target ? { Target: target } : {}),
         Content: event,
-        Dictionary: [{ rEventArg: JSON.stringify(arg) }],
+        Dictionary: [{ rEventArg: JSON.stringify(arg) } as unknown as ChatMessageDictionaryEntry] ,
     });
 }
 

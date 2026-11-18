@@ -32,6 +32,17 @@ class _ServerSendModifers {
         ChatRoomGame: []
     };
 
+    private applyModifiers<T extends keyof AllowedClientToServerEvents>(
+        event: T,
+        data: SendArgType<T>
+    ): SendArgType<T> {
+        let modifiedData = data;
+        for (const modifier of this.modifiers[event]) {
+            modifiedData = modifier(modifiedData);
+        }
+        return modifiedData;
+    }
+
     isAllowed(event: string): event is keyof AllowedClientToServerEvents {
         return (event in this.modifiers);
     }
@@ -40,10 +51,7 @@ class _ServerSendModifers {
         HookManager.hookFunction('ServerSend', 10, (args, next) => {
             const [event, data] = args;
             if(this.isAllowed(event)) {
-                const modifiers = this.modifiers[event];
-                for (const modifier of modifiers) {
-                    args[1] = modifier(data);
-                }
+                args[1] = this.applyModifiers(event, data as SendArgType<typeof event>);
             }
             return next(args);
         });
